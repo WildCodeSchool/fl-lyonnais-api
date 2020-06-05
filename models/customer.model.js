@@ -2,7 +2,7 @@ const db = require('../db.js');
 
 class Customer {
   constructor (customer) {
-    this.id = customer.id
+    this.id = customer.id;
     this.email = customer.email;
     this.last_name = customer.last_name;
     this.first_name = customer.first_name;

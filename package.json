@@ -1,7 +1,7 @@
 {
-  "name": "customers-api",
+  "name": "fl_lyonnais-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Freelances Lyonnais",
   "main": "server.js",
   "scripts": {
     "start:server": "node server.js",
@@ -51,6 +51,7 @@
     "husky": "^4.2.5",
     "jest": "^26.0.1",
     "nodemon": "^2.0.4",
+    "semistandard": "^14.2.0",
     "supertest": "^4.0.2",
     "swagger-jsdoc": "^4.0.0",
     "swagger-ui-express": "^4.1.4"

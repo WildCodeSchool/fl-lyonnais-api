@@ -7,16 +7,16 @@ services:
       - "3308:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=customer_api_database_test
+      - MYSQL_DATABASE=fl_lyonnais_api_database_test
   db:
     image: 'mysql:5.7'
     ports:
       - "3307:3306"
     environment:
       - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=customer_api_database
+      - MYSQL_DATABASE=fl_lyonnais_api_database
     volumes: 
-      - customers-db:/var/lib/mysql
+      - fl_lyonnais-db:/var/lib/mysql
   web:
     depends_on:
       - db
@@ -24,7 +24,7 @@ services:
     environment:
       - DB_USER=root
       - DB_PASS=root
-      - DB_NAME=customer_api_database
+      - DB_NAME=fl_lyonnais_api_database
       - DB_HOST=db
       - DB_PORT=3306
     ports:
@@ -32,4 +32,4 @@ services:
     command: 'bash -c "chmod u+x ./wait-for-it.sh && ./wait-for-it.sh db:3306 && npm start"'
   
 volumes:
-  customers-db:
+  fl_lyonnais-db:
