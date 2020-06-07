@@ -57,7 +57,7 @@ Then, create two MySQL server instances, both accessible with the user `root` an
 
 ```sh
 npm run migrate
-npm run start:watch
+npm run start-watch
 ```
 
 ### Run the automated tests
