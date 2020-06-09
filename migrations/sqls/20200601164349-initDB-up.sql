@@ -7,8 +7,22 @@ CREATE TABLE `address`
     `country`  varchar(50)  NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
+  DEFAULT CHARSET = utf8mb4;
+  
+CREATE TABLE `user`
+(
+    `id`                   int          NOT NULL AUTO_INCREMENT,
+    `email`                varchar(100) NOT NULL,
+    `password`             varchar(45)  NOT NULL,
+    `siret`                varchar(20) DEFAULT NULL,
+    `last_connection_date` date         NOT NULL,
+    `registration_date`    date         NOT NULL,
+    `key`                  varchar(20)  NOT NULL,
+    `is_admin`             tinyint     DEFAULT NULL,
+    `is_validated`         tinyint     DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
 
 CREATE TABLE `freelance`
 (
@@ -32,9 +46,19 @@ CREATE TABLE `freelance`
     CONSTRAINT `fk_address_id` FOREIGN KEY (`address_id`) REFERENCES `address` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `freelance_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON UPDATE CASCADE
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
+  DEFAULT CHARSET = utf8mb4;
+  
 
+CREATE TABLE `reference`
+(
+    `id`    int         NOT NULL AUTO_INCREMENT,
+    `name`  varchar(45) NOT NULL,
+    `image` varchar(255) DEFAULT NULL,
+    `url`   varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
+  
 CREATE TABLE `freelance_reference`
 (
     `freelance_id` int NOT NULL,
@@ -44,9 +68,19 @@ CREATE TABLE `freelance_reference`
     CONSTRAINT `fk_freelance_id` FOREIGN KEY (`freelance_id`) REFERENCES `freelance` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk_reference_id` FOREIGN KEY (`reference_id`) REFERENCES `reference` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
+  DEFAULT CHARSET = utf8mb4;
+  
 
+CREATE TABLE `tag`
+(
+    `id`      int         NOT NULL AUTO_INCREMENT,
+    `name`    varchar(45) NOT NULL,
+    `content` text,
+    `slug`    varchar(255) DEFAULT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
+  
 CREATE TABLE `freelancer_tag`
 (
     `freelancer_id` int NOT NULL,
@@ -56,8 +90,8 @@ CREATE TABLE `freelancer_tag`
     CONSTRAINT `fk_tag_id` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fr_freelancer_id` FOREIGN KEY (`freelancer_id`) REFERENCES `freelance` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
+  DEFAULT CHARSET = utf8mb4;
+  
 
 CREATE TABLE `generic_page`
 (
@@ -69,43 +103,10 @@ CREATE TABLE `generic_page`
     `description` varchar(150) DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
+  DEFAULT CHARSET = utf8mb4;
+  
 
-CREATE TABLE `reference`
-(
-    `id`    int         NOT NULL AUTO_INCREMENT,
-    `name`  varchar(45) NOT NULL,
-    `image` varchar(255) DEFAULT NULL,
-    `url`   varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
 
-CREATE TABLE `tag`
-(
-    `id`      int         NOT NULL AUTO_INCREMENT,
-    `name`    varchar(45) NOT NULL,
-    `content` text,
-    `slug`    varchar(255) DEFAULT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
+  
 
-CREATE TABLE `user`
-(
-    `id`                   int          NOT NULL AUTO_INCREMENT,
-    `email`                varchar(100) NOT NULL,
-    `password`             varchar(45)  NOT NULL,
-    `siret`                varchar(20) DEFAULT NULL,
-    `last_connection_date` date         NOT NULL,
-    `registration_date`    date         NOT NULL,
-    `key`                  varchar(20)  NOT NULL,
-    `is_admin`             tinyint     DEFAULT NULL,
-    `is_validated`         tinyint     DEFAULT NULL,
-    PRIMARY KEY (`id`)
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4
-  COLLATE = utf8mb4_0900_ai_ci;
+  
