@@ -8,7 +8,7 @@ CREATE TABLE `address`
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
-  
+
 CREATE TABLE `user`
 (
     `id`                   int          NOT NULL AUTO_INCREMENT,
@@ -47,7 +47,6 @@ CREATE TABLE `freelance`
     CONSTRAINT `freelance_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
-  
 
 CREATE TABLE `reference`
 (
@@ -58,18 +57,6 @@ CREATE TABLE `reference`
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
-  
-CREATE TABLE `freelance_reference`
-(
-    `freelance_id` int NOT NULL,
-    `reference_id` int NOT NULL,
-    KEY `fk_freelancer_id_idx` (`freelance_id`),
-    KEY `fk_reference_id_idx` (`reference_id`),
-    CONSTRAINT `fk_freelance_id` FOREIGN KEY (`freelance_id`) REFERENCES `freelance` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `fk_reference_id` FOREIGN KEY (`reference_id`) REFERENCES `reference` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB
-  DEFAULT CHARSET = utf8mb4;
-  
 
 CREATE TABLE `tag`
 (
@@ -80,7 +67,18 @@ CREATE TABLE `tag`
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
-  
+
+CREATE TABLE `freelance_reference`
+(
+    `freelance_id` int NOT NULL,
+    `reference_id` int NOT NULL,
+    KEY `fk_freelancer_id_idx` (`freelance_id`),
+    KEY `fk_reference_id_idx` (`reference_id`),
+    CONSTRAINT `fk_freelance_id` FOREIGN KEY (`freelance_id`) REFERENCES `freelance` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk_reference_id` FOREIGN KEY (`reference_id`) REFERENCES `reference` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8mb4;
+
 CREATE TABLE `freelancer_tag`
 (
     `freelancer_id` int NOT NULL,
@@ -91,7 +89,6 @@ CREATE TABLE `freelancer_tag`
     CONSTRAINT `fr_freelancer_id` FOREIGN KEY (`freelancer_id`) REFERENCES `freelance` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
-  
 
 CREATE TABLE `generic_page`
 (
@@ -104,9 +101,3 @@ CREATE TABLE `generic_page`
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
-  
-
-
-  
-
-  
