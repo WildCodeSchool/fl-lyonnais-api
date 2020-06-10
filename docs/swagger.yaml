@@ -1,8 +1,8 @@
 swagger: "2.0"
 info:
-  description: "Simple API to manage customers"
+  description: "Simple API to manage freelancers"
   version: "1.0.0"
-  title: "Customers API"
+  title: "Freelancers API"
 host: "localhost:3000"
 basePath: "/"
 consumes:
@@ -10,14 +10,14 @@ consumes:
 produces:
 - "application/json"
 tags:
-- name: "customer"
-  description: "operations on customers"
+- name: "freelancer"
+  description: "operations on freelancers"
 paths:
   /customers:
     get:
       tags:
-      - "customer"
-      summary: "Get a list of customers"
+      - "freelancer"
+      summary: "Get a list of freelancers"
       description: ""
       responses:
         "200":
@@ -28,20 +28,20 @@ paths:
               data:
                 type: 'array'
                 items: 
-                  $ref: '#/definitions/CustomerSimplified'
+                  $ref: '#/definitions/FreelancerSimplified'
     post:
       tags:
-      - "customer"
-      summary: "Add a new customer"
+      - "freelancer"
+      summary: "Add a new freelancer"
       description: ""
       parameters:
       - in: "body"
-        name: "customer"
-        description: "Customer object that needs to be added in DB"
+        name: "freelancer"
+        description: "Freelancer object that needs to be added in DB"
         required: true
         schema:
           allOf:
-           - $ref: "#/definitions/CustomerEditableAttributes"
+           - $ref: "#/definitions/FreelancerEditableAttributes"
            - type: 'object'
              required:
               - "email"
@@ -52,9 +52,9 @@ paths:
             type: "object"
             properties:
               data:
-                $ref: "#/definitions/Customer"
+                $ref: "#/definitions/Freelancer"
         "400":
-          description: "Invalid input. The customer object provided is not valid"
+          description: "Invalid input. The freelancer object provided is not valid"
           schema:
             type: 'object'
             properties:
@@ -64,13 +64,13 @@ paths:
   /customers/{customerId}:
     get:
       tags:
-      - "customer"
-      summary: "Find a customer by ID"
-      description: "Returns a single customer"
+      - "freelancer"
+      summary: "Find a freelancer by ID"
+      description: "Returns a single freelancer"
       parameters:
-      - name: "customerId"
+      - name: "freelancerId"
         in: "path"
-        description: "ID of customer to return"
+        description: "ID of freelancer to return"
         required: true
         type: "integer"
         format: "int64"
@@ -82,27 +82,27 @@ paths:
             properties:
               data:
                 type: "object"
-                $ref: "#/definitions/Customer"
+                $ref: "#/definitions/Freelancer"
         "404":
-          description: "customer not found"
+          description: "freelancer not found"
     put:
       tags:
-      - "customer"
-      summary: "Update an existing customer"
+      - "freelancer"
+      summary: "Update an existing freelancer"
       description: ""
       parameters:
-      - name: "customerId"
+      - name: "freelancerId"
         in: "path"
-        description: "ID of customer to return"
+        description: "ID of freelancer to return"
         required: true
         type: "integer"
         format: "int64"
       - in: "body"
-        name: "customer"
-        description: "customer object that needs to be updated"
+        name: "freelancer"
+        description: "freelancer object that needs to be updated"
         required: true
         schema:
-          $ref: "#/definitions/CustomerEditableAttributes"
+          $ref: "#/definitions/FreelancerEditableAttributes"
       responses:
         "200":
           description: "Updated"
@@ -110,9 +110,9 @@ paths:
             type: "object"
             properties:
               data:
-                $ref: "#/definitions/Customer"
+                $ref: "#/definitions/Freelancer"
         "404":
-          description: "customer not found"
+          description: "freelancer not found"
         "400":
           description: "Invalid input. The customer object provided is not valid"
           schema:
@@ -122,19 +122,19 @@ paths:
                 type: "string"
     delete:
       tags:
-      - "customer"
-      summary: "Deletes a customer"
+      - "freelancer"
+      summary: "Deletes a freelancer"
       description: ""
       parameters:
-      - name: "customerId"
+      - name: "freelancerId"
         in: "path"
-        description: "customer id to delete"
+        description: "freelancer id to delete"
         required: true
         type: "integer"
         format: "int64"
       responses:
         "404":
-          description: "customer not found"
+          description: "freelancer not found"
         "200":
           description: "OK"
 definitions:
@@ -175,5 +175,5 @@ definitions:
           id:
             type: "integer"
             format: "int64"
-      - $ref: '#/definitions/CustomerEditableAttributes'
+      - $ref: '#/definitions/FreelancerEditableAttributes'
       
