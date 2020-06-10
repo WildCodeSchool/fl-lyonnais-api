@@ -24,7 +24,7 @@ CREATE TABLE `user`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-CREATE TABLE `freelance`
+CREATE TABLE `freelancers`
 (
     `id`                     int          NOT NULL AUTO_INCREMENT,
     `firstname`              varchar(100) NOT NULL,
@@ -42,9 +42,9 @@ CREATE TABLE `freelance`
     `user_id`                int          DEFAULT NULL,
     PRIMARY KEY (`id`),
     KEY `fk_address_id_idx` (`address_id`),
-    KEY `freelance_user_id_fk` (`user_id`),
+    KEY `freelancers_user_id_fk` (`user_id`),
     CONSTRAINT `fk_address_id` FOREIGN KEY (`address_id`) REFERENCES `address` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `freelance_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON UPDATE CASCADE
+    CONSTRAINT `freelancers_user_id_fk` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
@@ -68,25 +68,25 @@ CREATE TABLE `tag`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-CREATE TABLE `freelance_reference`
+CREATE TABLE `freelancers_reference`
 (
-    `freelance_id` int NOT NULL,
+    `freelancers_id` int NOT NULL,
     `reference_id` int NOT NULL,
-    KEY `fk_freelancer_id_idx` (`freelance_id`),
+    KEY `fk_freelancers_id_idx` (`freelancers_id`),
     KEY `fk_reference_id_idx` (`reference_id`),
-    CONSTRAINT `fk_freelance_id` FOREIGN KEY (`freelance_id`) REFERENCES `freelance` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `fk_freelancers_id` FOREIGN KEY (`freelancers_id`) REFERENCES `freelancers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk_reference_id` FOREIGN KEY (`reference_id`) REFERENCES `reference` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-CREATE TABLE `freelancer_tag`
+CREATE TABLE `freelancers_tag`
 (
-    `freelancer_id` int NOT NULL,
+    `freelancers_id` int NOT NULL,
     `tag_id`        int NOT NULL,
-    KEY `fr_freelancer_id_idx` (`freelancer_id`),
+    KEY `fr_freelancers_id_idx` (`freelancers_id`),
     KEY `fk_tag_id_idx` (`tag_id`),
     CONSTRAINT `fk_tag_id` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `fr_freelancer_id` FOREIGN KEY (`freelancer_id`) REFERENCES `freelance` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `fr_freelancers_id` FOREIGN KEY (`freelancers_id`) REFERENCES `freelancers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
