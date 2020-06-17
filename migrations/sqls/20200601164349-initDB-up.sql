@@ -37,7 +37,7 @@ CREATE TABLE `freelance`
     `bio`                    text,
     `vat_number`             varchar(15)  DEFAULT NULL,
     `last_modification_date` datetime     NOT NULL,
-    `is_is_active`              tinyint(1)   NOT NULL,
+    `is_active`              tinyint(1)   NOT NULL,
     `address_id`             int          DEFAULT NULL,
     `user_id`                int          DEFAULT NULL,
     PRIMARY KEY (`id`),
