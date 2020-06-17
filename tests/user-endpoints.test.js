@@ -1,72 +1,69 @@
-const request = require('supertest');
-const app = require('../server.js');
-const Customer = require('../models/user.model.js');
+// const request = require('supertest');
+// const app = require('../server.js');
+// const user = require('../models/user.model');
+// const connection = require('../db.js')
 
-describe('customers endpoints', () => {
-  describe('GET /customers', () => {
-    describe('when there are two customers in DB', () => {
-      let res;
-      beforeEach(async () => {
-        await Promise.all([
-          Customer.create({ first_name: 'John', last_name: 'Doe', email: 'john.doe@gmail.com' }),
-          Customer.create({ first_name: 'Jane', last_name: 'Doe', email: 'jane.doe@gmail.com' })
-        ]);
-        res = await request(app).get('/customers');
-      });
+// describe('POST /user', () => {
+//   describe('when a valid payload is sent', () => {
+//     let res;
+//     beforeEach(done => connection.query('TRUNCATE user', done));
 
-      it('status is 200', async () => {
-        expect(res.status).toBe(200);
-      });
+//   it('returns 201 status les 4 champs sont bien remplis', (done) => {
+//     request(app)
+//       .post('/registration')
+//       .send({ email: 'toto@toto.fr', firstname: 'to', lastname: 'to', siret: '0000', password:'toto-soWhat?'})
+//       .expect(201)
+//       .expect('Content-Type', /json/)
+//       .then(response => {
+//         const expected = { id: expect.any(Number), email: 'toto@toto.fr', firstname: 'to', lastname: 'toto', siret: '0000' };
+//         expect(response.body).toEqual(expected);
+//         done();
+//       })
+//       .catch(done);
+// });
 
-      it('the returned data is an array containing two elements', async () => {
-        expect(Array.isArray(res.body.data));
-        expect(res.body.data.length).toBe(2);
-      });
-    });
-  });
+//   describe('POST /user', () => {
+//     describe('when a valid payload is sent', () => {
+//       let res;
+//       beforeAll(async () => {
+//         res = await request(app).post('/user').send({
+//           firstname: 'John',
+//           lastname: 'Doe',
+//           email: 'john.doe@gmail.com'
+//         });
+//       });
 
-  describe('POST /customers', () => {
-    describe('when a valid payload is sent', () => {
-      let res;
-      beforeAll(async () => {
-        res = await request(app).post('/customers').send({
-          first_name: 'John',
-          last_name: 'Doe',
-          email: 'john.doe@gmail.com'
-        });
-      });
+//       it('returns 201 status', async () => {
+//         expect(res.statusCode).toEqual(201);
+//       });
 
-      it('returns 201 status', async () => {
-        expect(res.statusCode).toEqual(201);
-      });
+//       it('returns the id of the created user', async () => {
+//         expect(res.body.data).toHaveProperty('id');
+//       });
+//     });
 
-      it('returns the id of the created customer', async () => {
-        expect(res.body.data).toHaveProperty('id');
-      });
-    });
+//     describe('when a user with the same email already exists in DB', () => {
+//       let res;
+//       beforeAll(async () => {
+//         Freelance.create({
+//           firstname: 'John',
+//           lastname: 'Doe',
+//           email: 'john.doe@gmail.com'
+//         });
+//         res = await request(app).post('/user').send({
+//           firstname: 'Jane',
+//           lastname: 'Doe',
+//           email: 'john.doe@gmail.com'
+//         });
+//       });
 
-    describe('when a customer with the same email already exists in DB', () => {
-      let res;
-      beforeAll(async () => {
-        Customer.create({
-          first_name: 'John',
-          last_name: 'Doe',
-          email: 'john.doe@gmail.com'
-        });
-        res = await request(app).post('/customers').send({
-          first_name: 'Jane',
-          last_name: 'Doe',
-          email: 'john.doe@gmail.com'
-        });
-      });
+//       it('returns a 400 status', async () => {
+//         expect(res.status).toBe(400);
+//       });
 
-      it('returns a 400 status', async () => {
-        expect(res.status).toBe(400);
-      });
-
-      it('retuns an error message', async () => {
-        expect(res.body).toHaveProperty('errorMessage');
-      });
-    });
-  });
-});
+//       it('retuns an error message', async () => {
+//         expect(res.body).toHaveProperty('errorMessage');
+//       });
+//     });
+//   });
+// });
