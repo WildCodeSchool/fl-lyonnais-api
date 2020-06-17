@@ -3,6 +3,7 @@ const swaggerUi = require('swagger-ui-express');
 const cors = require('cors');
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./docs/swagger.yaml');
+const bodyParser = require('body-parser');
 
 const app = express();
 const PORT = process.env.PORT || (process.env.NODE_ENV === 'test' ? 3001 : 3000);
@@ -13,6 +14,9 @@ app.use(cors());
 if (process.env.NODE_ENV !== 'production') {
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/user', require('./routes/user.routes.js'));
 
 // set port, listen for requests

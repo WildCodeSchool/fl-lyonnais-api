@@ -2,12 +2,13 @@ const User = require('../models/user.model.js');
 
 class UsersController {
   static async create (req, res) {
-    if (!req.body) {
+    console.log(req.body);
+    if (!req.params) {
       return res.status(400).send({ errorMessage: 'Content can not be empty!' });
     }
 
     if (!req.body.email) {
-      return res.status(400).send({ errorMessage: 'Email can not be empty!' });
+      return res.status(400).send({ errorMessage: 'Emaillllllllllllll can not be empty!' });
     }
 
     try {
@@ -29,9 +30,9 @@ class UsersController {
     try {
       const data = (await User.getAll()).map(c => new User(c)).map(c => ({
         id: c.id,
-        name: c.fullName,
-        email: c.email,
-        active: !!c.active
+        name: c.fullName
+        // email: c.email,
+        // active: !!c.active
       }));
       res.send({ data });
     } catch (err) {
