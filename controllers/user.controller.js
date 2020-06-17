@@ -2,16 +2,12 @@ const User = require('../models/user.model.js');
 
 class UsersController {
   static async create (req, res) {
-    if (!req.body) {
+    const user = req.body;
+    if (!user.email || !user.firstname || !user.lastname || !user.siret) {
       return res.status(400).send({ errorMessage: 'Content can not be empty!' });
     }
 
-    if (!req.body.email) {
-      return res.status(400).send({ errorMessage: 'Email can not be empty!' });
-    }
-
     try {
-      const user = new User(req.body);
       if (await User.emailAlreadyExists(user.email)) {
         res.status(400).send({ errorMessage: 'A user with this email already exists !' });
       } else {
@@ -27,12 +23,7 @@ class UsersController {
 
   static async findAll (req, res) {
     try {
-      const data = (await User.getAll()).map(c => new User(c)).map(c => ({
-        id: c.id,
-        name: c.fullName,
-        email: c.email,
-        active: !!c.active
-      }));
+      const data = (await User.getAll()).map(c => c);
       res.send({ data });
     } catch (err) {
       res.status(500).send({
@@ -60,7 +51,7 @@ class UsersController {
     }
 
     try {
-      const data = await User.updateById(req.params.id, new User(req.body));
+      const data = await User.updateById(req.params.id, (req.body));
       res.send({ data });
     } catch (err) {
       if (err.kind === 'not_found') {
