@@ -8,22 +8,22 @@ router.get('/:id', freelancersController.findOne);
 router.put('/:id', freelancersController.update);
 router.delete('/:id', freelancersController.delete);
 
-//Page signin
+// Page signin
 router.post('/signin', freelancersController.create);
 
-//Page registration
-router.post('/registration',freelancersController.create);
+// Page registration
+router.post('/registration', freelancersController.create);
 
 // Page listing
-router.get('/listing/:page', freelancersController.findAll); //faut il créer une autre méthode ex findListingSearch
+router.get('/listing/:page', freelancersController.findAll); // faut il créer une autre méthode ex findListingSearch
 router.get('/listing/', freelancersController.findAll);
 
-//Page détail
+// Page détail
 router.get('/detail/:id', freelancersController.findOne);
 router.put('/detail/:id', freelancersController.udpdate);
 router.delete('/detail/:id', freelancersController.delete);
 
-//Admin => back-office ? 
+// Admin => back-office ?
 router.put('/admin/:id', freelancersController.udpdate);
 router.delete('/admin/:id', freelancersController.delete);
 
@@ -34,4 +34,3 @@ router.put('/generic/:slug', freelancersController.udpdate);
 router.delete('/generic/:slug ', freelancersController.delete);
 
 module.exports = router;
-
