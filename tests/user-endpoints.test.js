@@ -1,6 +1,6 @@
 const request = require('supertest');
 const app = require('../server.js');
-const Customer = require('../models/customer.model.js');
+const Customer = require('../models/user.model.js');
 
 describe('customers endpoints', () => {
   describe('GET /customers', () => {

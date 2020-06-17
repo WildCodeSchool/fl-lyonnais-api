@@ -1,8 +1,8 @@
 swagger: "2.0"
 info:
-  description: "Simple API to manage freelancers"
+  description: "Simple API to manage freelance"
   version: "1.0.0"
-  title: "Freelancers API"
+  title: "Freelance API"
 host: "localhost:3000"
 basePath: "/"
 consumes:
@@ -10,14 +10,14 @@ consumes:
 produces:
 - "application/json"
 tags:
-- name: "freelancer"
-  description: "operations on freelancers"
+- name: "freelance"
+  description: "operations on freelance"
 paths:
   /customers:
     get:
       tags:
-      - "freelancer"
-      summary: "Get a list of freelancers"
+      - "freelance"
+      summary: "Get a list of freelance"
       description: ""
       responses:
         "200":
@@ -31,12 +31,12 @@ paths:
                   $ref: '#/definitions/FreelancerSimplified'
     post:
       tags:
-      - "freelancer"
-      summary: "Add a new freelancer"
+      - "freelance"
+      summary: "Add a new freelance"
       description: ""
       parameters:
       - in: "body"
-        name: "freelancer"
+        name: "freelance"
         description: "Freelancer object that needs to be added in DB"
         required: true
         schema:
@@ -54,7 +54,7 @@ paths:
               data:
                 $ref: "#/definitions/Freelancer"
         "400":
-          description: "Invalid input. The freelancer object provided is not valid"
+          description: "Invalid input. The freelance object provided is not valid"
           schema:
             type: 'object'
             properties:
@@ -64,13 +64,13 @@ paths:
   /customers/{customerId}:
     get:
       tags:
-      - "freelancer"
-      summary: "Find a freelancer by ID"
-      description: "Returns a single freelancer"
+      - "freelance"
+      summary: "Find a freelance by ID"
+      description: "Returns a single freelance"
       parameters:
-      - name: "freelancerId"
+      - name: "freelanceId"
         in: "path"
-        description: "ID of freelancer to return"
+        description: "ID of freelance to return"
         required: true
         type: "integer"
         format: "int64"
@@ -84,22 +84,22 @@ paths:
                 type: "object"
                 $ref: "#/definitions/Freelancer"
         "404":
-          description: "freelancer not found"
+          description: "freelance not found"
     put:
       tags:
-      - "freelancer"
-      summary: "Update an existing freelancer"
+      - "freelance"
+      summary: "Update an existing freelance"
       description: ""
       parameters:
-      - name: "freelancerId"
+      - name: "freelanceId"
         in: "path"
-        description: "ID of freelancer to return"
+        description: "ID of freelance to return"
         required: true
         type: "integer"
         format: "int64"
       - in: "body"
-        name: "freelancer"
-        description: "freelancer object that needs to be updated"
+        name: "freelance"
+        description: "freelance object that needs to be updated"
         required: true
         schema:
           $ref: "#/definitions/FreelancerEditableAttributes"
@@ -112,7 +112,7 @@ paths:
               data:
                 $ref: "#/definitions/Freelancer"
         "404":
-          description: "freelancer not found"
+          description: "freelance not found"
         "400":
           description: "Invalid input. The customer object provided is not valid"
           schema:
@@ -122,19 +122,19 @@ paths:
                 type: "string"
     delete:
       tags:
-      - "freelancer"
-      summary: "Deletes a freelancer"
+      - "freelance"
+      summary: "Deletes a freelance"
       description: ""
       parameters:
-      - name: "freelancerId"
+      - name: "freelanceId"
         in: "path"
-        description: "freelancer id to delete"
+        description: "freelance id to delete"
         required: true
         type: "integer"
         format: "int64"
       responses:
         "404":
-          description: "freelancer not found"
+          description: "freelance not found"
         "200":
           description: "OK"
 definitions:
