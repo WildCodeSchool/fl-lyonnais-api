@@ -54,7 +54,7 @@ class Database {
   deleteAllData () {
     return this.query(`
       SET FOREIGN_KEY_CHECKS=0;
-      TRUNCATE freelance;
+      TRUNCATE user;
       SET FOREIGN_KEY_CHECKS=1;
     `);
   }

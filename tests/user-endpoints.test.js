@@ -1,6 +1,6 @@
 const request = require('supertest');
 const app = require('../server.js');
-const freelancer = require('../models/freelancer.model.js');
+const freelancer = require('../models/user.model.js');
 
 
 // Test sur /registration
