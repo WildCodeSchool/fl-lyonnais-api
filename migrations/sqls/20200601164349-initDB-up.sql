@@ -21,14 +21,14 @@ CREATE TABLE `user`
     `registration_date`    date         NOT NULL,
     `key`                  varchar(20)  NOT NULL,
     `is_admin`             tinyint     DEFAULT NULL,
-    `is_validated`         tinyint     DEFAULT NULL,
+    `is_validated`         tinyint     DEFAULT '0',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
 CREATE TABLE `freelance`
 (
-    `id`                     int          NOT NULL AUTO_INCREMENT,
+    `id`                     int        NOT NULL AUTO_INCREMENT,
     `url_photo`              varchar(255) DEFAULT NULL,
     `phone_number`           varchar(20)  DEFAULT NULL,
     `average_daily_rate`     int          DEFAULT NULL,
@@ -36,8 +36,8 @@ CREATE TABLE `freelance`
     `job_title`              varchar(100) DEFAULT NULL,
     `bio`                    text,
     `vat_number`             varchar(15)  DEFAULT NULL,
-    `last_modification_date` datetime     NOT NULL,
-    `is_active`              tinyint(1)   NOT NULL,
+    `last_modification_date` datetime   NOT NULL,
+    `is_active`              tinyint(1) NOT NULL,
     `address_id`             int          DEFAULT NULL,
     `user_id`                int          DEFAULT NULL,
     PRIMARY KEY (`id`),
@@ -82,7 +82,7 @@ CREATE TABLE `freelance_reference`
 CREATE TABLE `freelance_tag`
 (
     `freelance_id` int NOT NULL,
-    `tag_id`        int NOT NULL,
+    `tag_id`       int NOT NULL,
     KEY `fr_freelance_id_idx` (`freelance_id`),
     KEY `fk_tag_id_idx` (`tag_id`),
     CONSTRAINT `fk_tag_id` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,

@@ -12,6 +12,7 @@
     "tests:setup-db": "docker-compose up -d test_db",
     "tests:migrate-db": "db-migrate up -e test",
     "test": "jest --maxWorkers=1",
+    "test:watch": "jest --watchAll",
     "lint": "semistandard --fix"
   },
   "husky": {
