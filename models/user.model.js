@@ -1,21 +1,19 @@
 const db = require('../db.js');
+const argon2 = require('argon2');
+// const jwt = require('jsonwebtoken');
 
 class User {
-  constructor (user) {
-    this.id = user.id;
-    this.email = user.email;
-    this.lastname = user.lastname;
-    this.firstname = user.firstname;
-    this.siret = user.siret;
-    this.password = user.password;
-  }
-
   get fullName () {
     return `${this.firstname} ${this.lastname}`;
   }
 
   static async create (newUser) {
-    return db.query('INSERT INTO user SET ?', newUser)
+    const hash = await argon2.hash(newUser.password);
+    console.log(hash);
+    const addUser = { ...newUser, password: hash };
+    console.log('Log Toi !!!!!!!!!!');
+    console.log(addUser);
+    return db.query('INSERT INTO user (lastname, firstname, email, password, siret) VALUES (?, ?, ?, ?, ?)', [addUser.lastname, addUser.firstname, addUser.email, addUser.password, addUser.siret])
       .then(res => {
         newUser.id = res.insertId;
         return newUser;
@@ -23,7 +21,7 @@ class User {
   }
 
   static async findById (id) {
-    return db.query(`SELECT * FROM user WHERE id = ${id}`)
+    return db.query('SELECT * FROM user WHERE id = ?', [id])
       .then(rows => {
         if (rows.length) {
           return Promise.resolve(rows[0]);
