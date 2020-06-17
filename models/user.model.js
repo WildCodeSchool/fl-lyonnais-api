@@ -7,6 +7,7 @@ class User {
     this.lastname = user.lastname;
     this.firstname = user.firstname;
     this.siret = user.siret;
+    this.password = user.password;
   }
 
   get fullName () {
