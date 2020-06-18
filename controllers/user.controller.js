@@ -1,12 +1,20 @@
 const User = require('../models/user.model.js');
+//const { check, validationResult } = require('express-validator');
+
+const validateEmail = email => {
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
 
 class UsersController {
   static async create (req, res) {
     const user = req.body;
     if (!user.email || !user.firstname || !user.lastname || !user.siret) {
-      return res.status(400).send({ errorMessage: 'Content can not be empty!' });
+      return res.status(422).send({ errorMessage: 'Content can not be empty!' });
     }
-
+    if (!validateEmail(user.email)) {
+      return res.status(422).send({ errorMessage: 'A valid email is required !' });
+    }
     try {
       const userAlreadyExists = await User.emailAlreadyExists(user.email);
       if (userAlreadyExists) {

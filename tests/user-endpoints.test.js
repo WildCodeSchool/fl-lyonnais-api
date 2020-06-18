@@ -1,5 +1,6 @@
 const request = require('supertest');
 const app = require('../server.js');
+
 // const user = require('../models/user.model');
 // const connection = require('../db.js')
 
@@ -17,48 +18,46 @@ describe('POST /user', () => {
         });
     });
 
-    //   describe('POST /user', () => {
-    //     describe('when a valid payload is sent', () => {
-    //       let res;
-    //       beforeAll(async () => {
-    //         res = await request(app).post('/user').send({
-    //           firstname: 'John',
-    //           lastname: 'Doe',
-    //           email: 'john.doe@gmail.com'
-    //         });
-    //       });
+    // // 2) Cas d’une requête avec un champ obligatoire manquant : exemple le SIRET,  status Code 422.
 
-    //       it('returns 201 status', async () => {
-    //         expect(res.statusCode).toEqual(201);
-    //       });
+    it('returns 422 statussi un champs obligatoire est manquant', async () => {
+      return request(app)
+        .post('/user')
+        .send({ email: 'toto@toto.fr', firstname: 'to', lastname: 'to', password: 'toto-soWhat?', siret: '' })
+        .expect(422)
+        .expect('Content-Type', /json/)
+        .then(response => {
+          const expected = { errorMessage: 'Content can not be empty!' };
+          expect(response.body).toEqual(expected);
+        });
+    });
+    // // 3) Cas avec un attribut du mauvais type : erreur dans l’adresse email,  status Code 422.
+    it('returns 422 statussi un champs obligatoire est manquant', async () => {
+      return request(app)
+        .post('/user')
+        .send({ email: 'toto@totofr', firstname: 'to', lastname: 'to', password: 'toto-soWhat?', siret: '0000' })
+        .expect(422)
+        .expect('Content-Type', /json/)
+        .then(response => {
+          const expected = { errorMessage: 'A valid email is required !' };
+          expect(response.body).toEqual(expected);
+        });
+    });
 
-    //       it('returns the id of the created user', async () => {
-    //         expect(res.body.data).toHaveProperty('id');
-    //       });
-    //     });
+    // // 4)  Cas de deux ressources ajoutées avec le même email ou siret ou combinaison Prénom/Nom : status Code 409.
+    it('returns 422 statussi un champs obligatoire est manquant', async () => {
+      return request(app)
+        .post('/user')
+        .send({ email: 'toto@totofr', firstname: 'to', lastname: 'to', password: 'toto-soWhat?', siret: '0000' })
+        .expect(422)
+        .expect('Content-Type', /json/)
+        .then(response => {
+          const expected = { errorMessage: 'A valid email is required !' };
+          expect(response.body).toEqual(expected);
+        });
+    });
+    
 
-    //     describe('when a user with the same email already exists in DB', () => {
-    //       let res;
-    //       beforeAll(async () => {
-    //         Freelance.create({
-    //           firstname: 'John',
-    //           lastname: 'Doe',
-    //           email: 'john.doe@gmail.com'
-    //         });
-    //         res = await request(app).post('/user').send({
-    //           firstname: 'Jane',
-    //           lastname: 'Doe',
-    //           email: 'john.doe@gmail.com'
-    //         });
-    //       });
 
-    //       it('returns a 400 status', async () => {
-    //         expect(res.status).toBe(400);
-    //       });
-
-    //       it('retuns an error message', async () => {
-    //         expect(res.body).toHaveProperty('errorMessage');
-    //       });
-    //     });
   });
 });
