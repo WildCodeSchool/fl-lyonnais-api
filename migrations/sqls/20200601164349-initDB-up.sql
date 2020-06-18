@@ -15,7 +15,7 @@ CREATE TABLE `user`
     `firstname`            varchar(100) NOT NULL,
     `lastname`             varchar(150) NOT NULL,
     `email`                varchar(100) NOT NULL,
-    `password`             varchar(45)  NOT NULL,
+    `password`             varchar(255)  NOT NULL,
     `siret`                varchar(20) DEFAULT NULL,
     `last_connection_date` date         NOT NULL,
     `registration_date`    date         NOT NULL,
