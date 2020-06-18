@@ -3,9 +3,6 @@
 
 // Sign in
 
-
-
-
 // describe('POST /freelance', () => {
 //   describe('when a valid payload is sent', () => {
 //     let res;
