@@ -10,7 +10,7 @@ describe('POST /user', () => {
 
     it('returns 201 status les 4 champs sont bien remplis', (done) => {
       request(app)
-        .post('/registration')
+        .post('/user')
         .send({ email: 'toto@toto.fr', firstname: 'to', lastname: 'to', siret: '0000', password: 'toto-soWhat?' })
         .expect(201)
         .expect('Content-Type', /json/)
