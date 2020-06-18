@@ -12,53 +12,53 @@ describe('POST /user', () => {
         .expect(201)
         .expect('Content-Type', /json/)
         .then(response => {
-          const expected = { id: expect.any(Number), email: 'toto@toto.fr', firstname: 'to', lastname: 'toto', siret: '0000' };
+          const expected = { id: expect.any(Number), email: 'toto@toto.fr', firstname: 'to', lastname: 'to', siret: '0000' };
           expect(response.body).toEqual(expected);
         });
     });
 
-//   describe('POST /user', () => {
-//     describe('when a valid payload is sent', () => {
-//       let res;
-//       beforeAll(async () => {
-//         res = await request(app).post('/user').send({
-//           firstname: 'John',
-//           lastname: 'Doe',
-//           email: 'john.doe@gmail.com'
-//         });
-//       });
+    //   describe('POST /user', () => {
+    //     describe('when a valid payload is sent', () => {
+    //       let res;
+    //       beforeAll(async () => {
+    //         res = await request(app).post('/user').send({
+    //           firstname: 'John',
+    //           lastname: 'Doe',
+    //           email: 'john.doe@gmail.com'
+    //         });
+    //       });
 
-//       it('returns 201 status', async () => {
-//         expect(res.statusCode).toEqual(201);
-//       });
+    //       it('returns 201 status', async () => {
+    //         expect(res.statusCode).toEqual(201);
+    //       });
 
-//       it('returns the id of the created user', async () => {
-//         expect(res.body.data).toHaveProperty('id');
-//       });
-//     });
+    //       it('returns the id of the created user', async () => {
+    //         expect(res.body.data).toHaveProperty('id');
+    //       });
+    //     });
 
-//     describe('when a user with the same email already exists in DB', () => {
-//       let res;
-//       beforeAll(async () => {
-//         Freelance.create({
-//           firstname: 'John',
-//           lastname: 'Doe',
-//           email: 'john.doe@gmail.com'
-//         });
-//         res = await request(app).post('/user').send({
-//           firstname: 'Jane',
-//           lastname: 'Doe',
-//           email: 'john.doe@gmail.com'
-//         });
-//       });
+    //     describe('when a user with the same email already exists in DB', () => {
+    //       let res;
+    //       beforeAll(async () => {
+    //         Freelance.create({
+    //           firstname: 'John',
+    //           lastname: 'Doe',
+    //           email: 'john.doe@gmail.com'
+    //         });
+    //         res = await request(app).post('/user').send({
+    //           firstname: 'Jane',
+    //           lastname: 'Doe',
+    //           email: 'john.doe@gmail.com'
+    //         });
+    //       });
 
-//       it('returns a 400 status', async () => {
-//         expect(res.status).toBe(400);
-//       });
+    //       it('returns a 400 status', async () => {
+    //         expect(res.status).toBe(400);
+    //       });
 
-//       it('retuns an error message', async () => {
-//         expect(res.body).toHaveProperty('errorMessage');
-//       });
-//     });
+    //       it('retuns an error message', async () => {
+    //         expect(res.body).toHaveProperty('errorMessage');
+    //       });
+    //     });
   });
 });
