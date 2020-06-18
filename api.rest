@@ -10,7 +10,7 @@ POST http://localhost:3000/user
 Content-Type: application/json
 
 {
-  "id": 2,
+  "id": 55,
   "firstname": "Cozmo",
   "lastname": "Ivankovic",
   "email": "Ivankovic",
