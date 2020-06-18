@@ -56,8 +56,5 @@ describe('POST /user', () => {
           expect(response.body).toEqual(expected);
         });
     });
-    
-
-
   });
 });
