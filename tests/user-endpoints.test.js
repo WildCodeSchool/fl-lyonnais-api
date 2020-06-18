@@ -1,15 +1,12 @@
 const request = require('supertest');
 const app = require('../server.js');
 // const user = require('../models/user.model');
-const connection = require('../db.js');
+// const connection = require('../db.js');
 
 describe('POST /user', () => {
   describe('when a valid payload is sent', () => {
-    // let res;
-    beforeEach(done => connection.query('TRUNCATE user', done));
-
-    it('returns 201 status les 4 champs sont bien remplis', (done) => {
-      request(app)
+    it('returns 201 status les 4 champs sont bien remplis', async () => {
+      return request(app)
         .post('/user')
         .send({ email: 'toto@toto.fr', firstname: 'to', lastname: 'to', siret: '0000', password: 'toto-soWhat?' })
         .expect(201)
@@ -17,9 +14,7 @@ describe('POST /user', () => {
         .then(response => {
           const expected = { id: expect.any(Number), email: 'toto@toto.fr', firstname: 'to', lastname: 'toto', siret: '0000' };
           expect(response.body).toEqual(expected);
-          done();
-        })
-        .catch(done);
+        });
     });
 
     //   describe('POST /user', () => {

@@ -8,14 +8,19 @@ class UsersController {
     }
 
     try {
-      if (await User.emailAlreadyExists(user.email)) {
+      const userAlreadyExists = await User.emailAlreadyExists(user.email);
+      if (userAlreadyExists) {
         res.status(400).send({ errorMessage: 'A user with this email already exists !' });
       } else {
         const data = await User.create(user);
-        res.status(201).send({ data });
+        console.log(data);
+
+        res.status(201).send(data);
       }
     } catch (err) {
+      console.error(err);
       res.status(500).send({
+
         errorMessage: err.message || 'Some error occurred while creating the User.'
       });
     }

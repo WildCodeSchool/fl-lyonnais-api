@@ -19,7 +19,7 @@ if (process.env.NODE_ENV !== 'production') {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/user', require('./routes/user.routes.js'));
-app.use('/freelance', require('./routes/freelance.routes.js'));
+// app.use('/freelance', require('./routes/freelance.routes.js'));
 
 // set port, listen for requests
 const server = app.listen(PORT, () => {
