@@ -88,6 +88,22 @@ class UsersController {
       }
     }
   }
+
+  static async sendEmail (req, res) {
+    try {
+      const emailBody = {
+        from: '"Toto Letigre" <toto.letigre@test.fr',
+        to: 'asterix@test.fr',
+        subject: 'Email de test',
+        Text: 'Voici un test de NodeMailer',
+        html: '<p>Voici un test de NodeMailer</p>'
+      };
+      await req.transporter.sendMail(emailBody);
+      console.log('Email envoyé');
+    } catch (error) {
+      console.log('Erreur', error);
+    }
+  }
 }
 
 module.exports = UsersController;
