@@ -95,8 +95,8 @@ class UsersController {
         from: '"Toto Letigre" <toto.letigre@test.fr',
         to: 'asterix@test.fr',
         subject: 'Email de test',
-        Text: 'Voici un test de NodeMailer',
-        html: '<p>Voici un test de NodeMailer</p>'
+        Text: 'Ceci est un test de NodeMailer',
+        html: '<p>Ceci est un test de NodeMailer</p>'
       };
       await req.transporter.sendMail(emailBody);
       console.log('Email envoyé');

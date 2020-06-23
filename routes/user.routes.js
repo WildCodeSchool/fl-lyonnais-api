@@ -7,6 +7,6 @@ router.get('/:id', usersController.findOne);
 router.put('/:id', usersController.update);
 router.delete('/:id', usersController.delete);
 
-router.post('/sendEmail', usersController.sendEmail);
+router.post('/sendemail/:id', usersController.sendEmail);
 
 module.exports = router;
