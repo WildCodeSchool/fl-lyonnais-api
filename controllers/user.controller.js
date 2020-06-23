@@ -20,7 +20,7 @@ class UsersController {
         res.status(400).send({ errorMessage: 'A user with this email already exists !' });
       } else {
         const data = await User.create(user);
-        console.log(data);
+        // console.log(data);
         res.status(201).send(data);
       }
     } catch (err) {
@@ -91,6 +91,7 @@ class UsersController {
 
   static async sendEmail (req, res) {
     try {
+      console.log(req.body);
       const emailBody = {
         from: '"Toto Letigre" <toto.letigre@test.fr',
         to: 'asterix@test.fr',
