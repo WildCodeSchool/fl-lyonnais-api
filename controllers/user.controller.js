@@ -82,7 +82,7 @@ class UsersController {
           message: `Not found User with id ${req.params.id}.`
         });
       } else {
-        res.status(500).User
+        res.status(500).User;
       }
     }
   }

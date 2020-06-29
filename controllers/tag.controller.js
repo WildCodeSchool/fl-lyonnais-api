@@ -1,7 +1,6 @@
 const Tag = require('../models/tag.model.js');
 
 class TagController {
-
   static async findAll (req, res) {
     try {
       const data = (await Tag.getAll()).map(c => c);
