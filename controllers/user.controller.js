@@ -82,9 +82,7 @@ class UsersController {
           message: `Not found User with id ${req.params.id}.`
         });
       } else {
-        res.status(500).send({
-          message: 'Could not delete User with id ' + req.params.id
-        });
+        res.status(500).User
       }
     }
   }

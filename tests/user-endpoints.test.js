@@ -20,7 +20,7 @@ describe('POST /user', () => {
 
     // // 2) Cas d’une requête avec un champ obligatoire manquant : exemple le SIRET,  status Code 422.
 
-    it('returns 422 statussi un champs obligatoire est manquant', async () => {
+    it('returns 422 status si un champs obligatoire est manquant', async () => {
       return request(app)
         .post('/user')
         .send({ email: 'toto@toto.fr', firstname: 'to', lastname: 'to', password: 'toto-soWhat?', siret: '' })

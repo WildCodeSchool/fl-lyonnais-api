@@ -16,6 +16,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 app.use('/user', require('./routes/user.routes.js'));
 app.use('/freelance', require('./routes/freelance.routes.js'));
+app.use('/tag', require('./routes/tag.routes'));
 
 // set port, listen for requests
 const server = app.listen(PORT, () => {
