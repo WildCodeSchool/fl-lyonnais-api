@@ -35,12 +35,10 @@ app.use(express.urlencoded({ extended: true }));
 //   next();
 // });
 
-app.use( (req,res,next) => {
+app.use((req, res, next) => {
   console.log('loggggggggggggggggg');
   next();
-})
-
-
+});
 
 app.use(express.json());
 app.use(cors());
