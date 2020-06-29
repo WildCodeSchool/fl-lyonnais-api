@@ -85,3 +85,10 @@ Content-Type: application/json
 
 ### DELETE
 DELETE http://localhost:3000/freelance/16
+
+------------------------------------------------------TAG------------------------------------------------------
+### FIND ALL
+GET http://localhost:3000/tag
+
+### FIND ONE
+GET http://localhost:3000/tag/2
