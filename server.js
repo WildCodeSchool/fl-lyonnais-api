@@ -25,7 +25,7 @@ require('dotenv').config();
 console.log('> Transporter created');
 
 const app = express();
-const PORT = process.env.PORT || (process.env.NODE_ENV === 'test' ? 3001 : 3000);
+const PORT = process.env.PORT || (process.env.NODE_ENV === 'test' ? 3001 : 7777);
 app.use(express.urlencoded({ extended: true }));
 
 // middlewares
