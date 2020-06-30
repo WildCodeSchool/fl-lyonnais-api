@@ -1,7 +1,6 @@
 const request = require('supertest');
 const app = require('../server.js');
 const Tag = require('../models/tag.model');
-// const connection = require('../db.js')
 
 describe('GET /tags', () => {
   // Requête de la liste globale des tags
@@ -43,7 +42,6 @@ describe('GET /tags', () => {
       .expect(404)
       .expect('Content-Type', /json/)
       .then(response => {
-        console.log(response.body);
         expect(response.body).toEqual({ errorMessage: 'Tag with id 1 not found.' });
       });
   });

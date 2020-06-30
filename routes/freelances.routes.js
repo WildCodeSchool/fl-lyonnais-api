@@ -1,4 +1,4 @@
-const freelancesController = require('../controllers/freelance.controller.js');
+const freelancesController = require('../controllers/freelances.controller.js');
 const router = require('express').Router();
 
 router.post('/', freelancesController.create);
