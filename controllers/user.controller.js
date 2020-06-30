@@ -14,10 +14,9 @@ class UsersController {
     if (!validateEmail(user.email)) {
       return res.status(422).send({ errorMessage: 'A valid email is required !' });
     }
-    try {  /* describe('Récupération de la liste des tags', () => {
-      let res;
-      const query = "INSERT INTO `tag` (`name`, `content`, `slug`) VALUES ('Javascript', 'JavaScript', 'js');";
-      beforeEach(done => connection.query(query); */
+    try {
+      const userAlreadyExists = await User.emailAlreadyExists(user.email);
+      if (userAlreadyExists) {
         res.status(400).send({ errorMessage: 'A user with this email already exists !' });
       } else {
         const data = await User.create(user);
