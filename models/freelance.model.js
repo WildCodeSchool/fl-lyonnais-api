@@ -1,17 +1,6 @@
 const db = require('../db.js');
 
 class Freelance {
-  constructor (freelance) {
-    this.id = freelance.id;
-    this.url_photo = freelance.url_photo;
-    this.job_title = freelance.job_title;
-    this.bio = freelance.bio;
-  }
-
-  get fullName () {
-    return `${this.firstname} ${this.lastname}`;
-  }
-
   static async create (newFreelance) {
     return db.query('INSERT INTO freelance SET ?', newFreelance)
       .then(res => {
@@ -50,8 +39,8 @@ class Freelance {
 
   static async updateById (id, freelance) {
     return db.query(
-      'UPDATE freelance SET url_photo = ?, job_title = ?, bio = ? WHERE id = ?',
-      [freelance.url_photo, freelance.job_title, freelance.bio, id]
+      'UPDATE freelance SET url_photo = ?, phone_number = ?, average_daily_rate = ?, url_web_site = ?, job_title = ?, bio = ?, vat_number = ? WHERE id = ?',
+      [freelance.url_photo, freelance.phone_number, freelance.average_daily_rate, freelance.url_web_site, freelance.job_title, freelance.bio, id]
     ).then(() => this.findById(id));
   }
 

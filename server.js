@@ -45,8 +45,9 @@ app.use(cors());
 if (process.env.NODE_ENV !== 'production') {
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
-app.use('/user', require('./routes/user.routes.js'));
-app.use('/freelance', require('./routes/freelance.routes.js'));
+app.use('/user', require('./routes/users.routes.js'));
+app.use('/freelance', require('./routes/freelances.routes.js'));
+app.use('/tags', require('./routes/tags.routes'));
 
 // set port, listen for requests
 const server = app.listen(PORT, () => {

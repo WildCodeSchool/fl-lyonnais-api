@@ -2,22 +2,10 @@ const Freelance = require('../models/freelance.model.js');
 
 class FreelancesController {
   static async create (req, res) {
-    if (!req.body) {
-      return res.status(400).send({ errorMessage: 'Content can not be empty!' });
-    }
-
-    if (!req.body.email) {
-      return res.status(400).send({ errorMessage: 'Email can not be empty!' });
-    }
-
     try {
-      const user = new Freelance(req.body);
-      if (await Freelance.emailAlreadyExists(user.email)) {
-        res.status(400).send({ errorMessage: 'A user with this email already exists !' });
-      } else {
-        const data = await Freelance.create(user);
-        res.status(201).send({ data });
-      }
+      const freelance = req.body;
+      const data = await Freelance.create(freelance);
+      res.status(201).send({ data });
     } catch (err) {
       res.status(500).send({
         errorMessage: err.message || 'Some error occurred while creating the Freelance.'
@@ -27,16 +15,11 @@ class FreelancesController {
 
   static async findAll (req, res) {
     try {
-      const data = (await Freelance.getAll()).map(c => new Freelance(c)).map(c => ({
-        id: c.id,
-        url_photo: c.url_photo,
-        job_title: c.job_title,
-        bio: !!c.bio
-      }));
+      const data = (await Freelance.getAll()).map(c => c);
       res.send({ data });
     } catch (err) {
       res.status(500).send({
-        errorMessage: err.message || 'Some error occurred while retrieving users.'
+        errorMessage: err.message || 'Some error occurred while retrieving freelances.'
       });
     }
   }
