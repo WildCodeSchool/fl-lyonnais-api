@@ -1,7 +1,7 @@
 const User = require('../models/user.model.js');
 
 const validateEmail = email => {
-  const re = '/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/';
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 };
 
@@ -14,9 +14,10 @@ class UsersController {
     if (!validateEmail(user.email)) {
       return res.status(422).send({ errorMessage: 'A valid email is required !' });
     }
-    try {
-      const userAlreadyExists = await User.emailAlreadyExists(user.email);
-      if (userAlreadyExists) {
+    try {  /* describe('Récupération de la liste des tags', () => {
+      let res;
+      const query = "INSERT INTO `tag` (`name`, `content`, `slug`) VALUES ('Javascript', 'JavaScript', 'js');";
+      beforeEach(done => connection.query(query); */
         res.status(400).send({ errorMessage: 'A user with this email already exists !' });
       } else {
         const data = await User.create(user);
