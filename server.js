@@ -4,7 +4,7 @@ const cors = require('cors');
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./docs/swagger.yaml');
 // const email = require('./email.js');
-const nodemailer = require('nodemailer');
+// const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 // NodeMailer : create fake account at Ethereal
