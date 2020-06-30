@@ -19,6 +19,13 @@ class Tag {
         }
       });
   }
+
+  static async create ({ name, content, slug }) {
+    return db.query('INSERT INTO tag (name, content, slug) VALUES (?, ?, ?);', [name, content, slug])
+      .then(res => {
+        return { name, content, slug, id: res.insertId };
+      });
+  }
 }
 
 module.exports = Tag;
