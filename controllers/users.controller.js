@@ -9,10 +9,14 @@ const validateEmail = email => {
 };
 
 async function sendEmail (data) {
+  // Convertion d'un string en bouléen
+  const isSecureConnection = (process.env.EMAIL_SMTP_SECURE === 'true');
+
+  // Création du "transporteur" pour l'envoi d'emails
   const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_SMTP_HOST,
-    port: 587, // process.env.EMAIL_SMTP_PORT,
-    secure: false, // process.env.EMAIL_SMTP_SECURE, // true for 465, false for other ports
+    port: parseInt(process.env.EMAIL_SMTP_PORT), // 587
+    secure: isSecureConnection, // process.env.EMAIL_SMTP_SECURE, // true for 465, false for other ports
     auth: {
       user: process.env.EMAIL_USER, // generated ethereal user
       pass: process.env.EMAIL_PASS // generated ethereal password
@@ -57,11 +61,9 @@ class UsersController {
       const userAlreadyExists = await User.emailAlreadyExists(user.email);
       if (userAlreadyExists) {
         res.status(400).send({ errorMessage: 'A user with this email already exists !' });
-        console.log('A user with this email already exists !');
       } else {
         const data = await User.create(user);
         await sendEmail(data);
-        // console.log(data);
         res.status(201).send(data);
       }
     } catch (err) {

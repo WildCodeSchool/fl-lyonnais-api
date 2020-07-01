@@ -12,7 +12,7 @@ Content-Type: application/json
 {
   "firstname": "Arsene",
   "lastname": "LUPIN",
-  "email": "arsene.lupin@test18.fr",
+  "email": "arsene.lupin@test20.fr",
   "password": "azerty",
   "siret": "362 521 879 00034",
   "last_connection_date": "2020-06-18",
