@@ -21,11 +21,21 @@ async function sendEmail (data) {
 
   try {
     const emailBody = {
-      from: `"${data.firstname} ${data.lastname}" <${data.email}>`,
-      to: `${data.email}`,
-      subject: 'Email de test',
-      Text: 'Ceci est un test de NodeMailer',
-      html: '<p>Ceci est un test de NodeMailer</p>'
+      from: 'Freelance Lyonnais <no_reply@no.reply>',
+      to: `${data.firstname} ${data.lastname} ${data.email}`,
+      subject: 'Freelance Lyonnais - Le processus de ton inscription est bientôt terminé !',
+      Text: `Cher(e) Freelance Lyonnais,
+      Nous te remercions pour ton inscription sur notre site.
+      Il ne te reste plus qu'à valider ton adresse email en collant le lien ci-dessous dans ton navigateur :
+      Toute l'équipe de Freelance Lyonnais te remercie.
+
+      ${process.env.EMAIL_DESTINATION_URL}/${data.key}`,
+
+      html: `<p>Cher(e) Freelance Lyonnais,</Il>
+      <p>Nous te remercions pour ton inscription sur notre site.</p>
+      <p>Il ne te reste plus qu'à valider ton adresse email en cliquant sur le lien ci-dessous</p>
+      <a href=${process.env.EMAIL_DESTINATION_URL}/${data.key}>${process.env.EMAIL_DESTINATION_URL}/${data.key}</a>
+      <p>Toute l'équipe de Freelance Lyonnais te remercie.</p>`
     };
     await transporter.sendMail(emailBody);
     return console.log('Email envoyé');

@@ -1,5 +1,4 @@
 const usersController = require('../controllers/users.controller.js');
-// const setupAccountValidationEmail = require('../middlewares/setupAccountValidationEmail');
 const router = require('express').Router();
 
 router.post('/', usersController.create);
