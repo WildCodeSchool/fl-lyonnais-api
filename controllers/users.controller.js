@@ -1,10 +1,38 @@
 const User = require('../models/user.model.js');
+require('dotenv').config();
+const nodemailer = require('nodemailer');
 
 const validateEmail = email => {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   // const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 };
+
+async function sendEmail (data) {
+  const transporter = nodemailer.createTransport({
+    host: process.env.EMAIL_SMTP_HOST,
+    port: 587, // process.env.EMAIL_SMTP_PORT,
+    secure: false, // process.env.EMAIL_SMTP_SECURE, // true for 465, false for other ports
+    auth: {
+      user: process.env.EMAIL_USER, // generated ethereal user
+      pass: process.env.EMAIL_PASS // generated ethereal password
+    }
+  });
+
+  try {
+    const emailBody = {
+      from: `"${data.firstname} ${data.lastname}" <${data.email}>`,
+      to: `${data.email}`,
+      subject: 'Email de test',
+      Text: 'Ceci est un test de NodeMailer',
+      html: '<p>Ceci est un test de NodeMailer</p>'
+    };
+    await transporter.sendMail(emailBody);
+    return console.log('Email envoyé');
+  } catch (error) {
+    return console.log('Erreur', error);
+  }
+}
 
 class UsersController {
   static async create (req, res) {
@@ -19,10 +47,11 @@ class UsersController {
       const userAlreadyExists = await User.emailAlreadyExists(user.email);
       if (userAlreadyExists) {
         res.status(400).send({ errorMessage: 'A user with this email already exists !' });
+        console.log('A user with this email already exists !');
       } else {
         const data = await User.create(user);
-        // await User.sendEmail(user.email);
-        console.log(data);
+        await sendEmail(data);
+        // console.log(data);
         res.status(201).send(data);
       }
     } catch (err) {
@@ -91,7 +120,7 @@ class UsersController {
     }
   }
 
-  static async sendEmail (req, res) {
+  /* static async sendEmail (req, res) {
     try {
       console.log(req.body);
       const emailBody = {
@@ -106,7 +135,7 @@ class UsersController {
     } catch (error) {
       console.log('Erreur', error);
     }
-  }
+  } */
 }
 
 module.exports = UsersController;

@@ -6,14 +6,14 @@ GET http://localhost:3000/user
 GET http://localhost:3000/user/2
 
 ### CREATE
-POST http://localhost:3000/user
+POST http://localhost:7777/users
 Content-Type: application/json
 
 {
-  "firstname": "Cozmo",
-  "lastname": "Ivankovic",
-  "email": "Ivankovrefvgica@ferg.com",
-  "password": "password",
+  "firstname": "Arsene",
+  "lastname": "LUPIN",
+  "email": "arsene.lupin@test9.fr",
+  "password": "azerty",
   "siret": "362 521 879 00034",
   "last_connection_date": "2020-06-18",
   "registration_date": "2020-06-05",
