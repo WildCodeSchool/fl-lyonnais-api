@@ -23,7 +23,7 @@ const initTransporter = (req, res, next) => {
   res.json({ ...transporter });
   console.log('---------------------------------------------------');
   console.log('> Transporter created', res);
-  
+
   next();
 };
 
@@ -41,4 +41,3 @@ module.exports = initTransporter;
   console.log('Middleware transporter');
   next();
 }, usersController.sendEmail); */
-
