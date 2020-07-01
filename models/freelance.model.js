@@ -10,7 +10,7 @@ class Freelance {
   }
 
   static async findById (id) {
-    return db.query(`SELECT * FROM freelance WHERE id = ${id}`)
+    return db.query(`SELECT * FROM freelance join user u on freelance.user_id = u.id join address a on freelance.address_id = a.id WHERE freelance.id = ${id}`)
       .then(rows => {
         if (rows.length) {
           return Promise.resolve(rows[0]);
@@ -34,7 +34,7 @@ class Freelance {
   }
 
   static async getAll (result) {
-    return db.query('SELECT * FROM freelance');
+    return db.query('SELECT freelance.id, firstname, lastname, url_photo, job_title FROM freelance join user u on freelance.user_id = u.id');
   }
 
   static async updateById (id, freelance) {
