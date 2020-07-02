@@ -1,17 +1,6 @@
 const db = require('../db.js');
 
 class Freelance {
-  constructor (freelance) {
-    this.id = freelance.id;
-    this.url_photo = freelance.url_photo;
-    this.job_title = freelance.job_title;
-    this.bio = freelance.bio;
-  }
-
-  get fullName () {
-    return `${this.firstname} ${this.lastname}`;
-  }
-
   static async create (newFreelance) {
     return db.query('INSERT INTO freelance SET ?', newFreelance)
       .then(res => {
@@ -21,7 +10,7 @@ class Freelance {
   }
 
   static async findById (id) {
-    return db.query(`SELECT * FROM freelance WHERE id = ${id}`)
+    return db.query('SELECT * FROM freelance join user u on freelance.user_id = u.id left join address a on freelance.address_id = a.id WHERE freelance.id = ?', [id])
       .then(rows => {
         if (rows.length) {
           return Promise.resolve(rows[0]);
@@ -31,6 +20,10 @@ class Freelance {
           return Promise.reject(err);
         }
       });
+  }
+
+  static async getAllTags (freelance_id) {  /* eslint-disable-line */
+    return db.query('SELECT id, name  FROM tag join freelance_tag ft on tag.id = ft.tag_id where ft.freelance_id = ?', [freelance_id]);   /* eslint-disable-line */
   }
 
   static async emailAlreadyExists (email) {
@@ -45,13 +38,13 @@ class Freelance {
   }
 
   static async getAll (result) {
-    return db.query('SELECT * FROM freelance');
+    return db.query('SELECT freelance.id, firstname, lastname, url_photo, job_title FROM freelance join user u on freelance.user_id = u.id');
   }
 
   static async updateById (id, freelance) {
     return db.query(
-      'UPDATE freelance SET url_photo = ?, job_title = ?, bio = ? WHERE id = ?',
-      [freelance.url_photo, freelance.job_title, freelance.bio, id]
+      'UPDATE freelance SET url_photo = ?, phone_number = ?, average_daily_rate = ?, url_web_site = ?, job_title = ?, bio = ?, vat_number = ? WHERE id = ?',
+      [freelance.url_photo, freelance.phone_number, freelance.average_daily_rate, freelance.url_web_site, freelance.job_title, freelance.bio, id]
     ).then(() => this.findById(id));
   }
 

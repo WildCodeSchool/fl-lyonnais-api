@@ -1,9 +1,52 @@
+require('dotenv').config();
 const User = require('../models/user.model.js');
+const nodemailer = require('nodemailer');
 
 const validateEmail = email => {
-  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  // const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 };
+
+async function sendEmail (data) {
+  // Convertion d'un string en bouléen
+  const isSecureConnection = (process.env.EMAIL_SMTP_SECURE === 'true');
+
+  // Création du "transporteur" pour l'envoi d'emails
+  const transporter = nodemailer.createTransport({
+    host: process.env.EMAIL_SMTP_HOST,
+    port: parseInt(process.env.EMAIL_SMTP_PORT), // 587
+    secure: isSecureConnection, // process.env.EMAIL_SMTP_SECURE, // true for 465, false for other ports
+    auth: {
+      user: process.env.EMAIL_USER, // generated ethereal user
+      pass: process.env.EMAIL_PASS // generated ethereal password
+    }
+  });
+
+  try {
+    const emailBody = {
+      from: 'Freelance Lyonnais <no_reply@no.reply>',
+      to: `${data.firstname} ${data.lastname} ${data.email}`,
+      subject: 'Freelance Lyonnais - Le processus de ton inscription est bientôt terminé !',
+      Text: `******* **** ***Cher(e) Freelance Lyonnais,
+      Nous te remercions pour ton inscription sur notre site.
+      Il ne te reste plus qu'à valider ton adresse email en collant le lien ci-dessous dans ton navigateur :
+      Toute l'équipe de Freelance Lyonnais te remercie.
+
+      "${process.env.EMAIL_DESTINATION_URL}/${data.email}_${data.key}"`,
+
+      html: `<p>Cher(e) Freelance Lyonnais,</Il>
+      <p>Nous te remercions pour ton inscription sur notre site.</p>
+      <p>Il ne te reste plus qu'à valider ton adresse email en copiant ou cliquant sur le lien ci-dessous :</p>
+      <a href=${process.env.EMAIL_DESTINATION_URL}/${data.email}/${data.key}>Vérification email</a>
+      <p>Toute l'équipe de Freelance Lyonnais te remercie.</p>`
+    };
+    await transporter.sendMail(emailBody);
+    return console.log('Email envoyé');
+  } catch (error) {
+    return console.log('Erreur', error);
+  }
+}
 
 class UsersController {
   static async create (req, res) {
@@ -20,7 +63,7 @@ class UsersController {
         res.status(400).send({ errorMessage: 'A user with this email already exists !' });
       } else {
         const data = await User.create(user);
-        console.log(data);
+        await sendEmail(data);
         res.status(201).send(data);
       }
     } catch (err) {
