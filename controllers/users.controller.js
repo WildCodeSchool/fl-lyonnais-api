@@ -28,7 +28,7 @@ async function sendEmail (data) {
       from: 'Freelance Lyonnais <no_reply@no.reply>',
       to: `${data.firstname} ${data.lastname} ${data.email}`,
       subject: 'Freelance Lyonnais - Le processus de ton inscription est bientôt terminé !',
-      Text: `Cher(e) Freelance Lyonnais,
+      Text: `******* **** ***Cher(e) Freelance Lyonnais,
       Nous te remercions pour ton inscription sur notre site.
       Il ne te reste plus qu'à valider ton adresse email en collant le lien ci-dessous dans ton navigateur :
       Toute l'équipe de Freelance Lyonnais te remercie.
@@ -37,8 +37,8 @@ async function sendEmail (data) {
 
       html: `<p>Cher(e) Freelance Lyonnais,</Il>
       <p>Nous te remercions pour ton inscription sur notre site.</p>
-      <p>Il ne te reste plus qu'à valider ton adresse email en cliquant sur le lien ci-dessous</p>
-      <a href=${process.env.EMAIL_DESTINATION_URL}/${data.email}_${data.key}>${process.env.EMAIL_DESTINATION_URL}/${data.email}_${data.key}</a>
+      <p>Il ne te reste plus qu'à valider ton adresse email en copiant ou cliquant sur le lien ci-dessous :</p>
+      <a href=${process.env.EMAIL_DESTINATION_URL}/${data.email}/${data.key}>Vérification email</a>
       <p>Toute l'équipe de Freelance Lyonnais te remercie.</p>`
     };
     await transporter.sendMail(emailBody);

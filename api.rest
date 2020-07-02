@@ -6,18 +6,18 @@ GET http://localhost:3000/user
 GET http://localhost:3000/user/2
 
 ### CREATE
-POST http://localhost:7777/users
+POST http://localhost:3000/users
 Content-Type: application/json
 
 {
   "firstname": "Arsene",
   "lastname": "LUPIN",
-  "email": "arsene.lupin@test20.fr",
+  "email": "arsene.lupin@test2.fr",
   "password": "azerty",
   "siret": "362 521 879 00034",
   "last_connection_date": "2020-06-18",
   "registration_date": "2020-06-05",
-  "key": "7",
+  "key": "JZFHZKFZJF7TJFJNZ9POA",
   "is_admin": null,
   "is_validated": null
 }
