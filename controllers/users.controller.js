@@ -140,11 +140,12 @@ class UsersController {
     }
 
     try {
-      const userExists = await User.emailAlreadyExists(email);
-      if (!userExists) {
+      let user = await User.findByEmail(email);
+      if (!user) {
         res.status(400).send({ errorMessage: 'Adresse email inexistante' });
+      } else if (user.is_validated) {
+        res.status(401).send({ errorMessage: 'Validation email déjà réalisée' });
       } else {
-        let user = await User.findByEmail(email);
         if (key === user.key) {
           console.log('Clés identiques !');
           user = { ...user, is_validated: 1 };
@@ -152,7 +153,7 @@ class UsersController {
           res.sendStatus(200);
         } else {
           console.log('Clés différentes !');
-          res.sendStatus(403);
+          res.status(403).send({ errorMessage: "Validation impossible, contactez l'administrateur" });
         }
       }
     } catch (err) {
