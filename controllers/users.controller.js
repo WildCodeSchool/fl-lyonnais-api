@@ -1,5 +1,5 @@
-const User = require('../models/user.model.js');
 require('dotenv').config();
+const User = require('../models/user.model.js');
 const nodemailer = require('nodemailer');
 
 const validateEmail = email => {
@@ -33,7 +33,7 @@ async function sendEmail (data) {
       Il ne te reste plus qu'à valider ton adresse email en collant le lien ci-dessous dans ton navigateur :
       Toute l'équipe de Freelance Lyonnais te remercie.
 
-      ${process.env.EMAIL_DESTINATION_URL}/${data.email}_${data.key}`,
+      "${process.env.EMAIL_DESTINATION_URL}/${data.email}_${data.key}"`,
 
       html: `<p>Cher(e) Freelance Lyonnais,</Il>
       <p>Nous te remercions pour ton inscription sur notre site.</p>
