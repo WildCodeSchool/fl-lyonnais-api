@@ -5,12 +5,8 @@ class FreelancesController {
     if (!req.body) {
       return res.status(400).send({ errorMessage: 'Content can not be empty!' });
     }
-
-    if (!req.body.email) {
-      return res.status(400).send({ errorMessage: 'Email can not be empty!' });
-    }
     try {
-      const user = new Freelance(req.body);
+      const user = req.body;
       if (await Freelance.emailAlreadyExists(user.email)) {
         res.status(400).send({ errorMessage: 'A user with this email already exists !' });
       } else {

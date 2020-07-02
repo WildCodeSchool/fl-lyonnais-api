@@ -1,7 +1,5 @@
 const db = require('../db.js');
 const argon2 = require('argon2');
-// const { connection } = require('../db.js');
-// const jwt = require('jsonwebtoken');
 
 class User {
   static async create (newUser) {
