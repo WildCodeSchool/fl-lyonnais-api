@@ -6,7 +6,7 @@ class FreelancesController {
       return res.status(400).send({ errorMessage: 'Content can not be empty!' });
     }
     try {
-      const user = req.body
+      const user = req.body;
       if (await Freelance.emailAlreadyExists(user.email)) {
         res.status(400).send({ errorMessage: 'A user with this email already exists !' });
       } else {
@@ -39,7 +39,6 @@ class FreelancesController {
       const data = await Freelance.findById(req.params.id);
       const tags = await Freelance.getAllTags(req.params.id);
       res.send({ data, tags });
-
     } catch (err) {
       if (err.kind === 'not_found') {
         res.status(404).send({ errorMessage: `Freelance with id ${req.params.id} not found.` });
