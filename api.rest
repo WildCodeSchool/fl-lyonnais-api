@@ -10,14 +10,14 @@ POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-  "firstname": "Cozmo",
-  "lastname": "Ivankovic",
-  "email": "Ivankovrefvervgica@ferg.com",
-  "password": "password",
+  "firstname": "Adèle",
+  "lastname": "BLANCSEC",
+  "email": "adele.blancsec@test.com",
+  "password": "azerty",
   "siret": "362 521 879 00034",
   "last_connection_date": "2020-06-18",
   "registration_date": "2020-06-05",
-  "key": "JZFHZKFZJF7TJFJNZ9POA",
+  "key": "JZFHZKFZJF7TJFJNZ9PO",
   "is_admin": null,
   "is_validated": null
 }
