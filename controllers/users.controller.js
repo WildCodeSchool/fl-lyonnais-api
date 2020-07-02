@@ -50,7 +50,7 @@ async function sendEmail (data) {
 
 class UsersController {
   static async create (req, res) {
-    const user = req.body;
+    let user = req.body;
     if (!user.email || !user.firstname || !user.lastname || !user.siret) {
       return res.status(422).send({ errorMessage: 'Content can not be empty!' });
     }
@@ -62,6 +62,7 @@ class UsersController {
       if (userAlreadyExists) {
         res.status(400).send({ errorMessage: 'A user with this email already exists !' });
       } else {
+        user = { ...user, is_validated: 0 };
         const data = await User.create(user);
         await sendEmail(data);
         res.status(201).send(data);

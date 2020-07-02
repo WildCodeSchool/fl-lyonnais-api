@@ -10,9 +10,9 @@ POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-  "firstname": "Caius",
-  "lastname": "CAMILLIUS",
-  "email": "caius.camillus@test.com",
+  "firstname": "Planteur",
+  "lastname": "J'ME-TRANCHE-LA-GORGE",
+  "email": "planteur@test.com",
   "password": "azerty",
   "siret": "362 521 879 00034",
   "last_connection_date": "2020-07-02",
@@ -44,7 +44,7 @@ DELETE http://localhost:3000/user/16
 
 
 ### ACCOUNT VALIDATION VIA EMAIL - CORRECT REQUEST
-GET http://localhost:3000/users/validation_email/arsene.lupin@test.com/KEY0
+GET http://localhost:3000/users/validation_email/arsene.lupin@test.com/KEY
 
 
 
