@@ -10,10 +10,10 @@ POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-  "firstname": "Arsene",
-  "lastname": "LUPIN",
-  "email": "arsene.lupin@test2.fr",
-  "password": "azerty",
+  "firstname": "Cozmo",
+  "lastname": "Ivankovic",
+  "email": "Ivankovrefvervgica@ferg.com",
+  "password": "password",
   "siret": "362 521 879 00034",
   "last_connection_date": "2020-06-18",
   "registration_date": "2020-06-05",
@@ -43,12 +43,6 @@ Content-Type: application/json
 DELETE http://localhost:3000/user/16
 
 ------------------------------------------------------FREELANCE------------------------------------------------------
-### FIND ALL
-GET http://localhost:3000/freelance
-
-### FIND ONE
-GET http://localhost:3000/freelance/2
-
 ### POST
 POST http://localhost:3000/freelance
 Content-Type: application/json
@@ -65,8 +59,14 @@ Content-Type: application/json
   "is_active": "1"
 }
 
+### FIND ALL
+GET http://localhost:3000/freelance
+
+### FIND ONE
+GET http://localhost:3000/freelance/8
+
 ### UPDATE
-PUT http://localhost:3000/freelance/2
+PUT http://localhost:3000/freelance/1
 Content-Type: application/json
 
 {

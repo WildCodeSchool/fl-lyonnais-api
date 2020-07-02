@@ -2,6 +2,7 @@ require('dotenv').config();
 const User = require('../models/user.model.js');
 const nodemailer = require('nodemailer');
 
+
 const validateEmail = email => {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   // const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -47,6 +48,7 @@ async function sendEmail (data) {
     return console.log('Erreur', error);
   }
 }
+
 
 class UsersController {
   static async create (req, res) {
@@ -131,23 +133,6 @@ class UsersController {
       }
     }
   }
-
-  /* static async sendEmail (req, res) {
-    try {
-      console.log(req.body);
-      const emailBody = {
-        from: '"Toto Letigre" <toto.letigre@test.fr',
-        to: 'asterix@test.fr',
-        subject: 'Email de test',
-        Text: 'Ceci est un test de NodeMailer',
-        html: '<p>Ceci est un test de NodeMailer</p>'
-      };
-      await req.transporter.sendMail(emailBody);
-      console.log('Email envoyé');
-    } catch (error) {
-      console.log('Erreur', error);
-    }
-  } */
 }
 
 module.exports = UsersController;
