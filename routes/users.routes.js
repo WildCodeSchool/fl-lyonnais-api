@@ -8,6 +8,6 @@ router.put('/:id', usersController.update);
 router.delete('/:id', usersController.delete);
 
 // Validation d'un nouveau freelance par son email
-router.put('/validation_email/:email/:key', usersController.validationByEmail);
+router.get('/validation_email/:email/:key', usersController.validationByEmail);
 
 module.exports = router;

@@ -10,13 +10,13 @@ POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-  "firstname": "Arsène",
-  "lastname": "LUPIN",
-  "email": "arsene.lupin@test.com",
+  "firstname": "Caius",
+  "lastname": "CAMILLIUS",
+  "email": "caius.camillus@test.com",
   "password": "azerty",
   "siret": "362 521 879 00034",
-  "last_connection_date": "2020-06-18",
-  "registration_date": "2020-06-05",
+  "last_connection_date": "2020-07-02",
+  "registration_date": "2020-07-02",
   "key": "KEY",
   "is_admin": null,
   "is_validated": null
@@ -44,7 +44,7 @@ DELETE http://localhost:3000/user/16
 
 
 ### ACCOUNT VALIDATION VIA EMAIL - CORRECT REQUEST
-PUT http://localhost:3000/users/validation_email/arsene.lupin@test.com/KEY0
+GET http://localhost:3000/users/validation_email/arsene.lupin@test.com/KEY0
 
 
 
