@@ -1,14 +1,11 @@
 const request = require('supertest');
 const app = require('../server.js');
 
-// const user = require('../models/user.model');
-// const connection = require('../db.js')
-
-describe('POST /user', () => {
+describe('POST /users', () => {
   describe('when a valid payload is sent', () => {
     it('returns 201 status les 4 champs sont bien remplis', async () => {
       return request(app)
-        .post('/user')
+        .post('/users')
         .send({ email: 'toto@toto.fr', firstname: 'to', lastname: 'to', siret: '0000', password: 'toto-soWhat?' })
         .expect(201)
         .expect('Content-Type', /json/)
@@ -22,7 +19,7 @@ describe('POST /user', () => {
 
     it('returns 422 status si un champs obligatoire est manquant', async () => {
       return request(app)
-        .post('/user')
+        .post('/users')
         .send({ email: 'toto@toto.fr', firstname: 'to', lastname: 'to', password: 'toto-soWhat?', siret: '' })
         .expect(422)
         .expect('Content-Type', /json/)
@@ -34,7 +31,7 @@ describe('POST /user', () => {
     // // 3) Cas avec un attribut du mauvais type : erreur dans l’adresse email,  status Code 422.
     it('returns 422 statussi un champs obligatoire est manquant', async () => {
       return request(app)
-        .post('/user')
+        .post('/users')
         .send({ email: 'toto@totofr', firstname: 'to', lastname: 'to', password: 'toto-soWhat?', siret: '0000' })
         .expect(422)
         .expect('Content-Type', /json/)
@@ -47,7 +44,7 @@ describe('POST /user', () => {
     // // 4)  Cas de deux ressources ajoutées avec le même email ou siret ou combinaison Prénom/Nom : status Code 409.
     it('returns 422 statussi un champs obligatoire est manquant', async () => {
       return request(app)
-        .post('/user')
+        .post('/users')
         .send({ email: 'toto@totofr', firstname: 'to', lastname: 'to', password: 'toto-soWhat?', siret: '0000' })
         .expect(422)
         .expect('Content-Type', /json/)

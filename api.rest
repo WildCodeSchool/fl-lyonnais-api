@@ -6,18 +6,18 @@ GET http://localhost:3000/user
 GET http://localhost:3000/user/2
 
 ### CREATE
-POST http://localhost:3000/user
+POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-  "firstname": "Cozmo",
-  "lastname": "Ivankovic",
-  "email": "Ivankovrefvervgica@ferg.com",
-  "password": "password",
+  "firstname": "Adèle",
+  "lastname": "BLANCSEC",
+  "email": "adele.blancsec@test.com",
+  "password": "azerty",
   "siret": "362 521 879 00034",
   "last_connection_date": "2020-06-18",
   "registration_date": "2020-06-05",
-  "key": "7",
+  "key": "JZFHZKFZJF7TJFJNZ9PO",
   "is_admin": null,
   "is_validated": null
 }
@@ -84,11 +84,11 @@ Content-Type: application/json
 }
 
 ### DELETE
-DELETE http://localhost:3000/freelance/61
+DELETE http://localhost:3000/freelance/16
 
 ------------------------------------------------------TAG------------------------------------------------------
 ### FIND ALL
-GET https://bridge.buddyweb.fr/api/freelancers/test
+GET http://localhost:3000/tag
 
 ### FIND ONE
 GET http://localhost:3000/tag/2
