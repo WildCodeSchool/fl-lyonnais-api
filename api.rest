@@ -10,10 +10,9 @@ POST http://localhost:3000/user
 Content-Type: application/json
 
 {
-  "id": 55,
   "firstname": "Cozmo",
   "lastname": "Ivankovic",
-  "email": "Ivankovic",
+  "email": "Ivankovrefvervgica@ferg.com",
   "password": "password",
   "siret": "362 521 879 00034",
   "last_connection_date": "2020-06-18",
@@ -28,8 +27,7 @@ PUT http://localhost:3000/user/2
 Content-Type: application/json
 
 {
-  "id": 2,
-  "firstname": "Cozmo",
+  "firstname": "Cozmvvvooo",
   "lastname": "Ivankovic",
   "email": "Ivankovic",
   "password": "password",
@@ -45,12 +43,6 @@ Content-Type: application/json
 DELETE http://localhost:3000/user/16
 
 ------------------------------------------------------FREELANCE------------------------------------------------------
-### FIND ALL
-GET http://localhost:3000/freelance
-
-### FIND ONE
-GET http://localhost:3000/freelance/2
-
 ### POST
 POST http://localhost:3000/freelance
 Content-Type: application/json
@@ -60,30 +52,43 @@ Content-Type: application/json
   "phone_number": "+33 1 23 45 67 89",
   "average_daily_rate": "400",
   "url_web_site": "https://fr.reactjs.org/",
+  "job_title": "dev",
   "bio": "En utilisant props et state on peut créer une petite application de gestion de tâches. Cet exemple utilise state pour maintenir la liste des tâches et le texte que l’utilisateur a saisi. Bien que les gestionnaires d’événements soient définis directement dans le code ils seront regroupés et gérés en utilisant les principes de délégation des événements.",
   "vat_number": "FR31734820078",
   "last_modification_date": "2020-07-19",
-  "is_is_active": "1",
-  "address_id": "23 Rue Claude Veyron 69007 Lyon",
-  "user_id": "5"
+  "is_active": "1"
 }
 
+### FIND ALL
+GET http://localhost:3000/freelance
+
+### FIND ONE
+GET http://localhost:3000/freelance/8
+
 ### UPDATE
-PUT http://localhost:3000/freelance/2
+PUT http://localhost:3000/freelance/1
 Content-Type: application/json
 
 {
   "url_photo": "https://randomuser.me/api/portraits/women/43.jpg",
   "phone_number": "+33 1 23 45 67 89",
-  "average_daily_rate": "400",
-  "url_web_site": "https://fr.reactjs.org/",
+  "average_daily_rate": "300",
+  "url_web_site": "https://fr.refrractjs.org/",
+  "job_title": "dev",
   "bio": "En utilisant props et state on peut créer une petite application de gestion de tâches. Cet exemple utilise state pour maintenir la liste des tâches et le texte que l’utilisateur a saisi. Bien que les gestionnaires d’événements soient définis directement dans le code ils seront regroupés et gérés en utilisant les principes de délégation des événements.",
   "vat_number": "FR31734820078",
-  "last_modification_date": "2020-07-19",
-  "is_is_active": "1",
-  "address_id": "23 Rue Claude Veyron 69007 Lyon",
-  "user_id": "5"
+  "last_modification_date": "2020-07-18T22:00:00.000Z",
+  "is_active": 1,
+  "address_id": null,
+  "user_id": null
 }
 
 ### DELETE
-DELETE http://localhost:3000/freelance/16
+DELETE http://localhost:3000/freelance/61
+
+------------------------------------------------------TAG------------------------------------------------------
+### FIND ALL
+GET https://bridge.buddyweb.fr/api/freelancers/test
+
+### FIND ONE
+GET http://localhost:3000/tag/2

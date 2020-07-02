@@ -4,16 +4,9 @@ const argon2 = require('argon2');
 // const jwt = require('jsonwebtoken');
 
 class User {
-  get fullName () {
-    return `${this.firstname} ${this.lastname}`;
-  }
-
   static async create (newUser) {
     const hash = await argon2.hash(newUser.password);
-    // console.log(hash);
     const addUser = { ...newUser, password: hash };
-    console.log('Log Toi !!!!!!!!!!');
-    // console.log(addUser);
     return db.query('INSERT INTO user SET ?', addUser)
       .then(res => {
         newUser.id = res.insertId;

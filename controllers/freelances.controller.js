@@ -9,7 +9,6 @@ class FreelancesController {
     if (!req.body.email) {
       return res.status(400).send({ errorMessage: 'Email can not be empty!' });
     }
-
     try {
       const user = new Freelance(req.body);
       if (await Freelance.emailAlreadyExists(user.email)) {
@@ -18,6 +17,9 @@ class FreelancesController {
         const data = await Freelance.create(user);
         res.status(201).send({ data });
       }
+      const freelance = req.body;
+      const data = await Freelance.create(freelance);
+      res.status(201).send({ data });
     } catch (err) {
       res.status(500).send({
         errorMessage: err.message || 'Some error occurred while creating the Freelance.'
@@ -27,16 +29,11 @@ class FreelancesController {
 
   static async findAll (req, res) {
     try {
-      const data = (await Freelance.getAll()).map(c => new Freelance(c)).map(c => ({
-        id: c.id,
-        url_photo: c.url_photo,
-        job_title: c.job_title,
-        bio: !!c.bio
-      }));
+      const data = (await Freelance.getAll()).map(c => c);
       res.send({ data });
     } catch (err) {
       res.status(500).send({
-        errorMessage: err.message || 'Some error occurred while retrieving users.'
+        errorMessage: err.message || 'Some error occurred while retrieving freelances.'
       });
     }
   }
@@ -44,7 +41,8 @@ class FreelancesController {
   static async findOne (req, res) {
     try {
       const data = await Freelance.findById(req.params.id);
-      res.send({ data });
+      const tags = await Freelance.getAllTags(req.params.id);
+      res.send({ data, tags });
     } catch (err) {
       if (err.kind === 'not_found') {
         res.status(404).send({ errorMessage: `Freelance with id ${req.params.id} not found.` });
