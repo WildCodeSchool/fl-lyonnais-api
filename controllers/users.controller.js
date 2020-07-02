@@ -131,6 +131,36 @@ class UsersController {
       }
     }
   }
+
+  static async validationByEmail (req, res) {
+    const { email, key } = req.params;
+    if (!validateEmail(email)) {
+      return res.status(422).send({ errorMessage: 'Il faut une adresse email valide !' });
+    }
+
+    try {
+      const userExists = await User.emailAlreadyExists(email);
+      if (!userExists) {
+        res.status(400).send({ errorMessage: 'Adresse email inexistante' });
+      } else {
+        let user = await User.findByEmail(email);
+        if (key === user.key) {
+          console.log('Clés identiques !');
+          user = { ...user, is_validated: 1 };
+          await User.updateById(user.id, user);
+          res.sendStatus(200);
+        } else {
+          console.log('Clés différentes !');
+          res.sendStatus(403);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send({
+        errorMessage: err.message || "Des erreurs se sont produites lors de la validation d'un nouvel utilisateur."
+      });
+    }
+  }
 }
 
 module.exports = UsersController;

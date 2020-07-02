@@ -26,6 +26,19 @@ class User {
       });
   }
 
+  static async findByEmail (email) {
+    return db.query('SELECT * FROM user WHERE email = ?', [email])
+      .then(rows => {
+        if (rows.length) {
+          return Promise.resolve(rows[0]);
+        } else {
+          const err = new Error();
+          err.kind = 'not_found';
+          return Promise.reject(err);
+        }
+      });
+  }
+
   static async emailAlreadyExists (email) {
     return db.query('SELECT * FROM user WHERE email = ?', [email])
       .then(rows => {
@@ -43,8 +56,8 @@ class User {
 
   static async updateById (id, user) {
     return db.query(
-      'UPDATE user SET email = ?, firstname = ?, lastname = ?, siret = ? WHERE id = ?',
-      [user.email, user.firstname, user.lastname, user.siret, id]
+      'UPDATE user SET email = ?, firstname = ?, lastname = ?, siret = ?, is_validated = ? WHERE id = ?',
+      [user.email, user.firstname, user.lastname, user.siret, user.is_validated, id]
     ).then(() => this.findById(id));
   }
 
