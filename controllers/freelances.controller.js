@@ -2,7 +2,21 @@ const Freelance = require('../models/freelance.model.js');
 
 class FreelancesController {
   static async create (req, res) {
+    if (!req.body) {
+      return res.status(400).send({ errorMessage: 'Content can not be empty!' });
+    }
+
+    if (!req.body.email) {
+      return res.status(400).send({ errorMessage: 'Email can not be empty!' });
+    }
     try {
+      const user = new Freelance(req.body);
+      if (await Freelance.emailAlreadyExists(user.email)) {
+        res.status(400).send({ errorMessage: 'A user with this email already exists !' });
+      } else {
+        const data = await Freelance.create(user);
+        res.status(201).send({ data });
+      }
       const freelance = req.body;
       const data = await Freelance.create(freelance);
       res.status(201).send({ data });
@@ -27,7 +41,8 @@ class FreelancesController {
   static async findOne (req, res) {
     try {
       const data = await Freelance.findById(req.params.id);
-      res.send({ data });
+      const tags = await Freelance.getAllTags(req.params.id);
+      res.send({ data, tags });
     } catch (err) {
       if (err.kind === 'not_found') {
         res.status(404).send({ errorMessage: `Freelance with id ${req.params.id} not found.` });

@@ -12,7 +12,7 @@ Content-Type: application/json
 {
   "firstname": "Cozmo",
   "lastname": "Ivankovic",
-  "email": "Ivankovrefvgica@ferg.com",
+  "email": "Ivankovrefvervgica@ferg.com",
   "password": "password",
   "siret": "362 521 879 00034",
   "last_connection_date": "2020-06-18",
@@ -43,12 +43,6 @@ Content-Type: application/json
 DELETE http://localhost:3000/user/16
 
 ------------------------------------------------------FREELANCE------------------------------------------------------
-### FIND ALL
-GET http://localhost:3000/freelance
-
-### FIND ONE
-GET http://localhost:3000/freelance/2
-
 ### POST
 POST http://localhost:3000/freelance
 Content-Type: application/json
@@ -65,8 +59,14 @@ Content-Type: application/json
   "is_active": "1"
 }
 
+### FIND ALL
+GET http://localhost:3000/freelance
+
+### FIND ONE
+GET http://localhost:3000/freelance/8
+
 ### UPDATE
-PUT http://localhost:3000/freelance/2
+PUT http://localhost:3000/freelance/1
 Content-Type: application/json
 
 {
@@ -84,11 +84,11 @@ Content-Type: application/json
 }
 
 ### DELETE
-DELETE http://localhost:3000/freelance/16
+DELETE http://localhost:3000/freelance/61
 
 ------------------------------------------------------TAG------------------------------------------------------
 ### FIND ALL
-GET http://localhost:3000/tag
+GET https://bridge.buddyweb.fr/api/freelancers/test
 
 ### FIND ONE
 GET http://localhost:3000/tag/2
