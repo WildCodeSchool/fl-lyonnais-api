@@ -62,7 +62,13 @@ class UsersController {
       if (userAlreadyExists) {
         res.status(400).send({ errorMessage: 'A user with this email already exists !' });
       } else {
-        user = { ...user, is_validated: 0, key: 'KEY42' };
+        const registrationDate = new Date().toISOString().slice(0, 10);
+        user = {
+          ...user,
+          registration_date: registrationDate,
+          is_validated: 0,
+          key: 'KEY42'
+        };
         const data = await User.create(user);
         await sendEmail(data);
         res.status(201).send(data);
@@ -150,7 +156,7 @@ class UsersController {
           console.log('Clés identiques !');
           user = { ...user, is_validated: 1 };
           await User.updateById(user.id, user);
-          res.sendStatus(200);
+          res.status(200).redirect('http://localhost:3001/connexion');
         } else {
           console.log('Clés différentes !');
           res.status(403).send({ errorMessage: "Validation impossible, contactez l'administrateur" });
