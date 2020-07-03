@@ -1,5 +1,7 @@
 const db = require('../db.js');
 const argon2 = require('argon2');
+const jwt = require('jsonwebtoken');
+const JWT_PRIVATE_KEY = process.env.JWT_PRIVATE_KEY;
 
 class User {
   static async create (newUser) {
@@ -46,6 +48,38 @@ class User {
       'UPDATE user SET email = ?, firstname = ?, lastname = ?, siret = ? WHERE id = ?',
       [user.email, user.firstname, user.lastname, user.siret, id]
     ).then(() => this.findById(id));
+  }
+  
+  static async findByEmail (email) {
+    return db.query('SELECT * FROM user WHERE email = ?', [email])
+      .then(rows => {
+        if (rows.length) {
+          return Promise.resolve(rows[0]);
+        } else {
+          const err = new Error();
+          console.log(`Aucun e-mail correspond à ${email}`);
+          return Promise.reject(err);
+        }
+      });
+  }
+
+  static async login (email, password) {
+    let user = await User.findByEmail(email);
+    if (!user) {
+      throw new Error('user not found');
+    } else {
+      const passwordIsValid = await argon2.verify(user.password, password);
+      if (!passwordIsValid) {
+        throw new Error('incorrect password');
+      } else {
+        const data = { name: user.name, id: user.id };
+        const token = jwt.sign(data, JWT_PRIVATE_KEY, { expiresIn: '2h' });
+        const userWithoutPassord = { password, ...user };
+        user = { ...userWithoutPassord, lastConnectionDate: new Date().toISOString().slice(0, 10) };
+        await User.updateById(data.id, user);
+        return Promise.resolve({ token, data });
+      }
+    }
   }
 
   static async remove (id) {
