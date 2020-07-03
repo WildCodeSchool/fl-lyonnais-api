@@ -63,7 +63,6 @@ class User {
     ).then(() => this.findById(id));
   }
 
-
   static async login (email, password) {
     let user = await User.findByEmail(email);
     if (!user) {
