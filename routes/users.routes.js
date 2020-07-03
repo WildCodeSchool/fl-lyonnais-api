@@ -13,5 +13,4 @@ router.get('/validation_email/:email/:key', usersController.validationByEmail);
 
 router.post('/connexion', authController.login);
 
-
 module.exports = router;

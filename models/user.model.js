@@ -62,19 +62,7 @@ class User {
       [user.email, user.firstname, user.lastname, user.siret, user.is_validated, id]
     ).then(() => this.findById(id));
   }
-  
-  static async findByEmail (email) {
-    return db.query('SELECT * FROM user WHERE email = ?', [email])
-      .then(rows => {
-        if (rows.length) {
-          return Promise.resolve(rows[0]);
-        } else {
-          const err = new Error();
-          console.log(`Aucun e-mail correspond à ${email}`);
-          return Promise.reject(err);
-        }
-      });
-  }
+
 
   static async login (email, password) {
     let user = await User.findByEmail(email);
