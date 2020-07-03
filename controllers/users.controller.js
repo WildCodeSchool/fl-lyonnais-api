@@ -62,8 +62,8 @@ class UsersController {
       if (userAlreadyExists) {
         res.status(400).send({ errorMessage: 'A user with this email already exists !' });
       } else {
-        user = { ...user, is_validated: 0 };
-        const data = await User.create(user);
+        user = { ...user, is_validated: 0, key: 'KEY42' };
+        let data = await User.create(user);
         await sendEmail(data);
         res.status(201).send(data);
       }
