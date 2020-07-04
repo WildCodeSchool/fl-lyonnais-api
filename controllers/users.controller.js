@@ -1,6 +1,7 @@
 require('dotenv').config();
 const User = require('../models/user.model.js');
 const nodemailer = require('nodemailer');
+const randkey = require('random-keygen');
 
 const validateEmail = email => {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -8,11 +9,23 @@ const validateEmail = email => {
   return re.test(String(email).toLowerCase());
 };
 
+// Le freelance a 48 heures pour valider son adresse email...
+// Vérification de ce délai
+function onTimeForValidation (user) {
+  const twoDaysAgo = new Date(Date.now() - (48 * 60 * 60 * 1000)).toISOString().slice(0, 10);
+  const registrationDate = user.registration_date.toString().substring(0, 10);
+  console.log(twoDaysAgo);
+  console.log(registrationDate);
+  console.log(twoDaysAgo <= registrationDate);
+  return twoDaysAgo <= registrationDate;
+}
+
+// Création du transporteur pour l'envoi d'mails (NodeMailer)
 async function sendEmail (data) {
   // Convertion d'un string en bouléen
   const isSecureConnection = (process.env.EMAIL_SMTP_SECURE === 'true');
 
-  // Création du "transporteur" pour l'envoi d'emails
+  // Transporteur
   const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_SMTP_HOST,
     port: parseInt(process.env.EMAIL_SMTP_PORT), // 587
@@ -33,12 +46,12 @@ async function sendEmail (data) {
       Il ne te reste plus qu'à valider ton adresse email en collant le lien ci-dessous dans ton navigateur :
       Toute l'équipe de Freelance Lyonnais te remercie.
 
-      "${process.env.EMAIL_DESTINATION_URL}${data.email}_${data.key}"`,
+      "${process.env.BASE_URL}/users/validation_email/${data.email}_${data.key}"`,
 
       html: `<p>Cher(e) Freelance Lyonnais,</Il>
       <p>Nous te remercions pour ton inscription sur notre site.</p>
       <p>Il ne te reste plus qu'à valider ton adresse email en copiant ou cliquant sur le lien ci-dessous :</p>
-      <a href=${process.env.EMAIL_DESTINATION_URL}${data.email}/${data.key}>Vérification email</a>
+      <a href=${process.env.BASE_URL}/users/validation_email/${data.email}/${data.key}>Vérification email</a>
       <p>Toute l'équipe de Freelance Lyonnais te remercie.</p>`
     };
     await transporter.sendMail(emailBody);
@@ -62,12 +75,20 @@ class UsersController {
       if (userAlreadyExists) {
         res.status(400).send({ errorMessage: 'A user with this email already exists !' });
       } else {
+        // Récupère la date du jour
         const registrationDate = new Date().toISOString().slice(0, 10);
+        // création d'une clé de 20 caractères
+        const key = randkey.get({
+          length: 20,
+          numbers: true,
+          uppercase: true
+        });
+        // Ajout des clés dans l'objet passé pour la création du tuple dans la table 'user'
         user = {
           ...user,
           registration_date: registrationDate,
           is_validated: 0,
-          key: 'KEY42'
+          key: key
         };
         const data = await User.create(user);
         await sendEmail(data);
@@ -152,14 +173,16 @@ class UsersController {
       } else if (user.is_validated) {
         res.status(401).send({ errorMessage: 'Validation email déjà réalisée' });
       } else {
-        if (key === user.key) {
+        const onTime = onTimeForValidation(user);
+        console.log(onTime);
+        if ((key === user.key) && onTime) {
           console.log('Clés identiques !');
           user = { ...user, is_validated: 1 };
           await User.updateById(user.id, user);
-          res.status(200).redirect('http://localhost:3001/connexion');
+          res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=' + user.key);
         } else {
           console.log('Clés différentes !');
-          res.status(403).send({ errorMessage: "Validation impossible, contactez l'administrateur" });
+          res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=nok');
         }
       }
     } catch (err) {
