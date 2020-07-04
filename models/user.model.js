@@ -77,7 +77,7 @@ class User {
         const userWithoutPassord = { password, ...user };
         user = { ...userWithoutPassord, lastConnectionDate: new Date().toISOString().slice(0, 10) };
         await User.updateById(data.id, user);
-        return Promise.resolve({ token, data });
+        return Promise.resolve({ token, data, user });
       }
     }
   }
