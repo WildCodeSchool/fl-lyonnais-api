@@ -173,14 +173,17 @@ class UsersController {
       } else {
         const isOnTime = onTimeForValidation(user);
         if ((key === user.key) && isOnTime) {
+          // OK : email, clé et date sont valides
           console.log('Clés identiques !');
           user = { ...user, is_validated: 1 };
           await User.updateById(user.id, user);
           res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=' + user.key);
         } else if (!isOnTime) {
+          // Erreur : le délai de réponse est dépassé
           console.log('Date dépassée...');
           res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=date');
         } else {
+          // Erreur : les clés sont différentes
           console.log('Clés différentes !');
           res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=key');
         }
