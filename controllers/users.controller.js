@@ -11,12 +11,10 @@ const validateEmail = email => {
 
 // Le freelance a 48 heures pour valider son adresse email...
 // Vérification de ce délai
+// Attention : ajouter 24 heures à la durée souhaitée (p.e. : 72 pour 48 h).
 function onTimeForValidation (user) {
-  const twoDaysAgo = new Date(Date.now() - (48 * 60 * 60 * 1000)).toISOString().slice(0, 10);
-  const registrationDate = user.registration_date.toString().substring(0, 10);
-  console.log(twoDaysAgo);
-  console.log(registrationDate);
-  console.log(twoDaysAgo <= registrationDate);
+  const twoDaysAgo = new Date(new Date(Date.now() - (72 * 60 * 60 * 1000)).toISOString().slice(0, 10));
+  const registrationDate = user.registration_date; // .substring(0, 10);
   return twoDaysAgo <= registrationDate;
 }
 
@@ -173,16 +171,18 @@ class UsersController {
       } else if (user.is_validated) {
         res.status(401).send({ errorMessage: 'Validation email déjà réalisée' });
       } else {
-        const onTime = onTimeForValidation(user);
-        console.log(onTime);
-        if ((key === user.key) && onTime) {
+        const isOnTime = onTimeForValidation(user);
+        if ((key === user.key) && isOnTime) {
           console.log('Clés identiques !');
           user = { ...user, is_validated: 1 };
           await User.updateById(user.id, user);
           res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=' + user.key);
+        } else if (!isOnTime) {
+          console.log('Date dépassée...');
+          res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=date');
         } else {
           console.log('Clés différentes !');
-          res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=nok');
+          res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=key');
         }
       }
     } catch (err) {
