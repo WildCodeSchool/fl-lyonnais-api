@@ -163,13 +163,15 @@ class UsersController {
     if (!validateEmail(email)) {
       return res.status(422).send({ errorMessage: 'Il faut une adresse email valide !' });
     }
-
     try {
       let user = await User.findByEmail(email);
       if (!user) {
+        // Erreur : l'adresse email n'est pas présente dans la table user
         res.status(400).send({ errorMessage: 'Adresse email inexistante' });
-      } else if (user.is_validated) {
-        res.status(401).send({ errorMessage: 'Validation email déjà réalisée' });
+      } else if (user.is_validated ) {
+        // Erreur : tentative de revalidation d'un compte déjà validé
+        console.log('Tentative de revalidation...');
+        res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=revalidation');
       } else {
         const isOnTime = onTimeForValidation(user);
         if ((key === user.key) && isOnTime) {
@@ -180,7 +182,7 @@ class UsersController {
           res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=' + user.key);
         } else if (!isOnTime) {
           // Erreur : le délai de réponse est dépassé
-          console.log('Date dépassée...');
+          console.log('Délai dépassée...');
           res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=delay_exceeded');
         } else {
           // Erreur : les clés sont différentes
