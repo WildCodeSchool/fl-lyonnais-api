@@ -181,11 +181,11 @@ class UsersController {
         } else if (!isOnTime) {
           // Erreur : le délai de réponse est dépassé
           console.log('Date dépassée...');
-          res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=date');
+          res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=delay_exceeded');
         } else {
           // Erreur : les clés sont différentes
           console.log('Clés différentes !');
-          res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=key');
+          res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=wrong_key');
         }
       }
     } catch (err) {
