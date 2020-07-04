@@ -8,6 +8,9 @@ router.get('/:id', usersController.findOne);
 router.put('/:id', usersController.update);
 router.delete('/:id', usersController.delete);
 
+// Validation d'un nouveau freelance par son email
+router.get('/validation_email/:email/:key', usersController.validationByEmail);
+
 router.post('/connexion', authController.login);
 
 module.exports = router;

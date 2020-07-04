@@ -33,12 +33,12 @@ async function sendEmail (data) {
       Il ne te reste plus qu'à valider ton adresse email en collant le lien ci-dessous dans ton navigateur :
       Toute l'équipe de Freelance Lyonnais te remercie.
 
-      "${process.env.EMAIL_DESTINATION_URL}/${data.email}_${data.key}"`,
+      "${process.env.EMAIL_DESTINATION_URL}${data.email}_${data.key}"`,
 
       html: `<p>Cher(e) Freelance Lyonnais,</Il>
       <p>Nous te remercions pour ton inscription sur notre site.</p>
       <p>Il ne te reste plus qu'à valider ton adresse email en copiant ou cliquant sur le lien ci-dessous :</p>
-      <a href=${process.env.EMAIL_DESTINATION_URL}/${data.email}/${data.key}>Vérification email</a>
+      <a href=${process.env.EMAIL_DESTINATION_URL}${data.email}/${data.key}>Vérification email</a>
       <p>Toute l'équipe de Freelance Lyonnais te remercie.</p>`
     };
     await transporter.sendMail(emailBody);
@@ -50,7 +50,7 @@ async function sendEmail (data) {
 
 class UsersController {
   static async create (req, res) {
-    const user = req.body;
+    let user = req.body;
     if (!user.email || !user.firstname || !user.lastname || !user.siret) {
       return res.status(422).send({ errorMessage: 'Content can not be empty!' });
     }
@@ -62,6 +62,13 @@ class UsersController {
       if (userAlreadyExists) {
         res.status(400).send({ errorMessage: 'A user with this email already exists !' });
       } else {
+        const registrationDate = new Date().toISOString().slice(0, 10);
+        user = {
+          ...user,
+          registration_date: registrationDate,
+          is_validated: 0,
+          key: 'KEY42'
+        };
         const data = await User.create(user);
         await sendEmail(data);
         res.status(201).send(data);
@@ -129,6 +136,37 @@ class UsersController {
           message: 'Could not delete User with id ' + req.params.id
         });
       }
+    }
+  }
+
+  static async validationByEmail (req, res) {
+    const { email, key } = req.params;
+    if (!validateEmail(email)) {
+      return res.status(422).send({ errorMessage: 'Il faut une adresse email valide !' });
+    }
+
+    try {
+      let user = await User.findByEmail(email);
+      if (!user) {
+        res.status(400).send({ errorMessage: 'Adresse email inexistante' });
+      } else if (user.is_validated) {
+        res.status(401).send({ errorMessage: 'Validation email déjà réalisée' });
+      } else {
+        if (key === user.key) {
+          console.log('Clés identiques !');
+          user = { ...user, is_validated: 1 };
+          await User.updateById(user.id, user);
+          res.status(200).redirect('http://localhost:3001/connexion');
+        } else {
+          console.log('Clés différentes !');
+          res.status(403).send({ errorMessage: "Validation impossible, contactez l'administrateur" });
+        }
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send({
+        errorMessage: err.message || "Des erreurs se sont produites lors de la validation d'un nouvel utilisateur."
+      });
     }
   }
 }
