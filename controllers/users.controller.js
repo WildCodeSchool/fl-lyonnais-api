@@ -163,31 +163,39 @@ class UsersController {
     if (!validateEmail(email)) {
       return res.status(422).send({ errorMessage: 'Il faut une adresse email valide !' });
     }
-
+    // Valeurs possibles dans le champ 'user.is_validated' :
+    // 0 : NOK : en attente de validation / non validée
+    // 1 :  OK : adresse email validée
+    // 2 : NOK : les clés ne sont pas identiques
+    // 4 : NOK : le délai est dépassé
+    // 9 : NOK : tentative de valider un compte déjà validé
+    //
     try {
       let user = await User.findByEmail(email);
-      if (!user) {
+      if /* (!user) {
+        // Erreur : l'adresse email n'est pas présente dans la table user
         res.status(400).send({ errorMessage: 'Adresse email inexistante' });
-      } else if (user.is_validated) {
-        res.status(401).send({ errorMessage: 'Validation email déjà réalisée' });
+      } else if  */(user.is_validated === 1) {
+        // Erreur : tentative de revalidation d'un compte déjà validé
+        user = { ...user, is_validated: 9 };
       } else {
         const isOnTime = onTimeForValidation(user);
         if ((key === user.key) && isOnTime) {
           // OK : email, clé et date sont valides
           console.log('Clés identiques !');
           user = { ...user, is_validated: 1 };
-          await User.updateById(user.id, user);
-          res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=' + user.key);
         } else if (!isOnTime) {
           // Erreur : le délai de réponse est dépassé
           console.log('Date dépassée...');
-          res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=date');
+          user = { ...user, is_validated: 4 };
         } else {
           // Erreur : les clés sont différentes
           console.log('Clés différentes !');
-          res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=key');
+          user = { ...user, is_validated: 2 };
         }
       }
+      await User.updateById(user.id, user);
+      res.redirect(process.env.BASE_URL_FRONT + '/connexion');
     } catch (err) {
       console.error(err);
       res.status(500).send({
