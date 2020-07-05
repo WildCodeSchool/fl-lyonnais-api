@@ -163,6 +163,17 @@ class UsersController {
     if (!validateEmail(email)) {
       return res.status(422).send({ errorMessage: 'Il faut une adresse email valide !' });
     }
+    // Informations envoyées au front
+    // ?statut=
+    // =revalidation : lorsque le freelance a déjà validé son email et qu'il clique sur le lien de nouveau
+    //                 => message d'information
+    // =validated : tout c'est bien passé, email validé.
+    //              => message de félicitations au nouveau membre
+    // =delay_exceeded : lorsque le délai de 2 jours pour la validation est dépassé
+    //                   => message + regénération d'une clé
+    // =wrong_key : le contrôleur a reçu une clé différente de celle stockée dans la table
+    //              => message + (à définir)
+    // 
     try {
       let user = await User.findByEmail(email);
       if (!user) {
@@ -171,7 +182,7 @@ class UsersController {
       } else if (user.is_validated) {
         // Erreur : tentative de revalidation d'un compte déjà validé
         console.log('Tentative de revalidation...');
-        res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=revalidation');
+        res.redirect(process.env.BASE_URL_FRONT + '/connexion?statut=revalidation');
       } else {
         const isOnTime = onTimeForValidation(user);
         if ((key === user.key) && isOnTime) {
@@ -179,15 +190,15 @@ class UsersController {
           console.log('Clés identiques !');
           user = { ...user, is_validated: 1 };
           await User.updateById(user.id, user);
-          res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=validated');
+          res.redirect(process.env.BASE_URL_FRONT + '/connexion?statut=validated');
         } else if (!isOnTime) {
           // Erreur : le délai de réponse est dépassé
           console.log('Délai dépassée...');
-          res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=delay_exceeded');
+          res.redirect(process.env.BASE_URL_FRONT + '/connexion?statut=delay_exceeded');
         } else {
           // Erreur : les clés sont différentes
           console.log('Clés différentes !');
-          res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=wrong_key');
+          res.redirect(process.env.BASE_URL_FRONT + '/connexion?statut=wrong_key');
         }
       }
     } catch (err) {
@@ -196,6 +207,11 @@ class UsersController {
         errorMessage: err.message || "Des erreurs se sont produites lors de la validation d'un nouvel utilisateur."
       });
     }
+  }
+
+  static async resendValidationEmail (req) {
+    const { email } = req.params;
+    console.log("demande de renvoi d'email", email);
   }
 }
 
