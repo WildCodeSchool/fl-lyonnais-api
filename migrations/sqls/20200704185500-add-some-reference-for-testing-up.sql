@@ -1,5 +1,19 @@
 /* Replace with your SQL commands */
 
+INSERT INTO `reference`
+VALUES (1, 'JavaScript',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/1200px-Unofficial_JavaScript_logo_2.svg.png',
+        'https://developer.mozilla.org/fr/docs/Web/JavaScript'),
+       (2, 'React',
+        'https://lh3.googleusercontent.com/proxy/xiOuU2ccZVlzlK7lMN-q6VyiT_ct_wC80HxLI7gez_jctKeXI5CFeV7H0V0oS0MLcwBMpu7lWJ9nuHAbRvnHzvvc68Vhusc',
+        'https://fr.reactjs.org/'),
+       (3, 'Node.js\n',
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Node.js_logo.svg/590px-Node.js_logo.svg.png',
+        'https://nodejs.org/en/'),
+       (4, 'MySQL', 'https://upload.wikimedia.org/wikipedia/fr/6/62/MySQL.svg', 'https://www.mysql.com/fr/'),
+       (5, 'Redux', 'https://makina-corpus.com/blog/metier/2016/pourquoi-vous-devriez-utiliser-les-selecteurs-avec-redux/image_mini',
+        'https://redux.js.org/');
+
 INSERT INTO `freelance_reference`
 VALUES (1, 1),
        (1, 2),
@@ -52,16 +66,3 @@ VALUES (1, 1),
        (10, 4),
        (10, 5);
 
-INSERT INTO `reference`
-VALUES (1, 'JavaScript',
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Unofficial_JavaScript_logo_2.svg/1200px-Unofficial_JavaScript_logo_2.svg.png',
-        'https://developer.mozilla.org/fr/docs/Web/JavaScript'),
-       (2, 'React',
-        'https://lh3.googleusercontent.com/proxy/xiOuU2ccZVlzlK7lMN-q6VyiT_ct_wC80HxLI7gez_jctKeXI5CFeV7H0V0oS0MLcwBMpu7lWJ9nuHAbRvnHzvvc68Vhusc',
-        'https://fr.reactjs.org/'),
-       (3, 'Node.js\n',
-        'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d9/Node.js_logo.svg/590px-Node.js_logo.svg.png',
-        'https://nodejs.org/en/'),
-       (4, 'MySQL', 'https://upload.wikimedia.org/wikipedia/fr/6/62/MySQL.svg', 'https://www.mysql.com/fr/'),
-       (5, 'Redux', 'https://makina-corpus.com/blog/metier/2016/pourquoi-vous-devriez-utiliser-les-selecteurs-avec-redux/image_mini',
-        'https://redux.js.org/');
