@@ -168,7 +168,7 @@ class UsersController {
       if (!user) {
         // Erreur : l'adresse email n'est pas présente dans la table user
         res.status(400).send({ errorMessage: 'Adresse email inexistante' });
-      } else if (user.is_validated ) {
+      } else if (user.is_validated) {
         // Erreur : tentative de revalidation d'un compte déjà validé
         console.log('Tentative de revalidation...');
         res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=revalidation');
@@ -179,7 +179,7 @@ class UsersController {
           console.log('Clés identiques !');
           user = { ...user, is_validated: 1 };
           await User.updateById(user.id, user);
-          res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=' + user.key);
+          res.redirect(process.env.BASE_URL_FRONT + '/connexion?status=validated');
         } else if (!isOnTime) {
           // Erreur : le délai de réponse est dépassé
           console.log('Délai dépassée...');
