@@ -25,6 +25,9 @@ class Freelance {
   static async getAllTags (freelance_id) {  /* eslint-disable-line */
     return db.query('SELECT id, name  FROM tag join freelance_tag ft on tag.id = ft.tag_id where ft.freelance_id = ?', [freelance_id]);   /* eslint-disable-line */
   }
+  static async getAllReferences (freelance_id) {  /* eslint-disable-line */
+    return db.query('SELECT id, name, image, url  FROM reference join freelance_reference fr on reference.id = fr.reference_id where freelance_id = ?', [freelance_id] );   /* eslint-disable-line */
+  }
 
   static async emailAlreadyExists (email) {
     return db.query('SELECT * FROM freelance WHERE url_photo = ?', [email])

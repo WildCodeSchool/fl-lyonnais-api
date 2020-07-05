@@ -36,9 +36,10 @@ class FreelancesController {
 
   static async findOne (req, res) {
     try {
-      const data = await Freelance.findById(req.params.id);
+      const freelances = await Freelance.findById(req.params.id);
       const tags = await Freelance.getAllTags(req.params.id);
-      res.send({ data, tags });
+      const references = await Freelance.getAllReferences(req.params.id);
+      res.send({ freelances, tags, references });
     } catch (err) {
       if (err.kind === 'not_found') {
         res.status(404).send({ errorMessage: `Freelance with id ${req.params.id} not found.` });
