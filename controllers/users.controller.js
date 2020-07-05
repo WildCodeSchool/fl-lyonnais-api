@@ -173,7 +173,7 @@ class UsersController {
     //                   => message + regénération d'une clé
     // =wrong_key : le contrôleur a reçu une clé différente de celle stockée dans la table
     //              => message + (à définir)
-    // 
+    //
     try {
       let user = await User.findByEmail(email);
       if (!user) {
@@ -209,9 +209,28 @@ class UsersController {
     }
   }
 
-  static async resendValidationEmail (req) {
+  static async resendValidationEmail (req, res) {
     const { email } = req.params;
     console.log("demande de renvoi d'email", email);
+    if (!validateEmail(email)) {
+      return res.status(422).send({ errorMessage: 'Il faut une adresse email valide !' });
+    }
+    try {
+      let user = await User.findByEmail(email);
+      if (user) {
+        user = { ...user, is_validated: 0 };
+        await User.updateById(user.id, user);
+        await sendEmail(user);
+        res.status(201).send(user);
+      } else {
+        res.status(403).send("L'adresse email est erronée");
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send({
+        errorMessage: err.message || "Des erreurs se sont produites lors du renvoi d'un email de validation."
+      });
+    }
   }
 }
 
