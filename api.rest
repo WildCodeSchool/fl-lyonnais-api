@@ -10,20 +10,20 @@ POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-  "firstname": "Adèle",
-  "lastname": "BLANCSEC",
-  "email": "adele.blancsec@test.com",
+  "firstname": "Planteur",
+  "lastname": "JE-M'TRANCHE-LA-GORGE",
+  "email": "planteur@test.com",
   "password": "azerty",
   "siret": "362 521 879 00034",
-  "last_connection_date": "2020-06-18",
-  "registration_date": "2020-06-05",
-  "key": "JZFHZKFZJF7TJFJNZ9PO",
+  "last_connection_date": "2020-07-02",
+  "registration_date": "2020-07-02",
+  "key": "KEY",
   "is_admin": null,
   "is_validated": null
 }
 
 ### UPDATE
-PUT http://localhost:3000/user/2
+PUT http://localhost:3000/users/2
 Content-Type: application/json
 
 {
@@ -41,6 +41,12 @@ Content-Type: application/json
 
 ### DELETE
 DELETE http://localhost:3000/user/16
+
+
+### ACCOUNT VALIDATION VIA EMAIL - CORRECT REQUEST
+GET http://localhost:3000/users/validation_email/arsene.lupin@test.com/KEY
+
+
 
 ------------------------------------------------------FREELANCE------------------------------------------------------
 ### POST
