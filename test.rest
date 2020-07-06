@@ -92,3 +92,6 @@ GET http://localhost:3000/tags
 
 ### FIND ONE
 GET http://localhost:3000/tags/2
+
+### FIND USED
+GET http://localhost:3000/tags/api/used
