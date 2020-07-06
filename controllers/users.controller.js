@@ -44,12 +44,12 @@ async function sendEmail (data) {
       Il ne te reste plus qu'à valider ton adresse email en collant le lien ci-dessous dans ton navigateur :
       Toute l'équipe de Freelance Lyonnais te remercie.
 
-      "${process.env.BASE_URL}/users/validation_email/${data.email}_${data.key}"`,
+      "${process.env.BASE_URL}/users/validation_email?email=${data.email}&key=${data.key}"`,
 
       html: `<p>Cher(e) Freelance Lyonnais,</Il>
       <p>Nous te remercions pour ton inscription sur notre site.</p>
       <p>Il ne te reste plus qu'à valider ton adresse email en copiant ou cliquant sur le lien ci-dessous :</p>
-      <a href=${process.env.BASE_URL}/users/validation_email/${data.email}/${data.key}>Vérification email</a>
+      <a href="${process.env.BASE_URL}/users/validation_email?email=${data.email}&key=${data.key}">Vérification email</a>
       <p>Toute l'équipe de Freelance Lyonnais te remercie.</p>`
     };
     await transporter.sendMail(emailBody);
@@ -159,7 +159,10 @@ class UsersController {
   }
 
   static async validationByEmail (req, res) {
-    const { email, key } = req.params;
+    console.log('Méthode validation by email');
+    // const { email, key } = req.params;
+    const { email, key } = req.query;
+    console.log('email : ', email);
     if (!validateEmail(email)) {
       return res.status(422).send({ errorMessage: 'Il faut une adresse email valide !' });
     }
@@ -210,7 +213,7 @@ class UsersController {
   }
 
   static async resendValidationEmail (req, res) {
-    const { email } = req.params;
+    const { email } = req.query;
     console.log("demande de renvoi d'email", email);
     if (!validateEmail(email)) {
       return res.status(422).send({ errorMessage: 'Il faut une adresse email valide !' });

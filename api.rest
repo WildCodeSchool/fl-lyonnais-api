@@ -11,7 +11,7 @@ Content-Type: application/json
 
 {
   "firstname": "Planteur",
-  "lastname": "J'ME-TRANCHE-LA-GORGE",
+  "lastname": "JE-M'TRANCHE-LA-GORGE",
   "email": "planteur@test.com",
   "password": "azerty",
   "siret": "362 521 879 00034",
