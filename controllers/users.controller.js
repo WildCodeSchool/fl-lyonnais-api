@@ -5,7 +5,6 @@ const randkey = require('random-keygen');
 
 const validateEmail = email => {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  // const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
 };
 
@@ -21,25 +20,38 @@ function onTimeForValidation (user) {
 // Création du transporteur pour l'envoi d'mails (NodeMailer)
 async function sendEmail (data) {
   // Convertion d'un string en bouléen
-  const isSecureConnection = (process.env.EMAIL_SMTP_SECURE === 'true');
+  // const isSecureConnection = (process.env.EMAIL_SMTP_SECURE === 'true');
 
   // Transporteur
   const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS // naturally, replace both with your real credentials or an application-specific password
+    }
+  });
+
+  /* const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_SMTP_HOST,
     port: parseInt(process.env.EMAIL_SMTP_PORT), // 587
     secure: isSecureConnection, // process.env.EMAIL_SMTP_SECURE, // true for 465, false for other ports
     auth: {
-      user: process.env.EMAIL_USER, // generated ethereal user
-      pass: process.env.EMAIL_PASS // generated ethereal password
+      user: process.env.EMAIL_USER, // User
+      pass: process.env.EMAIL_PASS, // Password
+      clientId: process.env.EMAIL_SMTP_CLIENT_ID,
+      clientSecret: process.env.EMAIL_SMTP_CLIENT_SECRET,
+      refreshToken: process.env.EMAIL_SMTP_REFRESH_TOKEN,
+      accessToken: process.env.EMAIL_SMTP_ACCESS_TOKEN,
+      expires: process.env.EMAIL_SMTP_EXPIRES
     }
-  });
+  }); */
 
   try {
     const emailBody = {
       from: 'Freelance Lyonnais <no_reply@no.reply>',
       to: `${data.firstname} ${data.lastname} ${data.email}`,
       subject: 'Freelance Lyonnais - Le processus de ton inscription est bientôt terminé !',
-      Text: `******* **** ***Cher(e) Freelance Lyonnais,
+      Text: `Cher(e) Freelance Lyonnais,
       Nous te remercions pour ton inscription sur notre site.
       Il ne te reste plus qu'à valider ton adresse email en collant le lien ci-dessous dans ton navigateur :
       Toute l'équipe de Freelance Lyonnais te remercie.
@@ -159,10 +171,7 @@ class UsersController {
   }
 
   static async validationByEmail (req, res) {
-    console.log('Méthode validation by email');
-    // const { email, key } = req.params;
     const { email, key } = req.query;
-    console.log('email : ', email);
     if (!validateEmail(email)) {
       return res.status(422).send({ errorMessage: 'Il faut une adresse email valide !' });
     }
@@ -184,7 +193,6 @@ class UsersController {
         res.status(400).send({ errorMessage: 'Adresse email inexistante' });
       } else if (user.is_validated) {
         // Erreur : tentative de revalidation d'un compte déjà validé
-        console.log('Tentative de revalidation...');
         res.redirect(process.env.BASE_URL_FRONT + '/connexion?statut=revalidation');
       } else {
         const isOnTime = onTimeForValidation(user);
@@ -214,7 +222,6 @@ class UsersController {
 
   static async resendValidationEmail (req, res) {
     const { email } = req.query;
-    console.log("demande de renvoi d'email", email);
     if (!validateEmail(email)) {
       return res.status(422).send({ errorMessage: 'Il faut une adresse email valide !' });
     }
