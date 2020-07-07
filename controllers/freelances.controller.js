@@ -96,6 +96,17 @@ class FreelancesController {
       });
     }
   }
+
+  static async totalAmountOfValideFreelances (req, res) {
+    try {
+      const data = await Freelance.totalAmountOfActiveFreelances();
+      res.send({ data });
+    } catch (err) {
+      res.status(500).send({
+        errorMessage: err.message || 'Some error occurred while retrieving freelances (pagination).'
+      });
+    }
+  }
 }
 
 module.exports = FreelancesController;

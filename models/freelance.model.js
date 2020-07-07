@@ -65,6 +65,11 @@ class Freelance {
   static async randomizeFreelance () {
     return db.query('UPDATE freelance SET random_id = LEFT(MD5(RAND()), 8);');
   }
+
+  // Récupération du nombre de freelance actifs
+  static async totalAmountOfActiveFreelances () {
+    return db.query('SELECT COUNT(id) AS totalAmoutOfValidFreelances FROM freelance WHERE is_active = 1;');
+  }
 }
 
 module.exports = Freelance;
