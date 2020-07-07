@@ -30,7 +30,7 @@ class Freelance {
   }
 
   static async getAll (result) {
-    return db.query('SELECT freelance.id, firstname, lastname, url_photo, job_title FROM freelance join user u on freelance.user_id = u.id');
+    return db.query('SELECT freelance.id, firstname, lastname, url_photo, job_title FROM freelance join user u on freelance.user_id = u.id ORDER BY random_id');
   }
 
   static async updateById (id, freelance) {
@@ -59,6 +59,11 @@ class Freelance {
   static async getAllByPage (result) {
     const { offset, step } = result;
     return db.query('SELECT * FROM freelance JOIN user AS u ON freelance.user_id = u.id WHERE freelance.is_active = 1 ORDER BY random_id LIMIT ? OFFSET ?', [parseInt(step), offset]);
+  }
+
+  // Cette méthode est à utiliser pour mélanger tous les freelances
+  static async randomizeFreelance () {
+    return db.query('UPDATE freelance SET random_id = LEFT(MD5(RAND()), 8);');
   }
 }
 
