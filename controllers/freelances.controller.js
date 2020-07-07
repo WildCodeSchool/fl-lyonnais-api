@@ -1,4 +1,5 @@
 const Freelance = require('../models/freelance.model.js');
+const User = require('../models/user.model');
 
 class FreelancesController {
   static async create (req, res) {
@@ -7,7 +8,7 @@ class FreelancesController {
     }
     try {
       const user = req.body;
-      if (await Freelance.emailAlreadyExists(user.email)) {
+      if (await User.emailAlreadyExists(user.email)) {
         res.status(400).send({ errorMessage: 'A user with this email already exists !' });
       } else {
         const data = await Freelance.create(user);

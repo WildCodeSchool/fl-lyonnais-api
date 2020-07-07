@@ -29,17 +29,6 @@ class Freelance {
     return db.query('SELECT id, name, image, url  FROM reference join freelance_reference fr on reference.id = fr.reference_id where freelance_id = ?', [freelance_id] );   /* eslint-disable-line */
   }
 
-  static async emailAlreadyExists (email) {
-    return db.query('SELECT * FROM freelance WHERE url_photo = ?', [email])
-      .then(rows => {
-        if (rows.length) {
-          return Promise.resolve(true);
-        } else {
-          return Promise.resolve(false);
-        }
-      });
-  }
-
   static async getAll (result) {
     return db.query('SELECT freelance.id, firstname, lastname, url_photo, job_title FROM freelance join user u on freelance.user_id = u.id');
   }
