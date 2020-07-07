@@ -83,6 +83,19 @@ class FreelancesController {
       }
     }
   }
+
+  static async pagination (req, res) {
+    const { page, step } = req.query;
+    try {
+      const offset = (page - 1) * step;
+      const data = (await Freelance.getAllByPage({ offset, step }));
+      res.send({ data });
+    } catch (err) {
+      res.status(500).send({
+        errorMessage: err.message || 'Some error occurred while retrieving freelances (pagination).'
+      });
+    }
+  }
 }
 
 module.exports = FreelancesController;
