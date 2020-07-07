@@ -14,7 +14,7 @@ class TagController {
 
   static async findUsedTags (req, res) {
     try {
-      const data = (await Tag.getUsedTags()).map(c => c);;
+      const data = (await Tag.getUsedTags()).map(c => c);
       res.send({ data });
     } catch (err) {
       res.status(500).send({
