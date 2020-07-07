@@ -58,10 +58,8 @@ class Freelance {
 
   static async getAllByPage (result) {
     const { offset, step } = result;
-    console.log('offset et step : ', offset, step);
-    return db.query('SELECT * FROM freelance JOIN user AS u ON freelance.user_id = u.id WHERE freelance.is_active = 1 LIMIT ?, ?', [offset, step]);
+    return db.query('SELECT * FROM freelance JOIN user AS u ON freelance.user_id = u.id WHERE freelance.is_active = 1 ORDER BY random_id LIMIT ? OFFSET ?', [parseInt(step), offset]);
   }
-
 }
 
 module.exports = Freelance;
