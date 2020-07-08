@@ -87,7 +87,12 @@ class FreelancesController {
   static async pagination (req, res) {
     const { page, step } = req.query;
     try {
+      // Vérification du numéro de semaine et appel à la fonction de mélange si elle a changé
+      await Freelance.randomizeFreelance();
+
+      // Calcul de l'offset en fonction du numéro de page et du nombre de vignettes affichées par page
       const offset = (page - 1) * step;
+
       const data = (await Freelance.getAllByPage({ offset, step }));
       const data2 = await Freelance.totalAmountOfActiveFreelances();
       res.send({ data, data2 });
@@ -97,7 +102,6 @@ class FreelancesController {
       });
     }
   }
-
 }
 
 module.exports = FreelancesController;
