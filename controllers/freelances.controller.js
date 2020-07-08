@@ -1,4 +1,6 @@
 const Freelance = require('../models/freelance.model.js');
+const User = require('../models/user.model');
+const moment = require('moment');
 
 class FreelancesController {
   static async create (req, res) {
@@ -7,7 +9,7 @@ class FreelancesController {
     }
     try {
       const user = req.body;
-      if (await Freelance.emailAlreadyExists(user.email)) {
+      if (await User.emailAlreadyExists(user.email)) {
         res.status(400).send({ errorMessage: 'A user with this email already exists !' });
       } else {
         const data = await Freelance.create(user);
@@ -36,9 +38,10 @@ class FreelancesController {
 
   static async findOne (req, res) {
     try {
-      const data = await Freelance.findById(req.params.id);
+      const freelance = await Freelance.findById(req.params.id);
       const tags = await Freelance.getAllTags(req.params.id);
-      res.send({ data, tags });
+      const references = await Freelance.getAllReferences(req.params.id);
+      res.send({ freelance, tags, references });
     } catch (err) {
       if (err.kind === 'not_found') {
         res.status(404).send({ errorMessage: `Freelance with id ${req.params.id} not found.` });
@@ -79,6 +82,29 @@ class FreelancesController {
           message: 'Could not delete Freelance with id ' + req.params.id
         });
       }
+    }
+  }
+
+  static async pagination (req, res) {
+    const { page, step } = req.query;
+    try {
+      // Vérification du numéro de semaine et appel à la fonction de mélange si elle a changé
+      const memorisedWeekNumber = await Freelance.readWeekNumber();
+      const weekNumber = moment().isoWeek();
+      if (memorisedWeekNumber[0].week !== weekNumber) {
+        await Freelance.randomizeFreelance();
+        await Freelance.writeWeekNumber(weekNumber);
+      }
+      // Calcul de l'offset en fonction du numéro de page et du nombre de vignettes affichées par page
+      const offset = (page - 1) * step;
+
+      const data = (await Freelance.getAllByPage({ offset, step }));
+      const data2 = await Freelance.totalAmountOfActiveFreelances();
+      res.send({ data, data2 });
+    } catch (err) {
+      res.status(500).send({
+        errorMessage: err.message || 'Some error occurred while retrieving freelances (pagination).'
+      });
     }
   }
 }

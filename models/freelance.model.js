@@ -25,20 +25,12 @@ class Freelance {
   static async getAllTags (freelance_id) {  /* eslint-disable-line */
     return db.query('SELECT id, name  FROM tag join freelance_tag ft on tag.id = ft.tag_id where ft.freelance_id = ?', [freelance_id]);   /* eslint-disable-line */
   }
-
-  static async emailAlreadyExists (email) {
-    return db.query('SELECT * FROM freelance WHERE url_photo = ?', [email])
-      .then(rows => {
-        if (rows.length) {
-          return Promise.resolve(true);
-        } else {
-          return Promise.resolve(false);
-        }
-      });
+  static async getAllReferences (freelance_id) {  /* eslint-disable-line */
+    return db.query('SELECT id, name, image, url  FROM reference join freelance_reference fr on reference.id = fr.reference_id where freelance_id = ?', [freelance_id] );   /* eslint-disable-line */
   }
 
   static async getAll (result) {
-    return db.query('SELECT freelance.id, firstname, lastname, url_photo, job_title FROM freelance join user u on freelance.user_id = u.id');
+    return db.query('SELECT freelance.id, firstname, lastname, url_photo, job_title FROM freelance join user u on freelance.user_id = u.id ORDER BY random_id');
   }
 
   static async updateById (id, freelance) {
@@ -62,6 +54,31 @@ class Freelance {
 
   static async removeAll (result) {
     return db.query('DELETE FROM freelance WHERE id = ?');
+  }
+
+  static async getAllByPage (result) {
+    const { offset, step } = result;
+    return db.query('SELECT * FROM freelance JOIN user AS u ON freelance.user_id = u.id WHERE freelance.is_active = 1 ORDER BY random_id LIMIT ? OFFSET ?', [parseInt(step), offset]);
+  }
+
+  // Cette méthode est à utiliser pour mélanger tous les freelances
+  static async randomizeFreelance (req, res) {
+    return db.query('UPDATE freelance SET random_id = LEFT(MD5(RAND()), 8);');
+  }
+
+  // Ecriture du numéro de la semaine dans la table settings
+  static async writeWeekNumber (weekNumber) {
+    return db.query('UPDATE settings SET week = ?', [weekNumber]);
+  }
+
+  // Lecture du numéro de la semaine
+  static async readWeekNumber () {
+    return db.query('SELECT week FROM settings');
+  }
+
+  // Récupération du nombre de freelance actifs
+  static async totalAmountOfActiveFreelances () {
+    return db.query('SELECT COUNT(id) AS totalAmoutOfValidFreelances FROM freelance WHERE is_active = 1;');
   }
 }
 

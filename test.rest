@@ -1,9 +1,9 @@
 ------------------------------------------------------USER------------------------------------------------------
 ### FIND ALL
-GET http://localhost:3000/user
+GET http://localhost:3000/users
 
 ### FIND ONE
-GET http://localhost:3000/user/2
+GET http://localhost:3000/users/2
 
 ### CREATE
 POST http://localhost:3000/users
@@ -40,7 +40,7 @@ Content-Type: application/json
 }
 
 ### DELETE
-DELETE http://localhost:3000/user/16
+DELETE http://localhost:3000/users/16
 
 
 ### ACCOUNT VALIDATION VIA EMAIL - CORRECT REQUEST
@@ -50,7 +50,7 @@ GET http://localhost:3000/users/validation_email/arsene.lupin@test.com/KEY
 
 ------------------------------------------------------FREELANCE------------------------------------------------------
 ### POST
-POST http://localhost:3000/freelance
+POST http://localhost:3000/freelances
 Content-Type: application/json
 
 {
@@ -66,13 +66,13 @@ Content-Type: application/json
 }
 
 ### FIND ALL
-GET http://localhost:3000/freelance
+GET http://localhost:3000/freelances
 
 ### FIND ONE
-GET http://localhost:3000/freelance/8
+GET http://localhost:3000/freelances/8
 
 ### UPDATE
-PUT http://localhost:3000/freelance/1
+PUT http://localhost:3000/freelances/1
 Content-Type: application/json
 
 {
@@ -90,11 +90,18 @@ Content-Type: application/json
 }
 
 ### DELETE
-DELETE http://localhost:3000/freelance/16
+DELETE http://localhost:3000/freelances/16
 
 ------------------------------------------------------TAG------------------------------------------------------
 ### FIND ALL
-GET http://localhost:3000/tag
+GET http://localhost:3000/tags
 
 ### FIND ONE
-GET http://localhost:3000/tag/2
+GET http://localhost:3000/tags/2
+
+### FIND USED
+GET http://localhost:3000/tags/api/used
+
+________________________________________________________________________________________________________________
+###
+GET http://localhost:3000/freelances/?page=1&step=3
