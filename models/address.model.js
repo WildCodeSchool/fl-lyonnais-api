@@ -21,7 +21,6 @@ class Address {
         }
       });
   }
-  
 
   // static async emailAlreadyExists (email) {
   //   return db.query('SELECT * FROM freelance WHERE url_photo = ?', [email])
@@ -57,7 +56,7 @@ class Address {
       [address.street, address.zip_code, address.city, address.country, id]
     ).then(() => {
       this.findByAddressId(id);
-    })
+    });
   }
 }
 

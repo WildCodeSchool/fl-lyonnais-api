@@ -8,7 +8,7 @@ const FreelanceReference = require('../models/freelance_reference.model.js');
 const moment = require('moment');
 
 class FreelancesController {
-  static async create(req, res) {
+  static async create (req, res) {
     // const main_picture_url = req.file ? req.file.path : null
     // const createdpost = await Post.create({main_picture_url})
     if (!req.body.is_active || !req.body.last_modification_date) {
@@ -17,11 +17,11 @@ class FreelancesController {
     try {
       // Destructuration et récparation de l'objet
       req.body.country = 'France';
-      const { email, street, zip_code, city, country, url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, references , chosenTags } = req.body;
+      const { email, street, zip_code, city, country, url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, references, chosenTags } = req.body;
 
       // table address
       const dataAddress = await Address.create({ street, zip_code, city, country });
-      const address_id = dataAddress.id
+      const address_id = dataAddress.id;
 
       // table User
       const user = await User.findByEmail(email);
@@ -39,7 +39,7 @@ class FreelancesController {
       // table références
       for (let i = 0; i < references.length; i++) {
         const { name, image, url } = references[i];
-        const reference = await Reference.create( { name, image, url } );// ni img ni url pour l'instant
+        const reference = await Reference.create({ name, image, url });// ni img ni url pour l'instant
         await FreelanceReference.create({ reference_id: reference.id, freelance_id: dataFreelance.id });
       }
 
@@ -79,49 +79,45 @@ class FreelancesController {
 
   static async update (req, res) {
     const { email, street, zip_code, city, country, url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, idTagList, nameReferenceList, imageReferenceList, urlReferenceList } = req.body;
-    
+
     if (!req.body) {
       res.status(400).send({ errorMessage: 'Content can not be empty!' });
     }
 
     try {
       // Destructuration et récparation de l'objet
-      if (! email) {
-        res.status(400).send('No email mannnnn!')
+      if (!email) {
+        res.status(400).send('No email mannnnn!');
       }
-      const user = await User.findByEmail(email)
-      const user_id = user.id
+      const user = await User.findByEmail(email);
+      const user_id = user.id;
       req.body.country = 'France';
-  
-      
+
       // table freelance
       const dataFreelance = await Freelance.updateById(req.params.id, req.body);
-      
+
       // table address
       const dataAddress = await Address.updateById(dataFreelance.address_id, req.body);
-      
+
       // Table freelance_tags
       // // Delete tags from freelance_tags
-        await FreelanceTag.removeAllTags(req.params.id);
-      
-        for (let i = 0; i < idTagList.length; i++) {
-          const dataTagId = await FreelanceTag.create({ tag_id: idTagList[i], freelance_id: req.params.id });
-        }
+      await FreelanceTag.removeAllTags(req.params.id);
+
+      for (let i = 0; i < idTagList.length; i++) {
+        const dataTagId = await FreelanceTag.create({ tag_id: idTagList[i], freelance_id: req.params.id });
+      }
 
       // // Table freelance_reference
       // const reference_id = await freelance_reference.updateById(freelance_id, req.body);
       console.log(nameReferenceList, imageReferenceList, urlReferenceList);
       // await FreelanceRef.removeAllRefs(req.params.id);
-    
+
       // for (let i = 0; i < nameReferenceList.length; i++) {
       //   const references = await Reference.create( { nameReferenceList[i] } )
       //   const dataTagId = await FreelanceRef.create({ reference_id: idTagList[i], freelance_id: req.params.id });
       // }
 
-
-      res.send( dataFreelance );
-
-
+      res.send(dataFreelance);
     } catch (err) {
       if (err.kind === 'not_found') {
         res.status(404).send({ errorMessage: `Freelance with id ${req.params.id} not found.` });

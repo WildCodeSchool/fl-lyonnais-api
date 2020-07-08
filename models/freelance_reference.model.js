@@ -22,8 +22,6 @@ class FreelanceReference {
       });
   }
 
-  
-
   static async updateById (freelance_id, reference_id) {
     return db.query(
       'UPDATE freelance_reference SET reference_id = ? WHERE freelance_id = ?',

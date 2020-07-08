@@ -50,8 +50,6 @@ class Freelance {
   //     });
   // }
 
-
-
   // { url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, user_id }
   // static async updateById (id, { url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date }) {
   //   return db.query(
@@ -61,7 +59,6 @@ class Freelance {
   //     console.log(id)
   //   }
 
-  
   static async remove (id) {
     return db.query('DELETE FROM freelance WHERE id = ?', id).then(res => {
       if (res.affectedRows !== 0) {

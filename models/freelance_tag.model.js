@@ -11,7 +11,7 @@ class FreelanceTag {
 
   static async findById (id) {
     return db.query(`SELECT * FROM freelance_tag WHERE freeid = ${id}`)
-      .then(rows => { 
+      .then(rows => {
         if (rows.length) {
           return Promise.resolve(rows[0]);
         } else {
@@ -71,7 +71,7 @@ class FreelanceTag {
   // }
 
   static async removeAllTags (flId) {
-    return db.query('DELETE FROM freelance_tag WHERE freelance_id= ?',[flId])
+    return db.query('DELETE FROM freelance_tag WHERE freelance_id= ?', [flId]);
   }
 }
 
