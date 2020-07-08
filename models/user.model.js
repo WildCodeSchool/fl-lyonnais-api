@@ -58,8 +58,8 @@ class User {
 
   static async updateById (id, user) {
     return db.query(
-      'UPDATE user SET email = ?, firstname = ?, lastname = ?, siret = ?, is_validated = ? WHERE id = ?',
-      [user.email, user.firstname, user.lastname, user.siret, user.is_validated, id]
+      'UPDATE user SET email = ?, firstname = ?, lastname = ?, siret = ?, is_validated = ?, last_connection_date = ? WHERE id = ?',
+      [user.email, user.firstname, user.lastname, user.siret, user.is_validated, user.lastConnectionDate, id]
     ).then(() => this.findById(id));
   }
 
