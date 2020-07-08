@@ -58,7 +58,7 @@ class Freelance {
 
   static async getAllByPage (result) {
     const { offset, step } = result;
-    return db.query('SELECT * FROM freelance JOIN user AS u ON freelance.user_id = u.id WHERE freelance.is_active = 1 ORDER BY random_id LIMIT ? OFFSET ?', [parseInt(step), offset]);
+    return db.query('SELECT * FROM freelance JOIN user AS u ON freelance.user_id = u.id WHERE freelance.is_active = 1 and freelance.is_deleted = 0 ORDER BY random_id LIMIT ? OFFSET ?', [parseInt(step), offset]);
   }
 
   // Cette méthode est à utiliser pour mélanger tous les freelances
