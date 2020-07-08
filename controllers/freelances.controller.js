@@ -68,23 +68,6 @@ class FreelancesController {
     }
   }
 
-  static async delete (req, res) {
-    try {
-      await Freelance.remove(req.params.id);
-      res.send({ message: 'Freelance was deleted successfully!' });
-    } catch (err) {
-      if (err.kind === 'not_found') {
-        res.status(404).send({
-          message: `Not found Freelance with id ${req.params.id}.`
-        });
-      } else {
-        res.status(500).send({
-          message: 'Could not delete Freelance with id ' + req.params.id
-        });
-      }
-    }
-  }
-
   static async pagination (req, res) {
     const { page, step } = req.query;
     try {
@@ -105,6 +88,23 @@ class FreelancesController {
       res.status(500).send({
         errorMessage: err.message || 'Some error occurred while retrieving freelances (pagination).'
       });
+    }
+  }
+
+  static async delete (req, res) {
+    const { deleted } = req.query;
+    if (!req.body) {
+      res.status(400).send({ errorMessage: 'Content can not be empty!' });
+    }
+    try {
+      const data = await Freelance.delete(deleted, req.params.id);
+      res.send({ data });
+    } catch (err) {
+      if (err.kind === 'not_found') {
+        res.status(404).send({ errorMessage: `Freelance with id ${req.params.id} not found.` });
+      } else {
+        res.status(500).send({ errorMessage: 'Error updating Freelance with id ' + req.params.id });
+      }
     }
   }
 }

@@ -80,6 +80,10 @@ class Freelance {
   static async totalAmountOfActiveFreelances () {
     return db.query('SELECT COUNT(id) AS totalAmoutOfValidFreelances FROM freelance WHERE is_active = 1;');
   }
+
+  static async delete (deleted, id) {
+    return db.query('UPDATE freelance SET is_deleted = ? where id = ?', [parseInt(deleted), parseInt(id)]);
+  }
 }
 
 module.exports = Freelance;
