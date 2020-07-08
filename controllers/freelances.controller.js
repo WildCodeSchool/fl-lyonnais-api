@@ -1,5 +1,6 @@
 const Freelance = require('../models/freelance.model.js');
 const User = require('../models/user.model');
+const moment = require('moment');
 
 class FreelancesController {
   static async create (req, res) {
@@ -88,8 +89,12 @@ class FreelancesController {
     const { page, step } = req.query;
     try {
       // Vérification du numéro de semaine et appel à la fonction de mélange si elle a changé
-      await Freelance.randomizeFreelance();
-
+      const memorisedWeekNumber = await Freelance.readWeekNumber();
+      const weekNumber = moment().isoWeek();
+      if (memorisedWeekNumber[0].week !== weekNumber) {
+        await Freelance.randomizeFreelance();
+        await Freelance.writeWeekNumber(weekNumber);
+      }
       // Calcul de l'offset en fonction du numéro de page et du nombre de vignettes affichées par page
       const offset = (page - 1) * step;
 

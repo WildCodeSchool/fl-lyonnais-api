@@ -1,5 +1,4 @@
 const db = require('../db.js');
-const moment = require('moment');
 
 class Freelance {
   static async create (newFreelance) {
@@ -63,15 +62,18 @@ class Freelance {
   }
 
   // Cette méthode est à utiliser pour mélanger tous les freelances
-  static async randomizeFreelance () {
-    const memorisedWeekNumber = 28; // ICI récupération du numéro semaine mémorisé lors du dernier mélange
-    const weekNumber = moment().isoWeek();
-    if (memorisedWeekNumber !== weekNumber) {
-      // ICI le stockage de l'info numéro semaine.
-      return db.query('UPDATE freelance SET random_id = LEFT(MD5(RAND()), 8);');
-    } else {
-      return false;
-    }
+  static async randomizeFreelance (req, res) {
+    return db.query('UPDATE freelance SET random_id = LEFT(MD5(RAND()), 8);');
+  }
+
+  // Ecriture du numéro de la semaine dans la table settings
+  static async writeWeekNumber (weekNumber) {
+    return db.query('UPDATE settings SET week = ?', [weekNumber]);
+  }
+
+  // Lecture du numéro de la semaine
+  static async readWeekNumber () {
+    return db.query('SELECT week FROM settings');
   }
 
   // Récupération du nombre de freelance actifs
