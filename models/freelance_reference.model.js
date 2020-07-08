@@ -40,10 +40,10 @@ class FreelanceReference {
   //     }
   //   });
   // }
+  static async removeAllRefetences (flId) {
+    return db.query('DELETE FROM freelance_reference WHERE freelance_id= ?', [flId]);
+  }
 
-  // static async removeAll (result) {
-  //   return db.query('DELETE FROM freelance WHERE id = ?');
-  // }
 }
 
 module.exports = FreelanceReference;

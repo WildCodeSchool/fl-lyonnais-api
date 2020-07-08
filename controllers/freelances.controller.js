@@ -78,7 +78,7 @@ class FreelancesController {
   }
 
   static async update (req, res) {
-    const { email, street, zip_code, city, country, url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, idTagList, nameReferenceList, imageReferenceList, urlReferenceList } = req.body;
+    const { email, street, zip_code, city, country, url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, references, chosenTags } = req.body
 
     if (!req.body) {
       res.status(400).send({ errorMessage: 'Content can not be empty!' });
@@ -102,20 +102,18 @@ class FreelancesController {
       // Table freelance_tags
       // // Delete tags from freelance_tags
       await FreelanceTag.removeAllTags(req.params.id);
-
-      for (let i = 0; i < idTagList.length; i++) {
-        const dataTagId = await FreelanceTag.create({ tag_id: idTagList[i], freelance_id: req.params.id });
+      for (let i = 0; i < chosenTags.length; i++) {
+        await FreelanceTag.create({ tag_id: chosenTags[i].id, freelance_id: req.params.id });
       }
 
-      // // Table freelance_reference
-      // const reference_id = await freelance_reference.updateById(freelance_id, req.body);
-      console.log(nameReferenceList, imageReferenceList, urlReferenceList);
-      // await FreelanceRef.removeAllRefs(req.params.id);
-
-      // for (let i = 0; i < nameReferenceList.length; i++) {
-      //   const references = await Reference.create( { nameReferenceList[i] } )
-      //   const dataTagId = await FreelanceRef.create({ reference_id: idTagList[i], freelance_id: req.params.id });
-      // }
+      // Table Ref Tags
+      // // Delete reference_id from freelance_reference
+      await FreelanceReference.removeAllRefetences(req.params.id);
+      for (let i = 0; i < references.length; i++) {
+        const { name, image, url } = references[i];
+        const reference = await Reference.create({ name, image, url });// ni img ni url pour l'instant
+        await FreelanceReference.create({ reference_id: reference.id, freelance_id: req.params.id });
+      }
 
       res.send(dataFreelance);
     } catch (err) {
