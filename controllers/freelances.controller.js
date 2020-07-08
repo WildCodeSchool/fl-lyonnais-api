@@ -89,7 +89,8 @@ class FreelancesController {
     try {
       const offset = (page - 1) * step;
       const data = (await Freelance.getAllByPage({ offset, step }));
-      res.send({ data });
+      const data2 = await Freelance.totalAmountOfActiveFreelances();
+      res.send({ data, data2 });
     } catch (err) {
       res.status(500).send({
         errorMessage: err.message || 'Some error occurred while retrieving freelances (pagination).'
@@ -97,16 +98,6 @@ class FreelancesController {
     }
   }
 
-  static async totalAmountOfValideFreelances (req, res) {
-    try {
-      const data = await Freelance.totalAmountOfActiveFreelances();
-      res.send({ data });
-    } catch (err) {
-      res.status(500).send({
-        errorMessage: err.message || 'Some error occurred while retrieving freelances (pagination).'
-      });
-    }
-  }
 }
 
 module.exports = FreelancesController;
