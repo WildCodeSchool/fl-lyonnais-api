@@ -10,10 +10,10 @@ POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-  "firstname": "Planteur",
-  "lastname": "JE-M'TRANCHE-LA-GORGE",
-  "email": "planteur@test.com",
-  "password": "azerty",
+  "firstname": "Cozmo",
+  "lastname": "Ivankovic",
+  "email": "Ivankovrefvgica@ferg.com",
+  "password": "password",
   "siret": "362 521 879 00034",
   "last_connection_date": "2020-07-02",
   "registration_date": "2020-07-02",
@@ -46,23 +46,20 @@ DELETE http://localhost:3000/users/16
 ### ACCOUNT VALIDATION VIA EMAIL - CORRECT REQUEST
 GET http://localhost:3000/users/validation_email/arsene.lupin@test.com/KEY
 
-
-
-------------------------------------------------------FREELANCE------------------------------------------------------
-### POST
+### POSTgit 
 POST http://localhost:3000/freelances
 Content-Type: application/json
 
 {
   "url_photo": "https://randomuser.me/api/portraits/women/43.jpg",
-  "phone_number": "+33 1 23 45 67 89",
+  "phone_number": "00000000000000000",
   "average_daily_rate": "400",
   "url_web_site": "https://fr.reactjs.org/",
   "job_title": "dev",
   "bio": "En utilisant props et state on peut créer une petite application de gestion de tâches. Cet exemple utilise state pour maintenir la liste des tâches et le texte que l’utilisateur a saisi. Bien que les gestionnaires d’événements soient définis directement dans le code ils seront regroupés et gérés en utilisant les principes de délégation des événements.",
   "vat_number": "FR31734820078",
   "last_modification_date": "2020-07-19",
-  "is_active": "1"
+  "is_active": "1",
 }
 
 ### FIND ALL
@@ -90,6 +87,87 @@ Content-Type: application/json
 }
 
 ### DELETE
+DELETE http://localhost:3000/freelance/1
+
+------------------------------------------------------TAG------------------------------------------------------
+### FIND ALL
+GET http://localhost:3000/tag
+
+### FIND ONE
+GET http://localhost:3000/tag/2
+
+
+### DELETE
+DELETE http://localhost:3000/freelances/account/74
+
+
+------------------------------------------------------TEST POST FREELANCE------------------------------------------------------
+
+### POST ACCOUNT
+POSt http://localhost:3000/freelances/account
+Content-Type: application/json
+
+{
+  "email": "pereira.pascal@gmail.com",
+  "url_photo": "https://proooooooooo",
+  "phone_number": "06 15 15 15 15",
+  "average_daily_rate": "500",
+  "url_web_site": "https://fr.armin.org/",
+  "job_title": "Armin",
+  "bio": "Je suis Armin, site de la nsa.",
+  "vat_number": "FR0000",
+  "last_modification_date": "2020-07-18",
+  "is_active": 1,
+
+  "street" : "rue saint fons",
+  "zip_code": "69000",
+  "city": "Saint Fons",
+
+  "idTagList" : ["2","5","10"],
+
+  "nameReferenceList" :["siempre","conscos"],
+  "imageReferenceList" : ["je suis image", "je suis image 2"],
+  "urlReferenceList": ["je suis url", "je suis url 2"],
+
+}
+
+
+
+------------------------------------------------------TEST PUT FREELANCE------------------------------------------------------
+
+### PUT ACCOUNT
+PUT  http://localhost:3000/freelances/account/99
+Content-Type: application/json
+
+{
+  "email": "pereira.pascal@gmail.com",
+  "url_photo": "",
+  "phone_number": "7777777",
+  "average_daily_rate": 333,
+  "url_web_site": "http://localhost:3000/freelances/account/97",
+  "job_title": "auuuuuuuuuuuuuuuuu",
+  "bio": "I lov",
+  "vat_number": "FR31734820078",
+  "last_modification_date": null,
+  "is_active": null,
+  "address_id": 83,
+  "user_id": 108,
+  "firstname": "Pascal",
+  "lastname": "Pereira",
+  "email": "pereira.pascal@gmail.com",
+  "password": "$argon2i$v=19$m=4096,t=3,p=1$OMEieHSTX5nbB4Vlmw2BQw$3wqEPjQr9gItBRcb5Lo0dXNPVYF9J/B8rfcbq8d8DM8",
+  "siret": "01234567891234",
+  "last_connection_date": null,
+  "registration_date": "2020-07-07T22:00:00.000Z",
+  "key": null,
+  "is_admin": null,
+  "is_validated": 0,
+  "street": "rue de  la soifffffffffffffffffffffffffffffffffff",
+  "zip_code": "3344",
+  "city": "Man U",
+  "country": "France"
+}
+
 DELETE http://localhost:3000/freelances/16
 
 ------------------------------------------------------TAG------------------------------------------------------

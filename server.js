@@ -4,6 +4,7 @@ const swaggerUi = require('swagger-ui-express');
 const cors = require('cors');
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./docs/swagger.yaml');
+const bodyParser = require('body-parser');
 
 const app = express();
 const PORT = process.env.PORT || (process.env.NODE_ENV === 'test' ? 3001 : 3000);
