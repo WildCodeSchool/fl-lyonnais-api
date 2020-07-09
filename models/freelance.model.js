@@ -35,10 +35,29 @@ class Freelance {
 
   static async updateById (id, freelance) {
     return db.query(
-      'UPDATE freelance SET url_photo = ?, phone_number = ?, average_daily_rate = ?, url_web_site = ?, job_title = ?, bio = ?, vat_number = ? WHERE id = ?',
-      [freelance.url_photo, freelance.phone_number, freelance.average_daily_rate, freelance.url_web_site, freelance.job_title, freelance.bio, id]
+      'UPDATE freelance SET url_photo = ?, phone_number = ?, average_daily_rate = ?, url_web_site = ?, job_title = ?, bio = ?, vat_number = ?, last_modification_date = ? WHERE id = ?',
+      [freelance.url_photo, freelance.phone_number, freelance.average_daily_rate, freelance.url_web_site, freelance.job_title, freelance.bio, freelance.vat_number, freelance.last_modification_date, id]
     ).then(() => this.findById(id));
   }
+
+  // static async addFreelance (newFreelance) {
+  //   console.log(newFreelance);
+  //   // const { url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, is_active, dataAddress.id, user_id: userId } = newFreelance;
+  //   return db.query('INSERT INTO freelance SET ?' , newFreelance)
+  //     .then(res => {
+  //       newFreelance.id = res.insertId;
+  //       return newFreelance;
+  //     });
+  // }
+
+  // { url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, user_id }
+  // static async updateById (id, { url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date }) {
+  //   return db.query(
+  //     'UPDATE freelance SET url_photo = ?, phone_number = ?, average_daily_rate = ?, url_web_site = ?, job_title = ?, bio = ?, vat_number = ?, last_modification_date = ?, WHERE id = ?',
+  //     [ url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date , id]
+  //     ).then(() => this.findById(id));
+  //     console.log(id)
+  //   }
 
   static async remove (id) {
     return db.query('DELETE FROM freelance WHERE id = ?', id).then(res => {
@@ -58,7 +77,7 @@ class Freelance {
 
   static async getAllByPage (result) {
     const { offset, step } = result;
-    return db.query('SELECT * FROM freelance JOIN user AS u ON freelance.user_id = u.id WHERE freelance.is_active = 1 ORDER BY random_id LIMIT ? OFFSET ?', [parseInt(step), offset]);
+    return db.query('SELECT * FROM freelance JOIN user AS u ON freelance.user_id = u.id WHERE freelance.is_active = 1 and freelance.is_deleted = 0 ORDER BY random_id LIMIT ? OFFSET ?', [parseInt(step), offset]);
   }
 
   // Cette méthode est à utiliser pour mélanger tous les freelances
@@ -79,6 +98,10 @@ class Freelance {
   // Récupération du nombre de freelance actifs
   static async totalAmountOfActiveFreelances () {
     return db.query('SELECT COUNT(id) AS totalAmoutOfValidFreelances FROM freelance WHERE is_active = 1;');
+  }
+
+  static async delete (deleted, id) {
+    return db.query('UPDATE freelance SET is_deleted = ? where id = ?', [parseInt(deleted), parseInt(id)]);
   }
 }
 

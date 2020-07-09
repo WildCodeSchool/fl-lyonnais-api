@@ -7,7 +7,8 @@ class User {
   static async create (newUser) {
     const hash = await argon2.hash(newUser.password);
     const addUser = { ...newUser, password: hash };
-    return db.query('INSERT INTO user SET ?', addUser)
+    return db.query('INSERT INTO user (email, firstname, lastname, password, siret, is_validated, registration_date, `key`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      [addUser.email, addUser.firstname, addUser.lastname, addUser.password, addUser.siret, addUser.is_validated, addUser.registration_date, addUser.key])
       .then(res => {
         newUser.id = res.insertId;
         const { password, ...addUser } = newUser;
