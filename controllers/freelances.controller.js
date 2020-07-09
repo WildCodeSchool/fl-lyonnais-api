@@ -29,7 +29,7 @@ class FreelancesController {
 
       // table freelance
       // const lastModificationDate = new Date().toISOString().slice(0, 10);
-      const dataFreelance = await Freelance.create({ url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, address_id, user_id });
+      const dataFreelance = await Freelance.create({ url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, address_id, user_id, is_active:1 });
 
       // table freelance_tag
       for (let i = 0; i < chosenTags.length; i++) {
