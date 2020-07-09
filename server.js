@@ -9,7 +9,7 @@ const extractToken = require('./middlewares/extractToken');
 const app = express();
 const PORT = process.env.PORT || (process.env.NODE_ENV === 'test' ? 3001 : 3000);
 app.use(express.urlencoded({ extended: true }));
-ape.use(extractToken);
+app.use(extractToken);
 
 
 // middlewares

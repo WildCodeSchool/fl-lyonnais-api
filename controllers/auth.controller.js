@@ -9,7 +9,7 @@ class authController {
         res.status(403).send('Access denied, your account has been blocked or you didn t validate your email');
       }
       else {
-        res.status(200).send({ token, user, data });
+        res.status(200).send({ token, user: {...user, password: ''}, data });
       }
     } catch (err) {
       res.status(400).send({ message: 'invalid credentials' });
