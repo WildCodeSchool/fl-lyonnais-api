@@ -78,7 +78,7 @@ class FreelancesController {
   }
 
   static async update (req, res) {
-    const { email, street, zip_code, city, country, url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, references, chosenTags } = req.body
+    const { email, street, zip_code, city, country, url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, references, chosenTags } = req.body;
 
     if (!req.body) {
       res.status(400).send({ errorMessage: 'Content can not be empty!' });

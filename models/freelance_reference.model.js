@@ -43,7 +43,6 @@ class FreelanceReference {
   static async removeAllRefetences (flId) {
     return db.query('DELETE FROM freelance_reference WHERE freelance_id= ?', [flId]);
   }
-
 }
 
 module.exports = FreelanceReference;
