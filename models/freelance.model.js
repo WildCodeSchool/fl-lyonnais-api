@@ -8,6 +8,15 @@ class Freelance {
         return newFreelance;
       });
   }
+  static async findByUserId (id) {
+    return db.query('SELECT * FROM freelance WHERE user_id = ?', [id])
+      .then(rows => {
+        if (rows.length) {
+          return Promise.resolve(rows[0]);
+        }
+        return Promise.resolve(null)
+      });
+  }
 
   static async findById (id) {
     return db.query('SELECT * FROM freelance join user u on freelance.user_id = u.id left join address a on freelance.address_id = a.id WHERE freelance.id = ?', [id])
@@ -101,7 +110,7 @@ class Freelance {
   }
 
   static async delete (deleted, id) {
-    return db.query('UPDATE freelance SET is_deleted = ? where id = ?', [parseInt(deleted), parseInt(id)]);
+    return db.query('UPDATE user SET is_deleted = ? where id = ?', [parseInt(deleted), parseInt(id)]);
   }
 }
 

@@ -8,6 +8,11 @@ const FreelanceReference = require('../models/freelance_reference.model.js');
 const moment = require('moment');
 
 class FreelancesController {
+  static async get (req,res) {
+    const user = req.currentUser;
+    const freelance = await Freelance.findByUserId(user.id);
+    res.status(200).send( {freelance,user})
+  }
   static async create (req, res) {
     // const main_picture_url = req.file ? req.file.path : null
     // const createdpost = await Post.create({main_picture_url})
@@ -154,7 +159,7 @@ class FreelancesController {
       res.status(400).send({ errorMessage: 'Content can not be empty!' });
     }
     try {
-      const data = await Freelance.delete(deleted, req.params.id);
+      const data = await Freelance.delete(deleted, req.currentUser.id);
       res.send({ data });
     } catch (err) {
       if (err.kind === 'not_found') {
