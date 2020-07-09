@@ -2,6 +2,8 @@ require('dotenv').config();
 const User = require('../models/user.model.js');
 const nodemailer = require('nodemailer');
 const randkey = require('random-keygen');
+const argon2 = require('argon2');
+const jwt = require('jsonwebtoken');
 
 const validateEmail = email => {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -149,6 +151,34 @@ class UsersController {
         res.status(404).send({ errorMessage: `User with id ${req.params.id} not found.` });
       } else {
         res.status(500).send({ errorMessage: 'Error updating User with id ' + req.params.id });
+      }
+    }
+  }
+
+  static async login (req, res) {
+    try {
+      const { email, password } = req.body;
+      const user = await User.findByEmail(email);
+      if (!user) {
+        throw new Error('User not found!');
+      } else {
+        const passwordMatch = await argon2.verify(user.password, password);
+        if (passwordMatch) {
+          const token = jwt.sign({ id: user.id, sub: user.name }, process.env.JWT_PRIVATE_KEY);
+          return Promise.resolve(token);
+        } else {
+          throw new Error('Password is not matching.');
+        }
+      }
+    } catch (err) {
+      if (err.kind === 'not_found') {
+        res.status(404).send({
+          message: 'Not found User with this email .'
+        });
+      } else {
+        res.status(500).send({
+          message: 'Could not found User with this email'
+        });
       }
     }
   }

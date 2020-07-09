@@ -13,7 +13,7 @@ tags:
 - name: "freelance"
   description: "operations on freelance"
 paths:
-  /customers:
+  /freelancers:
     get:
       tags:
       - "freelance"
@@ -61,7 +61,7 @@ paths:
               errorMessage:
                 type: "string"
           
-  /customers/{customerId}:
+  /freelancers/{freelancerId}:
     get:
       tags:
       - "freelance"
@@ -114,7 +114,7 @@ paths:
         "404":
           description: "freelance not found"
         "400":
-          description: "Invalid input. The customer object provided is not valid"
+          description: "Invalid input. The freelancer object provided is not valid"
           schema:
             type: 'object'
             properties:
@@ -138,7 +138,7 @@ paths:
         "200":
           description: "OK"
 definitions:
-  CustomerEditableAttributes:
+  freelancerEditableAttributes:
     type: "object"
     properties:
       first_name:
@@ -153,7 +153,7 @@ definitions:
       active: 
         type: "boolean"
       
-  CustomerSimplified:
+  freelanceSimplified:
     type: "object"
     properties:
       id:
@@ -168,7 +168,7 @@ definitions:
       active: 
         type: "boolean"
       
-  Customer:
+  freelancer:
     allOf: 
       - type: "object"
         properties:

@@ -20,6 +20,10 @@ class Tag {
       });
   }
 
+  static async getUsedTags (result) {
+    return db.query('SELECT id, name, count(*) as nb from tag join freelance_tag ft on tag.id = ft.tag_id group by tag_id');
+  }
+
   static async create ({ name, content, slug }) {
     return db.query('INSERT INTO tag (name, content, slug) VALUES (?, ?, ?);', [name, content, slug])
       .then(res => {
