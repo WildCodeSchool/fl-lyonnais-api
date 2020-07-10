@@ -85,7 +85,7 @@ class Freelance {
   }
 
   static async getAddress (id) {
-    return db.query(`SELECT * FROM freelance join user u on freelance.user_id = u.id join address a on freelance.address_id = a.id WHERE freelance.id = ${id}`)
+    return db.query(`SELECT street,zip_code,city FROM freelance join user u on freelance.user_id = u.id join address a on freelance.address_id = a.id WHERE freelance.id = ${id}`)
       .then(rows => {
         if (rows.length) {
           return Promise.resolve(rows[0]);

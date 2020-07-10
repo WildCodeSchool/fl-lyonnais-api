@@ -96,14 +96,10 @@ class FreelancesController {
   static async update (req, res) {
     const { email, street, zip_code, city, country, url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, references, chosenTags } = req.body;
 
-    // { firstname, lastname, email, url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, is_active, street, zip_code, city, references, chosenTags }
-
     if (!req.body) {
       res.status(400).send({ errorMessage: 'Content can not be empty!' });
     }
-
     try {
-      // Destructuration et récparation de l'objet
       if (!email) {
         res.status(400).send('No email mannnnn!');
       }
@@ -113,29 +109,32 @@ class FreelancesController {
       req.body.country = 'France';
 
       // table freelance
-      const dataFreelance = await Freelance.updateById(req.params.id, req.body);
+      const freelance = await Freelance.findByUserId(user.id);
+      console.log(freelance)
+      const dataFreelance = await Freelance.updateById(freelance.id, {...req.body,last_modification_date : new Date().toISOString().slice(0, 10)});
 
       // table address
       const dataAddress = await Address.updateById(dataFreelance.address_id, req.body);
 
       // Table freelance_tags
       // // Delete tags from freelance_tags
-      await FreelanceTag.removeAllTags(req.params.id);
+      await FreelanceTag.removeAllTags(freelance.id);
       for (let i = 0; i < chosenTags.length; i++) {
-        await FreelanceTag.create({ tag_id: chosenTags[i].id, freelance_id: req.params.id });
+        await FreelanceTag.create({ tag_id: chosenTags[i].id, freelance_id: freelance.id });
       }
 
       // Table Ref Tags
       // // Delete reference_id from freelance_reference
-      await FreelanceReference.removeAllRefetences(req.params.id);
+      await FreelanceReference.removeAllRefetences(freelance.id);
       for (let i = 0; i < references.length; i++) {
         const { name, image, url } = references[i];
         const reference = await Reference.create({ name, image, url });// ni img ni url pour l'instant
-        await FreelanceReference.create({ reference_id: reference.id, freelance_id: req.params.id });
+        await FreelanceReference.create({ reference_id: reference.id, freelance_id: freelance.id });
       }
 
       res.send(dataFreelance);
     } catch (err) {
+      console.error(err)
       if (err.kind === 'not_found') {
         res.status(404).send({ errorMessage: `Freelance with id ${req.params.id} not found.` });
       } else {
