@@ -33,7 +33,7 @@ class User {
     return db.query('SELECT * FROM user WHERE email = ?', [email])
       .then(rows => {
         if (rows.length) {
-          return Promise.resolve({...rows[0], password:''});
+          return Promise.resolve(rows[0]);
         } else {
           const err = new Error();
           err.kind = 'not_found';
@@ -43,6 +43,7 @@ class User {
   }
 
   static async emailAlreadyExists (email) {
+    console.log(email)
     return db.query('SELECT * FROM user WHERE email = ?', [email])
       .then(rows => {
         if (rows.length) {
@@ -55,7 +56,7 @@ class User {
 
   static async getAll (result) {
     return db.query('SELECT * FROM user')
-    .then( rows => rows.map(row => ({...row,password:''})))
+    .then( rows => rows.map(row => ({...row, password:''})))
   }
 
   static async updateById (id, user) {
@@ -71,10 +72,13 @@ class User {
     if (!user) {
       throw new Error('user not found');
     } else {
+      console.log(user.password);
+      console.log(password);
       const passwordIsValid = await argon2.verify(user.password, password);
       if (!passwordIsValid) {
         throw new Error('incorrect password');
       } else {
+        
         const data = { name: user.name, id: user.id };
         const token = jwt.sign(data, JWT_PRIVATE_KEY, { expiresIn: '48h' });
         const userWithoutPassord = { password:'', ...user };
