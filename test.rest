@@ -182,7 +182,7 @@ GET http://localhost:3000/tags/api/used
 
 ________________________________________________________________________________________________________________
 ###
-GET http://localhost:3000/freelances/?page=1&step=3
+GET http://localhost:3000/freelances/?page=2&step=15
 
 ### DELETE
 DELETE http://localhost:3000/freelances/16?deleted=0
