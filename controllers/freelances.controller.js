@@ -27,9 +27,6 @@ class FreelancesController {
   static async create (req, res) {
     // const main_picture_url = req.file ? req.file.path : null
     // const createdpost = await Post.create({main_picture_url})
-    if (!req.body.is_active || !req.body.last_modification_date) {
-      return res.status(400).send({ errorMessage: 'Content can not be empty!' });
-    }
     try {
       // Destructuration et récparation de l'objet
       req.body.country = 'France';
