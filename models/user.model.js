@@ -43,7 +43,6 @@ class User {
   }
 
   static async emailAlreadyExists (email) {
-    console.log(email);
     return db.query('SELECT * FROM user WHERE email = ?', [email])
       .then(rows => {
         if (rows.length) {
@@ -72,8 +71,6 @@ class User {
     if (!user) {
       throw new Error('user not found');
     } else {
-      console.log(user.password);
-      console.log(password);
       const passwordIsValid = await argon2.verify(user.password, password);
       if (!passwordIsValid) {
         throw new Error('incorrect password');

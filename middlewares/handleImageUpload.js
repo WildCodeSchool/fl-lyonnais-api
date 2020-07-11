@@ -23,6 +23,6 @@ const fileFilter = (req, file, cb) => {
   cb(err);
 };
 
-const upload = multer({ storage, fileFilter }).single('imageReferenceList');
+const upload = multer({ storage, fileFilter }).single('image');
 
 module.exports = upload;

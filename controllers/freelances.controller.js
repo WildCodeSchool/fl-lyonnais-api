@@ -11,8 +11,6 @@ class FreelancesController {
   static async get (req,res) {
     const user = req.currentUser;
     const freelance = await Freelance.findByUserId(user.id);
-    
-    console.log(freelance)
     let references = [];
     let tags = [];
     let address = {};
