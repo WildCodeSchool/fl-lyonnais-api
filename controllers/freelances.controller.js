@@ -8,20 +8,20 @@ const FreelanceReference = require('../models/freelance_reference.model.js');
 const moment = require('moment');
 
 class FreelancesController {
-  static async get (req,res) {
+  static async get (req, res) {
     const user = req.currentUser;
     const freelance = await Freelance.findByUserId(user.id);
-    
-    console.log(freelance)
+
+    console.log(freelance);
     let references = [];
     let tags = [];
     let address = {};
     if (freelance) {
       references = await Freelance.getAllReferences(freelance.id);
       tags = await Freelance.getAllTags(freelance.id);
-      address = await Freelance.getAddress(freelance.id)
+      address = await Freelance.getAddress(freelance.id);
     }
-    res.status(200).send( {freelance,user, references, tags, address})
+    res.status(200).send({ freelance, user, references, tags, address });
   }
 
   static async create (req, res) {
@@ -42,7 +42,7 @@ class FreelancesController {
 
       // table freelance
       // const lastModificationDate = new Date().toISOString().slice(0, 10);
-      const dataFreelance = await Freelance.create({ url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, address_id, user_id, is_active:1 });
+      const dataFreelance = await Freelance.create({ url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, address_id, user_id, is_active: 1 });
 
       // table freelance_tag
       for (let i = 0; i < chosenTags.length; i++) {
@@ -100,15 +100,15 @@ class FreelancesController {
       if (!email) {
         res.status(400).send('No email mannnnn!');
       }
-      const user = req.currentUser
+      const user = req.currentUser;
       const user_id = user.id;
-      console.log(user_id)
+      console.log(user_id);
       req.body.country = 'France';
 
       // table freelance
       const freelance = await Freelance.findByUserId(user.id);
-      console.log(freelance)
-      const dataFreelance = await Freelance.updateById(freelance.id, {...req.body,last_modification_date : new Date().toISOString().slice(0, 10)});
+      console.log(freelance);
+      const dataFreelance = await Freelance.updateById(freelance.id, { ...req.body, last_modification_date: new Date().toISOString().slice(0, 10) });
 
       // table address
       const dataAddress = await Address.updateById(dataFreelance.address_id, req.body);
@@ -131,7 +131,7 @@ class FreelancesController {
 
       res.send(dataFreelance);
     } catch (err) {
-      console.error(err)
+      console.error(err);
       if (err.kind === 'not_found') {
         res.status(404).send({ errorMessage: `Freelance with id ${req.params.id} not found.` });
       } else {
@@ -157,7 +157,7 @@ class FreelancesController {
       const data2 = await Freelance.totalAmountOfActiveFreelances();
       res.send({ data, data2 });
     } catch (err) {
-      console.error(err)
+      console.error(err);
       res.status(500).send({
         errorMessage: err.message || 'Some error occurred while retrieving freelances (pagination).'
       });
@@ -170,7 +170,7 @@ class FreelancesController {
       res.status(400).send({ errorMessage: 'Content can not be empty!' });
     }
     try {
-      const data = await Freelance.delete(deleted, req.currentUser.id);
+      const data = await Freelance.delete(deleted, req.params.id);
       res.send({ data });
     } catch (err) {
       if (err.kind === 'not_found') {
