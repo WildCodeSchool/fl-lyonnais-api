@@ -6,10 +6,13 @@ const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./docs/swagger.yaml');
 const extractToken = require('./middlewares/extractToken');
 
+
+
 const app = express();
 const PORT = process.env.PORT || (process.env.NODE_ENV === 'test' ? 3001 : 3000);
 app.use(express.urlencoded({ extended: true }));
 app.use(extractToken);
+
 
 
 // middlewares

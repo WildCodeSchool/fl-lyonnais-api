@@ -100,12 +100,10 @@ class FreelancesController {
       }
       const user = req.currentUser
       const user_id = user.id;
-      console.log(user_id)
       req.body.country = 'France';
 
       // table freelance
       const freelance = await Freelance.findByUserId(user.id);
-      console.log(freelance)
       const dataFreelance = await Freelance.updateById(freelance.id, {...req.body,last_modification_date : new Date().toISOString().slice(0, 10)});
 
       // table address

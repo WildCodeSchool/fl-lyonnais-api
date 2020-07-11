@@ -44,8 +44,8 @@ class Freelance {
 
   static async updateById (id, freelance) {
     return db.query(
-      'UPDATE freelance SET url_photo = ?, phone_number = ?, average_daily_rate = ?, url_web_site = ?, job_title = ?, bio = ?, vat_number = ?, last_modification_date = ? WHERE id = ?',
-      [freelance.url_photo, freelance.phone_number, freelance.average_daily_rate, freelance.url_web_site, freelance.job_title, freelance.bio, freelance.vat_number, freelance.last_modification_date, id]
+      'UPDATE freelance SET phone_number = ?, average_daily_rate = ?, url_web_site = ?, job_title = ?, bio = ?, vat_number = ?, last_modification_date = ? WHERE id = ?',
+      [freelance.phone_number, freelance.average_daily_rate, freelance.url_web_site, freelance.job_title, freelance.bio, freelance.vat_number, freelance.last_modification_date, id]
     ).then(() => this.findById(id));
   }
 
