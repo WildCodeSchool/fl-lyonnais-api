@@ -29,6 +29,7 @@ class FreelancesController {
       // Destructuration et récparation de l'objet
       req.body.country = 'France';
       const { email, street, zip_code, city, country, url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, references, chosenTags } = req.body;
+      // url_photo = 'avatar.webp'
 
       // table address
       const dataAddress = await Address.create({ street, zip_code, city, country });
@@ -116,14 +117,14 @@ class FreelancesController {
         await FreelanceTag.create({ tag_id: chosenTags[i].id, freelance_id: freelance.id });
       }
 
-      // Table Ref Tags
+
       // // Delete reference_id from freelance_reference
-      await FreelanceReference.removeAllRefetences(freelance.id);
-      for (let i = 0; i < references.length; i++) {
-        const { name, image, url } = references[i];
-        const reference = await Reference.create({ name, image, url });// ni img ni url pour l'instant
-        await FreelanceReference.create({ reference_id: reference.id, freelance_id: freelance.id });
-      }
+      // await FreelanceReference.removeAllReferences(freelance.id);
+      // for (let i = 0; i < references.length; i++) {
+      //   const { name, image, url } = references[i];
+      //   const reference = await Reference.create({ name, image, url });// ni img ni url pour l'instant
+      //   await FreelanceReference.create({ reference_id: reference.id, freelance_id: freelance.id });
+      // }
 
       res.send(dataFreelance);
     } catch (err) {

@@ -71,7 +71,6 @@ class FreelanceTag {
   // }
 
   static async removeAllTags (flId) {
-    console.log(flId);
     return db.query('DELETE FROM freelance_tag WHERE freelance_id= ?', [flId]);
   }
 }

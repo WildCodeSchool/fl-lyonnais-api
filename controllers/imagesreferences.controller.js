@@ -3,31 +3,44 @@ const User = require('../models/user.model.js');
 const Image = require('../models/image.model.js');
 const Reference = require('../models/reference.model.js');
 const FreelanceReference = require('../models/freelance_reference.model.js');
-const moment = require('moment');
+const ImageReference = require('../models/reference_image.model.js');
 
-class ImagesController {
+class ImageReferencesController {
 
   static async update (req, res) {
     // const { email, street, zip_code, city, country, url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, references, chosenTags } = req.body;
-    const image = req.file ? req.file.path : null
+    const imagesReceivedFiles = req.files 
+    const imagesReceivedBody= req.body;
+    console.log(' imagesReceivedFiles', imagesReceivedFiles)
+    console.log('imagesReceivedBody',req.body)
 
     if (!req.file) {
       res.status(400).send({ errorMessage: 'Image content can not be empty!' });
     }
-    //Upload de la photo de profil
-    //1 récupérer le fl id
-    //2 faire un update juste sur la photo
+
       //1
       const user = req.currentUser
       const user_id = user.id;
       req.body.country = 'France';
       const freelance = await Freelance.findByUserId(user.id);
       const freelance_id = freelance.id
+      console.log('références', freelance_id)
 
-      //2 
-      const dataFreelanceImage = await Image.updateById(freelance_id, {url_photo: image});
 
-      res.send(dataFreelanceImage);
+      await FreelanceReference.removeAllReferences(freelance.id);
+      let referencesToSendToClient = []
+      for (let i=0; i<= imagesReceivedBody.referenceID.length; i++) {
+        let  name = imagesReceivedBody.name[i];
+        let  image = imagesReceivedFiles[i].path;
+        let  url = imagesReceivedBody.url[i];
+
+        const reference = await Reference.create({ name, image, url });// ni img ni url pour l'instant
+        await FreelanceReference.create({ reference_id: reference.id, freelance_id: freelance.id });  
+        referencesToSendToClient.push(reference)
+      }
+      res.send(referencesToSendToClient);
+      
+
     } catch (err) {
       console.error(err)
       if (err.kind === 'not_found') {
@@ -37,7 +50,6 @@ class ImagesController {
       }
     }
   
-
   // static async delete (req, res) {
   //   const { deleted } = req.query;
   //   if (!req.body) {
@@ -56,4 +68,4 @@ class ImagesController {
   // }
 }
 
-module.exports = ImagesController;
+module.exports = ImageReferencesController;
