@@ -6,6 +6,7 @@ const FreelanceReference = require('../models/freelance_reference.model.js');
 const moment = require('moment');
 
 class ImagesController {
+
   static async update (req, res) {
     // const { email, street, zip_code, city, country, url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, references, chosenTags } = req.body;
     const image = req.file ? req.file.path : null

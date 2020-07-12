@@ -6,7 +6,10 @@ const handleImageUpload = require('../middlewares/handleImageUpload');
 // Pour la pagination, format : /?page=n&step=x
 router.post('/account', requireAuth, handleImageUpload, freelancesController.create);
 router.patch('/account', requireAuth, handleImageUpload, freelancesController.update);
+
+// router.post('/account/image', requireAuth, handleImageUpload, imagesController.create);
 router.patch('/account/image', requireAuth, handleImageUpload, imagesController.update);
+
 router.get('/account', requireAuth,freelancesController.get);
 
 router.get('/:id', freelancesController.findOne);
