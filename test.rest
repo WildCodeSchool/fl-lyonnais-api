@@ -186,3 +186,6 @@ GET http://localhost:3000/freelances/?page=2&step=15
 
 ### DELETE
 DELETE http://localhost:3000/freelances/16?deleted=0
+
+### ActivateDeactivate
+PUT http://localhost:3000/freelances/61?activated=1

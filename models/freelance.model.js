@@ -8,13 +8,14 @@ class Freelance {
         return newFreelance;
       });
   }
+
   static async findByUserId (id) {
     return db.query('SELECT * FROM freelance WHERE user_id = ?', [id])
       .then(rows => {
         if (rows.length) {
           return Promise.resolve(rows[0]);
         }
-        return Promise.resolve(null)
+        return Promise.resolve(null);
       });
   }
 
@@ -74,7 +75,7 @@ class Freelance {
           return Promise.resolve({});
         }
       });
-    }
+  }
 
   static async getAllByPage (result) {
     const { offset, step } = result;
@@ -98,11 +99,15 @@ class Freelance {
 
   // Récupération du nombre de freelance actifs
   static async totalAmountOfActiveFreelances () {
-    return db.query('SELECT COUNT(id) AS totalAmoutOfValidFreelances FROM freelance WHERE is_active = 1;');
+    return db.query('SELECT COUNT(f.id) AS totalAmoutOfValidFreelances FROM freelance AS f JOIN user AS u ON f.user_id = u.id WHERE f.is_active = 1 and u.is_deleted = 0;');
   }
 
   static async delete (deleted, id) {
-    return db.query('UPDATE user SET is_deleted = ? where id = ?', [parseInt(deleted), parseInt(id)]);
+    return db.query('UPDATE user join freelance f on user.id = f.user_id SET is_deleted = ? where f.id = ?', [parseInt(deleted), parseInt(id)]);
+  }
+
+  static async activate (activated, id) {
+    return db.query('UPDATE freelance SET is_active = ? where id = ?', [parseInt(activated), parseInt(id)]);
   }
 }
 
