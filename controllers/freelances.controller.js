@@ -11,8 +11,6 @@ class FreelancesController {
   static async get (req, res) {
     const user = req.currentUser;
     const freelance = await Freelance.findByUserId(user.id);
-
-    console.log(freelance);
     let references = [];
     let tags = [];
     let address = {};
@@ -102,13 +100,12 @@ class FreelancesController {
       }
       const user = req.currentUser;
       const user_id = user.id;
-      console.log(user_id);
       req.body.country = 'France';
 
       // table freelance
       const freelance = await Freelance.findByUserId(user.id);
-      console.log(freelance);
-      const dataFreelance = await Freelance.updateById(freelance.id, { ...req.body, last_modification_date: new Date().toISOString().slice(0, 10) });
+      const dataFreelance = await Freelance.updateById(freelance.id, {...req.body,last_modification_date : new Date().toISOString().slice(0, 10)});
+
 
       // table address
       const dataAddress = await Address.updateById(dataFreelance.address_id, req.body);
@@ -120,9 +117,9 @@ class FreelancesController {
         await FreelanceTag.create({ tag_id: chosenTags[i].id, freelance_id: freelance.id });
       }
 
-      // Table Ref Tags
-      // // Delete reference_id from freelance_reference
-      await FreelanceReference.removeAllRefetences(freelance.id);
+
+      // Delete reference_id from freelance_reference
+      await FreelanceReference.removeAllReferences(freelance.id);
       for (let i = 0; i < references.length; i++) {
         const { name, image, url } = references[i];
         const reference = await Reference.create({ name, image, url });// ni img ni url pour l'instant
@@ -197,6 +194,23 @@ class FreelancesController {
       }
     }
   }
+  static async setImagesToUploadsFile (req, res) {
+    // const { email, street, zip_code, city, country, url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, references, chosenTags } = req.body;
+    const image = req.file ? req.file.path : null
+
+    if (!req.file) {
+      res.status(400).send({ errorMessage: 'Image content can not be empty!' });
+    }
+    res.status(200).send({image})
+    
+    } catch (err) {
+      console.error(err)
+      if (err.kind === 'not_found') {
+        res.status(404).send({ errorMessage: `Freelance with id ${req.params.id} not found.` });
+      } else {
+        res.status(500).send({ errorMessage: 'Error updating Freelance with id ' + req.params.id });
+      }
+    }
 }
 
 module.exports = FreelancesController;
