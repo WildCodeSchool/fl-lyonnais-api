@@ -34,7 +34,6 @@ describe('POST /freelances/account', () => {
       .expect(201)
       .expect('Content-Type', /json/)
       .then(response => {
-        console.log(response.body);
         expect(response.body.id).toEqual(1);
       });
   });
