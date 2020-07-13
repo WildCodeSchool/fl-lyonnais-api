@@ -12,6 +12,8 @@ CREATE TABLE `address`
 CREATE TABLE `user`
 (
     `id`                   int          NOT NULL AUTO_INCREMENT,
+    `firstname`            varchar(100) NOT NULL,
+    `lastname`             varchar(150) NOT NULL,
     `email`                varchar(100) NOT NULL,
     `password`             varchar(45)  NOT NULL,
     `siret`                varchar(20) DEFAULT NULL,
@@ -19,16 +21,14 @@ CREATE TABLE `user`
     `registration_date`    date         NOT NULL,
     `key`                  varchar(20)  NOT NULL,
     `is_admin`             tinyint     DEFAULT NULL,
-    `is_validated`         tinyint     DEFAULT NULL,
+    `is_validated`         tinyint     DEFAULT '0',
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
 CREATE TABLE `freelance`
 (
-    `id`                     int          NOT NULL AUTO_INCREMENT,
-    `firstname`              varchar(100) NOT NULL,
-    `lastname`               varchar(150) NOT NULL,
+    `id`                     int        NOT NULL AUTO_INCREMENT,
     `url_photo`              varchar(255) DEFAULT NULL,
     `phone_number`           varchar(20)  DEFAULT NULL,
     `average_daily_rate`     int          DEFAULT NULL,
@@ -36,8 +36,8 @@ CREATE TABLE `freelance`
     `job_title`              varchar(100) DEFAULT NULL,
     `bio`                    text,
     `vat_number`             varchar(15)  DEFAULT NULL,
-    `last_modification_date` datetime     NOT NULL,
-    `is_active`              tinyint(1)   NOT NULL,
+    `last_modification_date` datetime   NOT NULL,
+    `is_active`              tinyint(1) NOT NULL,
     `address_id`             int          DEFAULT NULL,
     `user_id`                int          DEFAULT NULL,
     PRIMARY KEY (`id`),
@@ -72,21 +72,21 @@ CREATE TABLE `freelance_reference`
 (
     `freelance_id` int NOT NULL,
     `reference_id` int NOT NULL,
-    KEY `fk_freelancer_id_idx` (`freelance_id`),
+    KEY `fk_freelance_id_idx` (`freelance_id`),
     KEY `fk_reference_id_idx` (`reference_id`),
     CONSTRAINT `fk_freelance_id` FOREIGN KEY (`freelance_id`) REFERENCES `freelance` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT `fk_reference_id` FOREIGN KEY (`reference_id`) REFERENCES `reference` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
-CREATE TABLE `freelancer_tag`
+CREATE TABLE `freelance_tag`
 (
-    `freelancer_id` int NOT NULL,
-    `tag_id`        int NOT NULL,
-    KEY `fr_freelancer_id_idx` (`freelancer_id`),
+    `freelance_id` int NOT NULL,
+    `tag_id`       int NOT NULL,
+    KEY `fr_freelance_id_idx` (`freelance_id`),
     KEY `fk_tag_id_idx` (`tag_id`),
     CONSTRAINT `fk_tag_id` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT `fr_freelancer_id` FOREIGN KEY (`freelancer_id`) REFERENCES `freelance` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+    CONSTRAINT `fr_freelance_id` FOREIGN KEY (`freelance_id`) REFERENCES `freelance` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8mb4;
 
