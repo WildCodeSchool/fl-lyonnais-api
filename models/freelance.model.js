@@ -108,10 +108,7 @@ class Freelance {
 
   static async activate (activated, id) {
     return db.query('UPDATE freelance SET is_active = ? where id = ?', [parseInt(activated), parseInt(id)]);
-  }
 
-  static async delete (deleted, id) {
-    return db.query('UPDATE freelance SET is_deleted = ? where id = ?', [parseInt(deleted), parseInt(id)]);
   }
 }
 

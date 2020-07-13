@@ -110,6 +110,7 @@ class FreelancesController {
       const dataFreelance = await Freelance.updateById(freelance.id, { ...req.body, last_modification_date: new Date().toISOString().slice(0, 10) });
 
 
+
       // table address
       const dataAddress = await Address.updateById(dataFreelance.address_id, req.body);
 
@@ -165,18 +166,17 @@ class FreelancesController {
   }
 
   static async delete (req, res) {
-    const { deleted } = req.query;
-    if (!req.body) {
-      res.status(400).send({ errorMessage: 'Content can not be empty!' });
-    }
+    const user = req.currentUser;
+    const freelance = await Freelance.findByUserId(user.id);
     try {
-      const data = await Freelance.delete(deleted, req.params.id);
+      const data = await Freelance.delete(1, freelance.id);
       res.send({ data });
     } catch (err) {
+      console.error(err)
       if (err.kind === 'not_found') {
-        res.status(404).send({ errorMessage: `Freelance with id ${req.params.id} not found.` });
+        res.status(404).send({ errorMessage: `Freelance with id ${freelance.id} not found.` });
       } else {
-        res.status(500).send({ errorMessage: 'Error updating Freelance with id ' + req.params.id });
+        res.status(500).send({ errorMessage: 'Error updating Freelance with id ' + freelance.id });
       }
     }
   }
