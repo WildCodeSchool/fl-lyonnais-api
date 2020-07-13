@@ -205,16 +205,6 @@ class UsersController {
     if (!validateEmail(email)) {
       return res.status(422).send({ errorMessage: 'Il faut une adresse email valide !' });
     }
-    // Informations envoyées au front
-    // ?statut=
-    // =revalidation : lorsque le freelance a déjà validé son email et qu'il clique sur le lien de nouveau
-    //                 => message d'information
-    // =validated : tout c'est bien passé, email validé.
-    //              => message de félicitations au nouveau membre
-    // =delay_exceeded : lorsque le délai de 2 jours pour la validation est dépassé
-    //                   => message + regénération d'une clé
-    // =wrong_key : le contrôleur a reçu une clé différente de celle stockée dans la table
-    //              => message + (à définir)
     //
     try {
       let user = await User.findByEmail(email);

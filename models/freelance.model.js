@@ -9,6 +9,16 @@ class Freelance {
       });
   }
 
+  static async findByUserId (id) {
+    return db.query('SELECT * FROM freelance WHERE user_id = ?', [id])
+      .then(rows => {
+        if (rows.length) {
+          return Promise.resolve(rows[0]);
+        }
+        return Promise.resolve(null);
+      });
+  }
+
   static async findById (id) {
     return db.query('SELECT * FROM freelance join user u on freelance.user_id = u.id left join address a on freelance.address_id = a.id WHERE freelance.id = ?', [id])
       .then(rows => {
@@ -75,9 +85,20 @@ class Freelance {
     return db.query('DELETE FROM freelance WHERE id = ?');
   }
 
+  static async getAddress (id) {
+    return db.query(`SELECT street,zip_code,city FROM freelance join user u on freelance.user_id = u.id join address a on freelance.address_id = a.id WHERE freelance.id = ${id}`)
+      .then(rows => {
+        if (rows.length) {
+          return Promise.resolve(rows[0]);
+        } else {
+          return Promise.resolve({});
+        }
+      });
+  }
+
   static async getAllByPage (result) {
     const { offset, step } = result;
-    return db.query('SELECT * FROM freelance JOIN user AS u ON freelance.user_id = u.id WHERE freelance.is_active = 1 and freelance.is_deleted = 0 ORDER BY random_id LIMIT ? OFFSET ?', [parseInt(step), offset]);
+    return db.query('SELECT f.id as id, firstname, lastname, url_photo, job_title FROM freelance AS f JOIN user AS u ON f.user_id = u.id WHERE f.is_active = 1 and u.is_deleted = 0 ORDER BY random_id LIMIT ? OFFSET ?', [parseInt(step), offset]);
   }
 
   // Cette méthode est à utiliser pour mélanger tous les freelances
@@ -97,7 +118,15 @@ class Freelance {
 
   // Récupération du nombre de freelance actifs
   static async totalAmountOfActiveFreelances () {
-    return db.query('SELECT COUNT(id) AS totalAmoutOfValidFreelances FROM freelance WHERE is_active = 1;');
+    return db.query('SELECT COUNT(f.id) AS totalAmoutOfValidFreelances FROM freelance AS f JOIN user AS u ON f.user_id = u.id WHERE f.is_active = 1 and u.is_deleted = 0;');
+  }
+
+  static async delete (deleted, id) {
+    return db.query('UPDATE user join freelance f on user.id = f.user_id SET is_deleted = ? where f.id = ?', [parseInt(deleted), parseInt(id)]);
+  }
+
+  static async activate (activated, id) {
+    return db.query('UPDATE freelance SET is_active = ? where id = ?', [parseInt(activated), parseInt(id)]);
   }
 
   static async delete (deleted, id) {
