@@ -45,28 +45,9 @@ class Freelance {
   static async updateById (id, freelance) {
     return db.query(
       'UPDATE freelance SET url_photo = ?, phone_number = ?, average_daily_rate = ?, url_web_site = ?, job_title = ?, bio = ?, vat_number = ?, last_modification_date = ? WHERE id = ?',
-      [freelance.url_photo, freelance.phone_number, freelance.average_daily_rate, freelance.url_web_site, freelance.job_title, freelance.bio, freelance.vat_number, freelance.last_modification_date, id]
+      [freelance.url_photo,freelance.phone_number, freelance.average_daily_rate, freelance.url_web_site, freelance.job_title, freelance.bio, freelance.vat_number, freelance.last_modification_date, id]
     ).then(() => this.findById(id));
   }
-
-  // static async addFreelance (newFreelance) {
-  //   console.log(newFreelance);
-  //   // const { url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, is_active, dataAddress.id, user_id: userId } = newFreelance;
-  //   return db.query('INSERT INTO freelance SET ?' , newFreelance)
-  //     .then(res => {
-  //       newFreelance.id = res.insertId;
-  //       return newFreelance;
-  //     });
-  // }
-
-  // { url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, user_id }
-  // static async updateById (id, { url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date }) {
-  //   return db.query(
-  //     'UPDATE freelance SET url_photo = ?, phone_number = ?, average_daily_rate = ?, url_web_site = ?, job_title = ?, bio = ?, vat_number = ?, last_modification_date = ?, WHERE id = ?',
-  //     [ url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date , id]
-  //     ).then(() => this.findById(id));
-  //     console.log(id)
-  //   }
 
   static async remove (id) {
     return db.query('DELETE FROM freelance WHERE id = ?', id).then(res => {
