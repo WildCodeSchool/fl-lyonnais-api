@@ -192,5 +192,5 @@ PUT http://localhost:3000/freelances/61?activated=1
 
 ----------------------
 ###
-GET http://localhost:3000/search?recherche=meyer
+GET http://localhost:3000/search?recherche=me
 
