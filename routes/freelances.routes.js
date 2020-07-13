@@ -1,5 +1,6 @@
-const freelancesController = require('../controllers/freelances.controller.js');
 const router = require('express').Router();
+const freelancesController = require('../controllers/freelances.controller.js');
+// const imagesController = require('../controllers/images.controller.js');
 const requireAuth = require('../middlewares/requireAuth');
 
 // Pour la pagination, format : /?page=n&step=x
