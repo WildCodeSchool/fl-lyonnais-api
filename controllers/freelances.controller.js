@@ -29,7 +29,6 @@ class FreelancesController {
       // Destructuration et récparation de l'objet
       req.body.country = 'France';
       const { email, street, zip_code, city, country, url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, references, chosenTags } = req.body;
-      // url_photo = 'avatar.webp'
 
       // table address
       const dataAddress = await Address.create({ street, zip_code, city, country });
@@ -118,13 +117,13 @@ class FreelancesController {
       }
 
 
-      // // Delete reference_id from freelance_reference
-      // await FreelanceReference.removeAllReferences(freelance.id);
-      // for (let i = 0; i < references.length; i++) {
-      //   const { name, image, url } = references[i];
-      //   const reference = await Reference.create({ name, image, url });// ni img ni url pour l'instant
-      //   await FreelanceReference.create({ reference_id: reference.id, freelance_id: freelance.id });
-      // }
+      // Delete reference_id from freelance_reference
+      await FreelanceReference.removeAllReferences(freelance.id);
+      for (let i = 0; i < references.length; i++) {
+        const { name, image, url } = references[i];
+        const reference = await Reference.create({ name, image, url });// ni img ni url pour l'instant
+        await FreelanceReference.create({ reference_id: reference.id, freelance_id: freelance.id });
+      }
 
       res.send(dataFreelance);
     } catch (err) {
@@ -177,6 +176,23 @@ class FreelancesController {
       }
     }
   }
+  static async setImagesToUploadsFile (req, res) {
+    // const { email, street, zip_code, city, country, url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, references, chosenTags } = req.body;
+    const image = req.file ? req.file.path : null
+
+    if (!req.file) {
+      res.status(400).send({ errorMessage: 'Image content can not be empty!' });
+    }
+    res.status(200).send({image})
+    
+    } catch (err) {
+      console.error(err)
+      if (err.kind === 'not_found') {
+        res.status(404).send({ errorMessage: `Freelance with id ${req.params.id} not found.` });
+      } else {
+        res.status(500).send({ errorMessage: 'Error updating Freelance with id ' + req.params.id });
+      }
+    }
 }
 
 module.exports = FreelancesController;
