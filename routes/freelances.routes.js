@@ -2,6 +2,7 @@ const router = require('express').Router();
 const freelancesController = require('../controllers/freelances.controller.js');
 // const imagesController = require('../controllers/images.controller.js');
 const requireAuth = require('../middlewares/requireAuth');
+const handleImageUpload = require('../middlewares/handleImageUpload');
 
 router.get('/account', requireAuth,freelancesController.get);
 router.post('/account', requireAuth, handleImageUpload, freelancesController.create);
