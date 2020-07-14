@@ -158,16 +158,16 @@ class FreelancesController {
       // Calcul de l'offset en fonction du numéro de page et du nombre de vignettes affichées par page
       const offset = (page - 1) * step;
 
-      const Freelances = await Freelance.getAllByPage({ offset, step });
-      const FreelanceTotalAmount = await Freelance.totalAmountOfActiveFreelances();
+      const freelances = await Freelance.getAllByPage({ offset, step });
+      const freelanceTotalAmount = await Freelance.totalAmountOfActiveFreelances();
 
-      const tags = await Promise.all(Freelances.map(f => Freelance.getAllTags(f.id)));
-      for (let i = 0; i < Freelances.length; i++) {
-        Freelances[i].tags = tags[i];
+      const tags = await Promise.all(freelances.map(f => Freelance.getAllTags(f.id)));
+      for (let i = 0; i < freelances.length; i++) {
+        freelances[i].tags = tags[i];
       }
-      console.log(Freelances);
+      console.log(freelances);
 
-      res.send({ Freelances, FreelanceTotalAmount });
+      res.send({ freelances, freelanceTotalAmount });
     } catch (err) {
       console.error(err);
       res.status(500).send({
