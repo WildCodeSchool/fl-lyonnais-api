@@ -141,6 +141,10 @@ class FreelancesController {
     }
   }
 
+  // Affichage des freelance par page
+  // Paramètres :
+  // - page = numéro de la page à envoyer
+  // - step = nombre de freelance par page
   static async pagination (req, res) {
     const { page, step } = req.query;
     try {
@@ -154,9 +158,16 @@ class FreelancesController {
       // Calcul de l'offset en fonction du numéro de page et du nombre de vignettes affichées par page
       const offset = (page - 1) * step;
 
-      const data = (await Freelance.getAllByPage({ offset, step }));
-      const data2 = await Freelance.totalAmountOfActiveFreelances();
-      res.send({ data, data2 });
+      const Freelances = await Freelance.getAllByPage({ offset, step });
+      const FreelanceTotalAmount = await Freelance.totalAmountOfActiveFreelances();
+
+      const tags = await Promise.all(Freelances.map(f => Freelance.getAllTags(f.id)));
+      for (let i = 0; i < Freelances.length; i++) {
+        Freelances[i].tags = tags[i];
+      }
+      console.log(Freelances);
+
+      res.send({ Freelances, FreelanceTotalAmount });
     } catch (err) {
       console.error(err);
       res.status(500).send({
@@ -197,9 +208,14 @@ class FreelancesController {
       }
     }
   }
+
+  // Commentaire de Christophe (14/7/2020)
+  // Cette méthode me paraît corrompue...
+  // En effet, il y a un catch sans try.
+
   static async setImagesToUploadsFile (req, res) {
     // const { email, street, zip_code, city, country, url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, references, chosenTags } = req.body;
-    const image = req.file ? req.file.path : null
+    const image = req.file ? req.file.path : null;
 
     if (!req.file) {
       res.status(400).send({ errorMessage: 'Image content can not be empty!' });
@@ -214,6 +230,8 @@ class FreelancesController {
         res.status(500).send({ errorMessage: 'Error updating Freelance with id ' + req.params.id });
       }
     }
+
 }
+
 
 module.exports = FreelancesController;

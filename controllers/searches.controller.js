@@ -5,8 +5,8 @@ class SearchController {
     try {
       const searchItems = req.query.recherche;
       const searchResults = await Search.search(searchItems);
-      console.log(searchResults.length);
-      console.log(searchResults);
+      // console.log(searchResults.length);
+      // console.log(searchResults);
       res.send({ searchResults });
     } catch (err) {
       res.status(500).send({
