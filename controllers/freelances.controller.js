@@ -165,7 +165,7 @@ class FreelancesController {
       for (let i = 0; i < freelances.length; i++) {
         freelances[i].tags = tags[i];
       }
-      console.log(freelances);
+      console.log('freelances');
 
       res.send({ freelances, freelanceTotalAmount });
     } catch (err) {
