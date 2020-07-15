@@ -4,7 +4,7 @@ const freelancesController = require('../controllers/freelances.controller.js');
 const requireAuth = require('../middlewares/requireAuth');
 const handleImageUpload = require('../middlewares/handleImageUpload');
 
-router.get('/account', requireAuth,freelancesController.get);
+router.get('/account', requireAuth, freelancesController.get);
 router.post('/account', requireAuth, handleImageUpload, freelancesController.create);
 router.patch('/account', requireAuth, handleImageUpload, freelancesController.update);
 router.delete('/account', requireAuth, freelancesController.delete);

@@ -144,9 +144,9 @@ class FreelancesController {
   // Affichage des freelance par page
   // Paramètres :
   // - page = numéro de la page à envoyer
-  // - step = nombre de freelance par page
+  // - flperpage = nombre de freelance par page
   static async pagination (req, res) {
-    const { page, step } = req.query;
+    const { page, flperpage, search } = req.query;
     try {
       // Vérification du numéro de semaine et appel à la fonction de mélange si elle a changé
       const memorisedWeekNumber = await Freelance.readWeekNumber();
@@ -156,10 +156,24 @@ class FreelancesController {
         await Freelance.writeWeekNumber(weekNumber);
       }
       // Calcul de l'offset en fonction du numéro de page et du nombre de vignettes affichées par page
-      const offset = (page - 1) * step;
+      const offset = (page - 1) * flperpage;
+      let freelances = [];
+      let freelanceTotalAmount = [];
 
-      const freelances = await Freelance.getAllByPage({ offset, step });
-      const freelanceTotalAmount = await Freelance.totalAmountOfActiveFreelances();
+      console.log('search : ', search);
+      if (!search) {
+        freelances = await Freelance.getAllByPage({ offset, flperpage });
+        freelanceTotalAmount = await Freelance.totalAmountOfActiveFreelances();
+        freelanceTotalAmount = freelanceTotalAmount.map(f => f.totalAmoutOfValidFreelances);
+        freelanceTotalAmount = freelanceTotalAmount[0];
+      } else {
+        let resultLength = 0;
+        freelances = await Freelance.search(search, flperpage, offset, resultLength);
+        resultLength = 1;
+        freelanceTotalAmount = await Freelance.search(search, flperpage, offset, resultLength);
+        freelanceTotalAmount = freelanceTotalAmount.length;
+        console.log('freelanceTotalAmount : ', freelanceTotalAmount);
+      }
 
       const tags = await Promise.all(freelances.map(f => Freelance.getAllTags(f.id)));
       for (let i = 0; i < freelances.length; i++) {
@@ -209,10 +223,6 @@ class FreelancesController {
     }
   }
 
-  // Commentaire de Christophe (14/7/2020)
-  // Cette méthode me paraît corrompue...
-  // En effet, il y a un catch sans try.
-
   static async setImagesToUploadsFile (req, res) {
     // const { email, street, zip_code, city, country, url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, references, chosenTags } = req.body;
     const image = req.file ? req.file.path : null;
@@ -220,18 +230,8 @@ class FreelancesController {
     if (!req.file) {
       res.status(400).send({ errorMessage: 'Image content can not be empty!' });
     }
-    res.status(200).send({image})
-    
-    } catch (err) {
-      console.error(err)
-      if (err.kind === 'not_found') {
-        res.status(404).send({ errorMessage: `Freelance with id ${req.params.id} not found.` });
-      } else {
-        res.status(500).send({ errorMessage: 'Error updating Freelance with id ' + req.params.id });
-      }
-    }
-
+    res.status(200).send({ image });
+  }
 }
-
 
 module.exports = FreelancesController;
