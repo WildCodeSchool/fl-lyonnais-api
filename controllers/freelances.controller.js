@@ -162,8 +162,8 @@ class FreelancesController {
       let freelances = [];
       let freelanceTotalAmount = [];
 
-      if (!search) {
-        // Si la recherche est vide, alors affichage de tous les freelances avec pagination
+      if (search[0] === '') {
+        // Si la recherche (search) est vide, alors affichage de tous les freelances avec pagination
         freelances = await Freelance.getAllByPage({ offset, flperpage });
         freelanceTotalAmount = await Freelance.totalAmountOfActiveFreelances();
         freelanceTotalAmount = freelanceTotalAmount.map(f => f.totalAmoutOfValidFreelances);

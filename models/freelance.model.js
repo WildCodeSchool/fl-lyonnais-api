@@ -133,7 +133,7 @@ class Freelance {
       queryWhere += 'tag.name LIKE ? OR user.firstname LIKE ? OR user.lastname LIKE ? OR freelance.job_title LIKE ? ';
 
       // On ajoute OR à la fin de la ligne sauf à la dernière où l'on ferme la parenthèse
-      (i < searchItemsTable.length - 1) ? queryWhere += 'OR ' : queryWhere += ') ';
+      (i < searchItemsTable.length - 1) ? queryWhere += 'OR ' : queryWhere += ') ORDER BY freelance.random_id ';
 
       // Parce qu'il y a quatre champs pour chaque recherches :
       // user.firstname, user.lastname, tag.name et freelance.job_title
