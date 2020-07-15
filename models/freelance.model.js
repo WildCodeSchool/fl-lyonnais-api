@@ -112,8 +112,16 @@ class Freelance {
     return db.query('UPDATE freelance SET is_active = ? where id = ?', [parseInt(activated), parseInt(id)]);
   }
 
+  // Recherche dans le nom, le prénom, les tags et le job title des freelances
+  // Paramètres de la méthode :
+  // - searchItems : liste des critères de recherche
+  // - flperpage : nombre de freelance à afficher par page
+  // - offset : offset pour la pagination
+  // - resultLength : FLAG
+  //   si = 1 => la requête liste tous les freelances correspondants à la recherche sans pagination (pour obtenir le nombre total de fl concernés afin de calculer le nombre total de pages)
+  //   si = 0 => requête paginée
   static async search (searchItems, flperpage, offset, resultLength) {
-    const searchItemsTable = searchItems.split(';');
+    const searchItemsTable = searchItems;
 
     const queryCommon = 'SELECT freelance.id AS freelance_id, user.firstname, user.lastname, freelance.job_title, freelance.url_photo FROM freelance JOIN user ON freelance.user_id = user.id WHERE freelance.user_id IN (SELECT DISTINCT freelance.user_id FROM freelance LEFT JOIN user ON freelance.user_id = user.id LEFT JOIN freelance_tag ON freelance_tag.freelance_id = freelance.id LEFT JOIN tag ON freelance_tag.tag_id = tag.id WHERE ';
 
@@ -137,6 +145,7 @@ class Freelance {
       }
     }
     if (!resultLength) {
+      // Pour obtenir une liste paginée
       queryWhere += 'LIMIT ? OFFSET ?';
       queryEscapeTable.push(parseInt(flperpage));
       queryEscapeTable.push(offset);

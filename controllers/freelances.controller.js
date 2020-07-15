@@ -6,6 +6,7 @@ const Address = require('../models/address.model.js');
 const Reference = require('../models/reference.model.js');
 const FreelanceReference = require('../models/freelance_reference.model.js');
 const moment = require('moment');
+const queryString = require('query-string');
 
 class FreelancesController {
   static async get (req, res) {
@@ -147,6 +148,7 @@ class FreelancesController {
   // - flperpage = nombre de freelance par page
   static async pagination (req, res) {
     const { page, flperpage, search } = req.query;
+
     try {
       // Vérification du numéro de semaine et appel à la fonction de mélange si elle a changé
       const memorisedWeekNumber = await Freelance.readWeekNumber();
@@ -160,26 +162,25 @@ class FreelancesController {
       let freelances = [];
       let freelanceTotalAmount = [];
 
-      console.log('search : ', search);
       if (!search) {
+        // Si la recherche est vide, alors affichage de tous les freelances avec pagination
         freelances = await Freelance.getAllByPage({ offset, flperpage });
         freelanceTotalAmount = await Freelance.totalAmountOfActiveFreelances();
         freelanceTotalAmount = freelanceTotalAmount.map(f => f.totalAmoutOfValidFreelances);
         freelanceTotalAmount = freelanceTotalAmount[0];
       } else {
+        // Si des critères de recherche ont été trouvés => recherche avec ces critères
         let resultLength = 0;
         freelances = await Freelance.search(search, flperpage, offset, resultLength);
         resultLength = 1;
         freelanceTotalAmount = await Freelance.search(search, flperpage, offset, resultLength);
         freelanceTotalAmount = freelanceTotalAmount.length;
-        console.log('freelanceTotalAmount : ', freelanceTotalAmount);
       }
 
       const tags = await Promise.all(freelances.map(f => Freelance.getAllTags(f.id)));
       for (let i = 0; i < freelances.length; i++) {
         freelances[i].tags = tags[i];
       }
-      console.log('freelances');
 
       res.send({ freelances, freelanceTotalAmount });
     } catch (err) {
