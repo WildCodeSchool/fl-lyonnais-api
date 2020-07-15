@@ -170,9 +170,9 @@ class FreelancesController {
         freelanceTotalAmount = freelanceTotalAmount[0];
       } else {
         // Si des critères de recherche ont été trouvés => recherche avec ces critères
-        let resultLength = 0;
+        let resultLength = false;
         freelances = await Freelance.search(search, flperpage, offset, resultLength);
-        resultLength = 1;
+        resultLength = true;
         freelanceTotalAmount = await Freelance.search(search, flperpage, offset, resultLength);
         freelanceTotalAmount = freelanceTotalAmount.length;
       }
