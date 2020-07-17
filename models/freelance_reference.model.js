@@ -49,6 +49,4 @@ class FreelanceReference {
   // }
 }
 
-
-
 module.exports = FreelanceReference;

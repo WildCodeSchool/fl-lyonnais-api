@@ -6,8 +6,6 @@ const YAML = require('yamljs');
 const swaggerDocument = YAML.load('./docs/swagger.yaml');
 const extractToken = require('./middlewares/extractToken');
 
-
-
 const app = express();
 const PORT = process.env.PORT || (process.env.NODE_ENV === 'test' ? 3001 : 3000);
 app.use(express.urlencoded({ extended: true }));
@@ -24,7 +22,6 @@ if (process.env.NODE_ENV !== 'production') {
 app.use('/users', require('./routes/users.routes.js'));
 app.use('/freelances', require('./routes/freelances.routes.js'));
 app.use('/tags', require('./routes/tags.routes'));
-
 
 // set port, listen for requests
 const server = app.listen(PORT, () => {

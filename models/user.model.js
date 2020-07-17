@@ -43,7 +43,6 @@ class User {
   }
 
   static async emailAlreadyExists (email) {
-
     return db.query('SELECT * FROM user WHERE email = ?', [email])
       .then(rows => {
         if (rows.length) {

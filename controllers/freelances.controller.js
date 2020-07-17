@@ -110,8 +110,6 @@ class FreelancesController {
       console.log(freelance);
       const dataFreelance = await Freelance.updateById(freelance.id, { ...req.body, last_modification_date: new Date().toISOString().slice(0, 10) });
 
-
-
       // table address
       const dataAddress = await Address.updateById(dataFreelance.address_id, req.body);
 
@@ -121,7 +119,6 @@ class FreelancesController {
       for (let i = 0; i < chosenTags.length; i++) {
         await FreelanceTag.create({ tag_id: chosenTags[i].id, freelance_id: freelance.id });
       }
-
 
       // Delete reference_id from freelance_reference
       await FreelanceReference.removeAllReferences(freelance.id);
@@ -198,7 +195,7 @@ class FreelancesController {
       const data = await Freelance.delete(1, freelance.id);
       res.send({ data });
     } catch (err) {
-      console.error(err)
+      console.error(err);
       if (err.kind === 'not_found') {
         res.status(404).send({ errorMessage: `Freelance with id ${freelance.id} not found.` });
       } else {
