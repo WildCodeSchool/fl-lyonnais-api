@@ -6,13 +6,13 @@ const Address = require('../models/address.model.js');
 const Reference = require('../models/reference.model.js');
 const FreelanceReference = require('../models/freelance_reference.model.js');
 const moment = require('moment');
+const queryString = require('query-string');
 
 class FreelancesController {
   static async get (req, res) {
     const user = req.currentUser;
     const freelance = await Freelance.findByUserId(user.id);
 
-    console.log(freelance);
     let references = [];
     let tags = [];
     let address = {};
@@ -102,13 +102,15 @@ class FreelancesController {
       }
       const user = req.currentUser;
       const user_id = user.id;
-      console.log(user_id);
+
       req.body.country = 'France';
 
       // table freelance
       const freelance = await Freelance.findByUserId(user.id);
       console.log(freelance);
       const dataFreelance = await Freelance.updateById(freelance.id, { ...req.body, last_modification_date: new Date().toISOString().slice(0, 10) });
+
+
 
       // table address
       const dataAddress = await Address.updateById(dataFreelance.address_id, req.body);
@@ -120,9 +122,9 @@ class FreelancesController {
         await FreelanceTag.create({ tag_id: chosenTags[i].id, freelance_id: freelance.id });
       }
 
-      // Table Ref Tags
-      // // Delete reference_id from freelance_reference
-      await FreelanceReference.removeAllRefetences(freelance.id);
+
+      // Delete reference_id from freelance_reference
+      await FreelanceReference.removeAllReferences(freelance.id);
       for (let i = 0; i < references.length; i++) {
         const { name, image, url } = references[i];
         const reference = await Reference.create({ name, image, url });// ni img ni url pour l'instant
@@ -140,8 +142,13 @@ class FreelancesController {
     }
   }
 
+  // Affichage des freelance par page
+  // Paramètres :
+  // - page = numéro de la page à envoyer
+  // - flperpage = nombre de freelance par page
   static async pagination (req, res) {
-    const { page, step } = req.query;
+    const { page, flperpage, search } = req.query;
+
     try {
       // Vérification du numéro de semaine et appel à la fonction de mélange si elle a changé
       const memorisedWeekNumber = await Freelance.readWeekNumber();
@@ -151,11 +158,31 @@ class FreelancesController {
         await Freelance.writeWeekNumber(weekNumber);
       }
       // Calcul de l'offset en fonction du numéro de page et du nombre de vignettes affichées par page
-      const offset = (page - 1) * step;
+      const offset = (page - 1) * flperpage;
+      let freelances = [];
+      let freelanceTotalAmount = [];
 
-      const data = (await Freelance.getAllByPage({ offset, step }));
-      const data2 = await Freelance.totalAmountOfActiveFreelances();
-      res.send({ data, data2 });
+      if (search[0] === '') {
+        // Si la recherche (search) est vide, alors affichage de tous les freelances avec pagination
+        freelances = await Freelance.getAllByPage({ offset, flperpage });
+        freelanceTotalAmount = await Freelance.totalAmountOfActiveFreelances();
+        freelanceTotalAmount = freelanceTotalAmount.map(f => f.totalAmoutOfValidFreelances);
+        freelanceTotalAmount = freelanceTotalAmount[0];
+      } else {
+        // Si des critères de recherche ont été trouvés => recherche avec ces critères
+        let resultLength = false;
+        freelances = await Freelance.search(search, flperpage, offset, resultLength);
+        resultLength = true;
+        freelanceTotalAmount = await Freelance.search(search, flperpage, offset, resultLength);
+        freelanceTotalAmount = freelanceTotalAmount.length;
+      }
+
+      const tags = await Promise.all(freelances.map(f => Freelance.getAllTags(f.id)));
+      for (let i = 0; i < freelances.length; i++) {
+        freelances[i].tags = tags[i];
+      }
+
+      res.send({ freelances, freelanceTotalAmount });
     } catch (err) {
       console.error(err);
       res.status(500).send({
@@ -165,12 +192,28 @@ class FreelancesController {
   }
 
   static async delete (req, res) {
-    const { deleted } = req.query;
+    const user = req.currentUser;
+    const freelance = await Freelance.findByUserId(user.id);
+    try {
+      const data = await Freelance.delete(1, freelance.id);
+      res.send({ data });
+    } catch (err) {
+      console.error(err)
+      if (err.kind === 'not_found') {
+        res.status(404).send({ errorMessage: `Freelance with id ${freelance.id} not found.` });
+      } else {
+        res.status(500).send({ errorMessage: 'Error updating Freelance with id ' + freelance.id });
+      }
+    }
+  }
+
+  static async ActivateDeactivate (req, res) {
+    const { activated } = req.query;
     if (!req.body) {
       res.status(400).send({ errorMessage: 'Content can not be empty!' });
     }
     try {
-      const data = await Freelance.delete(deleted, req.currentUser.id);
+      const data = await Freelance.activate(activated, req.params.id);
       res.send({ data });
     } catch (err) {
       if (err.kind === 'not_found') {
@@ -179,6 +222,16 @@ class FreelancesController {
         res.status(500).send({ errorMessage: 'Error updating Freelance with id ' + req.params.id });
       }
     }
+  }
+
+  static async setImagesToUploadsFile (req, res) {
+    // const { email, street, zip_code, city, country, url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, references, chosenTags } = req.body;
+    const image = req.file ? req.file.path : null;
+
+    if (!req.file) {
+      res.status(400).send({ errorMessage: 'Image content can not be empty!' });
+    }
+    res.status(200).send({ image });
   }
 }
 

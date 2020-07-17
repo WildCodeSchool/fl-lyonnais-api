@@ -11,7 +11,7 @@ const storage = multer.diskStorage({
 });
 
 const fileFilter = (req, file, cb) => {
-  const filetypes = /jpeg|jpg|png|gif/;
+  const filetypes = /jpeg|jpg|png|gif|webp/;
   const mimetype = filetypes.test(file.mimetype);
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
 
@@ -23,6 +23,6 @@ const fileFilter = (req, file, cb) => {
   cb(err);
 };
 
-const upload = multer({ storage, fileFilter }).single('imageReferenceList');
+const upload = multer({ storage, fileFilter }).single('image');
 
 module.exports = upload;
