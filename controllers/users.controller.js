@@ -26,10 +26,15 @@ async function sendEmail (data) {
 
   // Transporteur
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'in-v3.mailjet.com',
+    port: 465,
+    secure: true,
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS // naturally, replace both with your real credentials or an application-specific password
+    },
+    tls: {
+      rejectUnauthorized: false
     }
   });
 
