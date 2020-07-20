@@ -26,10 +26,15 @@ async function sendEmail (data) {
 
   // Transporteur
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'in-v3.mailjet.com',
+    port: 465,
+    secure: true,
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS // naturally, replace both with your real credentials or an application-specific password
+    },
+    tls: {
+      rejectUnauthorized: false
     }
   });
 
@@ -50,21 +55,23 @@ async function sendEmail (data) {
 
   try {
     const emailBody = {
-      from: 'Freelance Lyonnais <no_reply@no.reply>',
+      from: 'Pierre Ammeloot <pierre@ammeloot.fr>',
       to: `${data.firstname} ${data.lastname} ${data.email}`,
-      subject: 'Freelance Lyonnais - Le processus de ton inscription est bientôt terminé !',
+      subject: 'Annuaire des Freelances Lyonnais - Le processus d’inscription est bientôt terminé',
       Text: `Cher(e) Freelance Lyonnais,
-      Nous te remercions pour ton inscription sur notre site.
+      Nous te remercions pour ton inscription sur l’annuaire des Freelances Lyonnais.
       Il ne te reste plus qu'à valider ton adresse email en collant le lien ci-dessous dans ton navigateur :
-      Toute l'équipe de Freelance Lyonnais te remercie.
+      A bientôt,
+      Pierre.
 
       "${process.env.BASE_URL}/users/validation_email?email=${data.email}&key=${data.key}"`,
 
       html: `<p>Cher(e) Freelance Lyonnais,</Il>
-      <p>Nous te remercions pour ton inscription sur notre site.</p>
+      <p>Nous te remercions pour ton inscription sur l’annuaire des Freelances Lyonnais.</p>
       <p>Il ne te reste plus qu'à valider ton adresse email en copiant ou cliquant sur le lien ci-dessous :</p>
       <a href="${process.env.BASE_URL}/users/validation_email?email=${data.email}&key=${data.key}">Vérification email</a>
-      <p>Toute l'équipe de Freelance Lyonnais te remercie.</p>`
+      <p>À bientôt,</p>
+      <p>Pierre</p>`
     };
     await transporter.sendMail(emailBody);
     return console.log('Email envoyé');
