@@ -85,8 +85,13 @@ class Freelance {
   }
 
   // Cette méthode est à utiliser pour mélanger tous les freelances
-  static async randomizeFreelance (req, res) {
+  static async randomizeAllFreelances (req, res) {
     return db.query('UPDATE freelance SET random_id = LEFT(MD5(RAND()), 8);');
+  }
+
+  // Cette méthode est à utiliser pour créer le code random par freelance
+  static async randomizeOneFreelance (id) {
+    return db.query('UPDATE freelance SET random_id = LEFT(MD5(RAND()), 8) WHERE id = ?;', [id]);
   }
 
   // Ecriture du numéro de la semaine dans la table settings
