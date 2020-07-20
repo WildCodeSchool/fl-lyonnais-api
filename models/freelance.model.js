@@ -81,12 +81,17 @@ class Freelance {
 
   static async getAllByPage (result) {
     const { offset, flperpage } = result;
-    return db.query('SELECT f.id as id, firstname, lastname, url_photo, job_title FROM freelance AS f JOIN user AS u ON f.user_id = u.id WHERE f.is_active = 1 and u.is_deleted = 0 ORDER BY random_id LIMIT ? OFFSET ?', [parseInt(flperpage), offset]);
+    return db.query('SELECT f.id AS id, firstname, lastname, url_photo, job_title FROM freelance AS f JOIN user AS u ON f.user_id = u.id WHERE f.is_active = 1 AND u.is_deleted = 0 AND u.is_validated ORDER BY random_id LIMIT ? OFFSET ?', [parseInt(flperpage), offset]);
   }
 
   // Cette méthode est à utiliser pour mélanger tous les freelances
-  static async randomizeFreelance (req, res) {
+  static async randomizeAllFreelances (req, res) {
     return db.query('UPDATE freelance SET random_id = LEFT(MD5(RAND()), 8);');
+  }
+
+  // Cette méthode est à utiliser pour créer le code random par freelance
+  static async randomizeOneFreelance (id) {
+    return db.query('UPDATE freelance SET random_id = LEFT(MD5(RAND()), 8) WHERE id = ?;', [id]);
   }
 
   // Ecriture du numéro de la semaine dans la table settings
@@ -123,7 +128,7 @@ class Freelance {
   static async search (searchItems, flperpage, offset, resultLength) {
     const searchItemsTable = searchItems;
 
-    const queryCommon = 'SELECT freelance.id, user.firstname, user.lastname, freelance.job_title, freelance.url_photo FROM freelance JOIN user ON freelance.user_id = user.id WHERE freelance.user_id IN (SELECT DISTINCT freelance.user_id FROM freelance LEFT JOIN user ON freelance.user_id = user.id LEFT JOIN freelance_tag ON freelance_tag.freelance_id = freelance.id LEFT JOIN tag ON freelance_tag.tag_id = tag.id WHERE ';
+    const queryCommon = 'SELECT freelance.id, user.firstname, user.lastname, freelance.job_title, freelance.url_photo FROM freelance JOIN user ON freelance.user_id = user.id WHERE user.is_deleted = 0 AND user.is_validated AND freelance.is_active AND freelance.user_id IN (SELECT DISTINCT freelance.user_id FROM freelance LEFT JOIN user ON freelance.user_id = user.id LEFT JOIN freelance_tag ON freelance_tag.freelance_id = freelance.id LEFT JOIN tag ON freelance_tag.tag_id = tag.id WHERE ';
 
     let queryWhere = '';
     const queryEscapeTable = [];
