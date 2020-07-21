@@ -8,6 +8,11 @@ const FreelanceReference = require('../models/freelance_reference.model.js');
 const moment = require('moment');
 const queryString = require('query-string');
 
+const tryParseInt = (str, defaultValue = null) => {
+  const res = parseInt(str, 10);
+  return isNaN(res) ? defaultValue : res;
+};
+
 class FreelancesController {
   static async get (req, res) {
     const user = req.currentUser;
@@ -42,7 +47,9 @@ class FreelancesController {
 
       // table freelance
       // const lastModificationDate = new Date().toISOString().slice(0, 10);
-      const dataFreelance = await Freelance.create({ url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, address_id, user_id, is_active: 1 });
+      const dataFreelance = await Freelance.create({ url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, address_id, user_id, is_active: 1, random_id });
+      // Ajoute un code aléatoire à chaque nouveau freelance
+      await Freelance.randomizeOneFreelance(dataFreelance.id);
 
       // table freelance_tag
       for (let i = 0; i < chosenTags.length; i++) {
@@ -144,14 +151,17 @@ class FreelancesController {
   // - page = numéro de la page à envoyer
   // - flperpage = nombre de freelance par page
   static async pagination (req, res) {
-    const { page, flperpage, search } = req.query;
+    let { page, flperpage, search } = req.query;
+
+    page = tryParseInt(page, 1);
+    flperpage = tryParseInt(flperpage, 20);
 
     try {
       // Vérification du numéro de semaine et appel à la fonction de mélange si elle a changé
       const memorisedWeekNumber = await Freelance.readWeekNumber();
       const weekNumber = moment().isoWeek();
       if (memorisedWeekNumber[0].week !== weekNumber) {
-        await Freelance.randomizeFreelance();
+        await Freelance.randomizeAllFreelances();
         await Freelance.writeWeekNumber(weekNumber);
       }
       // Calcul de l'offset en fonction du numéro de page et du nombre de vignettes affichées par page
@@ -159,7 +169,7 @@ class FreelancesController {
       let freelances = [];
       let freelanceTotalAmount = [];
 
-      if (search[0] === '') {
+      if (!search || search[0] === '') {
         // Si la recherche (search) est vide, alors affichage de tous les freelances avec pagination
         freelances = await Freelance.getAllByPage({ offset, flperpage });
         freelanceTotalAmount = await Freelance.totalAmountOfActiveFreelances();
