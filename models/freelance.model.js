@@ -79,9 +79,8 @@ class Freelance {
       });
   }
 
-  static async getAllByPage (result) {
-    const { offset, flperpage } = result;
-    return db.query('SELECT f.id AS id, firstname, lastname, url_photo, job_title FROM freelance AS f JOIN user AS u ON f.user_id = u.id WHERE f.is_active = 1 AND u.is_deleted = 0 AND u.is_validated ORDER BY random_id LIMIT ? OFFSET ?', [parseInt(flperpage), offset]);
+  static async getAllByPage ({ offset, flperpage }) {
+    return db.query('SELECT f.id AS id, firstname, lastname, url_photo, job_title FROM freelance AS f JOIN user AS u ON f.user_id = u.id WHERE f.is_active = 1 AND u.is_deleted = 0 AND u.is_validated ORDER BY random_id LIMIT ? OFFSET ?', [flperpage, offset]);
   }
 
   // Cette méthode est à utiliser pour mélanger tous les freelances
