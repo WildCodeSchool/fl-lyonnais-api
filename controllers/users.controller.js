@@ -10,11 +10,11 @@ const validateEmail = email => {
   return re.test(String(email).toLowerCase());
 };
 
-// Le freelance a 48 heures pour valider son adresse email...
+// Le freelance a 3 jours pour valider son adresse email...
 // Vérification de ce délai
-// Attention : ajouter 24 heures à la durée souhaitée (p.e. : 72 pour 48 h).
+// Attention : ajouter 24 heures à la durée souhaitée (p.e. : 96 pour 72h / 3 jours).
 function onTimeForValidation (user) {
-  const twoDaysAgo = new Date(new Date(Date.now() - (72 * 60 * 60 * 1000)).toISOString().slice(0, 10));
+  const twoDaysAgo = new Date(new Date(Date.now() - (96 * 60 * 60 * 1000)).toISOString().slice(0, 10));
   const registrationDate = user.registration_date; // .substring(0, 10);
   return twoDaysAgo <= registrationDate;
 }
