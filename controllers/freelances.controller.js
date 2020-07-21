@@ -6,7 +6,17 @@ const Address = require('../models/address.model.js');
 const Reference = require('../models/reference.model.js');
 const FreelanceReference = require('../models/freelance_reference.model.js');
 const moment = require('moment');
-const queryString = require('query-string');
+const uniqid = require('uniqid');
+
+const tryParseInt = (str, defaultValue = null) => {
+  const res = parseInt(str, 10);
+  return isNaN(res) ? defaultValue : res;
+};
+
+const tryParseInt = (str, defaultValue = null) => {
+  const res = parseInt(str, 10);
+  return isNaN(res) ? defaultValue : res;
+};
 
 class FreelancesController {
   static async get (req, res) {
@@ -42,7 +52,7 @@ class FreelancesController {
 
       // table freelance
       // const lastModificationDate = new Date().toISOString().slice(0, 10);
-      const dataFreelance = await Freelance.create({ url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, address_id, user_id, is_active: 1, random_id });
+      const dataFreelance = await Freelance.create({ url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, address_id, user_id, is_active: 1, random_id: uniqid() });
       // Ajoute un code aléatoire à chaque nouveau freelance
       await Freelance.randomizeOneFreelance(dataFreelance.id);
 
@@ -146,7 +156,10 @@ class FreelancesController {
   // - page = numéro de la page à envoyer
   // - flperpage = nombre de freelance par page
   static async pagination (req, res) {
-    const { page, flperpage, search } = req.query;
+    let { page, flperpage, search } = req.query;
+
+    page = tryParseInt(page, 1);
+    flperpage = tryParseInt(flperpage, 20);
 
     try {
       // Vérification du numéro de semaine et appel à la fonction de mélange si elle a changé
@@ -161,7 +174,7 @@ class FreelancesController {
       let freelances = [];
       let freelanceTotalAmount = [];
 
-      if (search[0] === '') {
+      if (!search || search[0] === '') {
         // Si la recherche (search) est vide, alors affichage de tous les freelances avec pagination
         freelances = await Freelance.getAllByPage({ offset, flperpage });
         freelanceTotalAmount = await Freelance.totalAmountOfActiveFreelances();
