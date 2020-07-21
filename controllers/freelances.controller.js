@@ -6,7 +6,12 @@ const Address = require('../models/address.model.js');
 const Reference = require('../models/reference.model.js');
 const FreelanceReference = require('../models/freelance_reference.model.js');
 const moment = require('moment');
-const queryString = require('query-string');
+const uniqid = require('uniqid');
+
+const tryParseInt = (str, defaultValue = null) => {
+  const res = parseInt(str, 10);
+  return isNaN(res) ? defaultValue : res;
+};
 
 const tryParseInt = (str, defaultValue = null) => {
   const res = parseInt(str, 10);
@@ -47,7 +52,7 @@ class FreelancesController {
 
       // table freelance
       // const lastModificationDate = new Date().toISOString().slice(0, 10);
-      const dataFreelance = await Freelance.create({ url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, address_id, user_id, is_active: 1, random_id });
+      const dataFreelance = await Freelance.create({ url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, address_id, user_id, is_active: 1, random_id: uniqid() });
       // Ajoute un code aléatoire à chaque nouveau freelance
       await Freelance.randomizeOneFreelance(dataFreelance.id);
 
