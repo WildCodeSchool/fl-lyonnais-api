@@ -42,7 +42,9 @@ class FreelancesController {
 
       // table freelance
       // const lastModificationDate = new Date().toISOString().slice(0, 10);
-      const dataFreelance = await Freelance.create({ url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, address_id, user_id, is_active: 1 });
+      const dataFreelance = await Freelance.create({ url_photo, phone_number, average_daily_rate, url_web_site, job_title, bio, vat_number, last_modification_date, address_id, user_id, is_active: 1, random_id });
+      // Ajoute un code aléatoire à chaque nouveau freelance
+      await Freelance.randomizeOneFreelance(dataFreelance.id);
 
       // table freelance_tag
       for (let i = 0; i < chosenTags.length; i++) {
@@ -151,7 +153,7 @@ class FreelancesController {
       const memorisedWeekNumber = await Freelance.readWeekNumber();
       const weekNumber = moment().isoWeek();
       if (memorisedWeekNumber[0].week !== weekNumber) {
-        await Freelance.randomizeFreelance();
+        await Freelance.randomizeAllFreelances();
         await Freelance.writeWeekNumber(weekNumber);
       }
       // Calcul de l'offset en fonction du numéro de page et du nombre de vignettes affichées par page
