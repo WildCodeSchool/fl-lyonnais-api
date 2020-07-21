@@ -31,7 +31,7 @@ async function sendEmail (data) {
     secure: true,
     auth: {
       user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS // naturally, replace both with your real credentials or an application-specific password
+      pass: process.env.EMAIL_PASS
     },
     tls: {
       rejectUnauthorized: false
@@ -255,7 +255,20 @@ class UsersController {
     try {
       let user = await User.findByEmail(email);
       if (user) {
-        user = { ...user, is_validated: 0 };
+        // Récupère la date du jour
+        const registrationDate = new Date().toISOString().slice(0, 10);
+        // création d'une clé de 20 caractères
+        const key = randkey.get({
+          length: 20,
+          numbers: true,
+          uppercase: true
+        });
+        user = {
+          ...user,
+          is_validated: 0,
+          registration_date: registrationDate,
+          key: key
+        };
         await User.updateById(user.id, user);
         await sendEmail(user);
         res.status(201).send(user);
