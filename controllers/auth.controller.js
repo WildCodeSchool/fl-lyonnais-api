@@ -8,7 +8,7 @@ class authController {
       const freelance = await Freelance.findByUserId(user.id);
       const freelance_id = freelance ? freelance.id : null;
       if (user.is_deleted || !user.is_validated) {
-        res.status(403).send('Access denied, your account has been blocked or you didn t validate your email');
+        res.status(400).send('Access denied, your account has been blocked or you didn t validate your email');
       } else {
         res.status(200).send({ token, user: { ...user, password: '', freelance_id }, data });
       }
