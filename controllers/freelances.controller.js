@@ -1,7 +1,6 @@
 const Freelance = require('../models/freelance.model.js');
 const User = require('../models/user.model.js');
 const FreelanceTag = require('../models/freelance_tag.model.js');
-const FreelanceRef = require('../models/freelance_reference.model.js');
 const Address = require('../models/address.model.js');
 const Reference = require('../models/reference.model.js');
 const FreelanceReference = require('../models/freelance_reference.model.js');
