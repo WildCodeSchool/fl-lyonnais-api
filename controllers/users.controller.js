@@ -278,7 +278,7 @@ class UsersController {
         await sendEmail(user);
         res.status(201).send(user);
       } else {
-        res.status(400).send("L'adresse email est erronée");
+        res.status(404).send("L'adresse email est erronée");
       }
     } catch (err) {
       console.error(err);
