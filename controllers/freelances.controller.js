@@ -12,11 +12,6 @@ const tryParseInt = (str, defaultValue = null) => {
   return isNaN(res) ? defaultValue : res;
 };
 
-const tryParseInt = (str, defaultValue = null) => {
-  const res = parseInt(str, 10);
-  return isNaN(res) ? defaultValue : res;
-};
-
 class FreelancesController {
   static async get (req, res) {
     const user = req.currentUser;
