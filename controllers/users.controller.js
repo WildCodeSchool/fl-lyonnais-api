@@ -70,8 +70,10 @@ async function sendEmail (data) {
       <p>À bientôt,</p>
       <p>Pierre</p>`
     };
-    await transporter.sendMail(emailBody);
-    return console.log('Email envoyé');
+    
+    if (process.env.NODE_ENV !== 'test') {
+      await transporter.sendMail(emailBody);
+    }
   } catch (error) {
     return console.error('Erreur', error);
   }
@@ -276,7 +278,7 @@ class UsersController {
         await sendEmail(user);
         res.status(201).send(user);
       } else {
-        res.status(404).send("L'adresse email est erronée");
+        res.status(400).send("L'adresse email est erronée");
       }
     } catch (err) {
       console.error(err);
