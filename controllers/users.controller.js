@@ -10,20 +10,17 @@ const validateEmail = email => {
   return re.test(String(email).toLowerCase());
 };
 
-// Le freelance a 48 heures pour valider son adresse email...
+// Le freelance a 3 jours pour valider son adresse email...
 // Vérification de ce délai
-// Attention : ajouter 24 heures à la durée souhaitée (p.e. : 72 pour 48 h).
+// Attention : ajouter 24 heures à la durée souhaitée (p.e. : 96 pour 72h / 3 jours).
 function onTimeForValidation (user) {
-  const twoDaysAgo = new Date(new Date(Date.now() - (72 * 60 * 60 * 1000)).toISOString().slice(0, 10));
+  const twoDaysAgo = new Date(new Date(Date.now() - (96 * 60 * 60 * 1000)).toISOString().slice(0, 10));
   const registrationDate = user.registration_date; // .substring(0, 10);
   return twoDaysAgo <= registrationDate;
 }
 
 // Création du transporteur pour l'envoi d'mails (NodeMailer)
 async function sendEmail (data) {
-  // Convertion d'un string en bouléen
-  // const isSecureConnection = (process.env.EMAIL_SMTP_SECURE === 'true');
-
   // Transporteur
   const transporter = nodemailer.createTransport({
     host: 'in-v3.mailjet.com',
@@ -31,7 +28,7 @@ async function sendEmail (data) {
     secure: true,
     auth: {
       user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS // naturally, replace both with your real credentials or an application-specific password
+      pass: process.env.EMAIL_PASS
     },
     tls: {
       rejectUnauthorized: false
@@ -78,7 +75,7 @@ async function sendEmail (data) {
       await transporter.sendMail(emailBody);
     }
   } catch (error) {
-    return console.log('Erreur', error);
+    return console.error('Erreur', error);
   }
 }
 
@@ -249,6 +246,10 @@ class UsersController {
     }
   }
 
+  // Lorsque le freelance nouvellement inscrit n'a pas répondu dans les temps
+  // Il en est informé lorsqu'il arrive sur la page de validation
+  // S'il redonne son email (celui-ci doit être le même que celui donné lors de l'inscription),
+  // on lui renvoi un nouvel email avec une nouvelle clé (la date d'inscription est actualisée à la date du jour)
   static async resendValidationEmail (req, res) {
     const { email } = req.query;
     if (!validateEmail(email)) {
@@ -257,8 +258,23 @@ class UsersController {
     try {
       let user = await User.findByEmail(email);
       if (user) {
-        user = { ...user, is_validated: 0 };
+        // Récupère la date du jour
+        const registrationDate = new Date().toISOString().slice(0, 10);
+        // création d'une nouvelle clé de 20 caractères
+        const key = randkey.get({
+          length: 20,
+          numbers: true,
+          uppercase: true
+        });
+        user = {
+          ...user,
+          is_validated: 0,
+          registration_date: registrationDate,
+          key: key
+        };
+        // Mise à jour des données de l'utilisateur (clé, date, etc.)
         await User.updateById(user.id, user);
+        // Envoi de l'email de validation
         await sendEmail(user);
         res.status(201).send(user);
       } else {
