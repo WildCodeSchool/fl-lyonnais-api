@@ -130,6 +130,6 @@ JWT_PRIVATE_KEY=[JWT_PRIVATE_KEY]
   - Password : [GH_PASSWORD]
   - "Save & Update"
   - copier la valeur du champs apparu dans "Method 3: Deploy from Github/Bitbucket/Gitlab"
-  - aller sur https://github.com/fl-lyonnais-dev/fl-lyonnais-back-office/settings/hooks
+  - aller sur https://github.com/fl-lyonnais-dev/fl-lyonnais-front-office/settings/hooks
   - cliquer sur "add webhook"
   - coller la valeur de l'input copiée précédement dans le champs Payload URL de github, cliquer sur le bouton vert "Add webhook". 
