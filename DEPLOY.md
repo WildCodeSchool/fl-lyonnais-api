@@ -81,6 +81,7 @@ EMAIL_SMTP_SECURE=false
 EMAIL_DESTINATION_URL=https://api.[NOM DOMAINE]/users/validation_email/
 BASE_URL=https://api.[NOM DOMAINE]
 BASE_URL_FRONT=https://[NOM DOMAINE]
+JWT_PRIVATE_KEY=[JWT_PRIVATE_KEY]
 ```
   - cliquer sur "Add Persistent directory" plus bas
   - Renseigner dans Path in App : /usr/src/app/uploads
