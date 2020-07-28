@@ -120,7 +120,7 @@ JWT_PRIVATE_KEY=[JWT_PRIVATE_KEY]
   - aller sur l'app "front-office"
   - onglet http settings : cliquer sur "Enable HTTPS", dans l'input "Container HTTP Port" mettre 80,  cocher "Force HTTPS by redirecting all HTTP traffic to HTTPS", cliquer sur "Save & Update"
   - onglet http settings : à coté du bouton "connect new domain", remplir l'input avec [NOM DE DOMAINE] et cliquer sur le bouton puis sur "enable HTTPS".
-  - onglet App Configs, Environmental Variables: cocher "bulk edit" et copier : REACT_APP_API_BASE_URL=https://<span>api.[NOM DE DOMAINE]</span>
+  - onglet App Configs, Environmental Variables: cocher "bulk edit" et copier : REACT_APP_API_URL=https://<span>api.[NOM DE DOMAINE]</span>
   - "Save & Update"
   - onglet "Deployement"
   - aller à la section Method 3: Deploy from Github/Bitbucket/Gitlab
