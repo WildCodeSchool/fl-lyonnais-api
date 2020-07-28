@@ -66,7 +66,7 @@ Attendre 60 secondes
 
 ### STEP 3 : créer l'API
   - Caprover > Apps > entrer "api" dans l'input, cocher "Has persistant data" , cliquer sur le bouton "Create New App"
-  - Caprover > Apps > api > Enable HTTPS et cocher Force HTTPS by redirecting all HTTP traffic to HTTPS et "Save & Update"
+  - Caprover > Apps > api > Enable HTTPS et cocher Force HTTPS by redirecting all HTTP traffic to HTTPS, mettre 3000 dans le champs "Container HTTP Port" et cliquer sur "Save & Update"
   - onglet App Configs, Environmental Variables: cocher "bulk edit" et copier dans le champ :
 ```
 DB_HOST=srv-captain--fl-lyonnais-db
